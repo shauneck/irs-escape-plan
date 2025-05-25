@@ -238,6 +238,17 @@ TAX_GLOSSARY = {
     }
 }
 
+# Helper function to convert MongoDB documents
+def serialize_doc(doc):
+    """Convert MongoDB document to JSON-serializable dict"""
+    if doc is None:
+        return None
+    if "_id" in doc:
+        del doc["_id"]
+    if isinstance(doc, list):
+        return [serialize_doc(item) for item in doc]
+    return doc
+
 # Sample data initialization
 async def init_sample_data():
     """Initialize sample data if collections are empty"""
