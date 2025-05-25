@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { APIContext } from '../App';
+import CTABox from '../components/CTABox';
 
 function HomePage({ user }) {
   const api = useContext(APIContext);
