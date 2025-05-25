@@ -428,6 +428,7 @@ async def get_courses(
         query["category_id"] = category_id
     
     courses = await db.courses.find(query).to_list(100)
+    courses = [serialize_doc(course) for course in courses]
     
     # Add user progress if email provided
     if user_email:
