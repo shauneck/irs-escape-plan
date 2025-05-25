@@ -87,6 +87,9 @@ function HomePage({ user }) {
       </div>
 
       <div className="container">
+        {/* CTA Box for AI Assistant */}
+        <CTABox user={user} hasAIAccess={false} />
+
         {/* Filters */}
         <div className="search-filters">
           <h3>Filter by Category</h3>
