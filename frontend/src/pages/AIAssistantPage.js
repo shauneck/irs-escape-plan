@@ -4,6 +4,7 @@ import { APIContext } from '../App';
 
 function AIAssistantPage({ user }) {
   const api = useContext(APIContext);
+  const navigate = useNavigate();
   const [hasAccess, setHasAccess] = useState(false);
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,7 +24,11 @@ function AIAssistantPage({ user }) {
       setPackages(packagesResponse.packages || []);
       
       if (user) {
-        checkAccess();
+        await checkAccess();
+      } else {
+        // Redirect to upsell if no user
+        navigate('/ai-upsell');
+        return;
       }
     } catch (err) {
       console.error('Error loading AI assistant data:', err);
@@ -38,10 +43,18 @@ function AIAssistantPage({ user }) {
     try {
       setCheckingAccess(true);
       const response = await api.get(`/api/ai-assistant/access/${user.email}`);
-      setHasAccess(response.has_access || false);
+      const userHasAccess = response.has_access || false;
+      setHasAccess(userHasAccess);
+      
+      // Redirect to upsell if no access
+      if (!userHasAccess) {
+        navigate('/ai-upsell');
+        return;
+      }
     } catch (err) {
       console.error('Error checking access:', err);
       setHasAccess(false);
+      navigate('/ai-upsell');
     } finally {
       setCheckingAccess(false);
     }
