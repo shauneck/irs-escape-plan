@@ -460,7 +460,9 @@ async def get_course_detail(course_id: str, user_email: Optional[str] = Query(No
     if not course:
         raise HTTPException(status_code=404, detail="Course not found")
     
+    course = serialize_doc(course)
     modules = await db.modules.find({"course_id": course_id}).sort("module_number", 1).to_list(100)
+    modules = [serialize_doc(module) for module in modules]
     
     # Add user progress and bookmarks if email provided
     if user_email:
@@ -470,13 +472,14 @@ async def get_course_detail(course_id: str, user_email: Optional[str] = Query(No
                 "user_email": user_email,
                 "module_id": module["id"]
             })
-            module["progress"] = progress if progress else None
+            module["progress"] = serialize_doc(progress) if progress else None
             
             # Get bookmark status
             bookmark = await db.user_bookmarks.find_one({
                 "user_email": user_email,
                 "module_id": module["id"]
             })
+            bookmark = serialize_doc(bookmark) if bookmark else None
             module["is_bookmarked"] = bool(bookmark)
             module["bookmark_notes"] = bookmark.get("notes") if bookmark else None
     
