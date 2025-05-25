@@ -11,8 +11,13 @@ function AIAssistantPage({ user }) {
   const [checkingAccess, setCheckingAccess] = useState(false);
 
   useEffect(() => {
+    // Check access immediately if user exists, otherwise redirect
+    if (!user) {
+      navigate('/ai-upsell');
+      return;
+    }
     loadData();
-  }, []);
+  }, [user, navigate]);
 
   const loadData = async () => {
     try {
