@@ -593,9 +593,12 @@ async def check_ai_access(user_email: str):
     if not purchase:
         return {"has_access": False, "message": "No active AI assistant subscription"}
     
+    purchase = serialize_doc(purchase)
+    
     # Check if monthly subscription is expired
     if purchase["plan_type"] == "monthly" and purchase["expires_at"]:
-        if datetime.utcnow() > purchase["expires_at"]:
+        expires_at = datetime.fromisoformat(purchase["expires_at"].replace('Z', '+00:00')) if isinstance(purchase["expires_at"], str) else purchase["expires_at"]
+        if datetime.utcnow() > expires_at:
             await db.ai_assistant_purchases.update_one(
                 {"id": purchase["id"]},
                 {"$set": {"status": "expired"}}
