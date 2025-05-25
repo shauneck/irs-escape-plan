@@ -1,53 +1,85 @@
-import { useEffect } from "react";
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.css';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+// Components
+import Header from './components/Header';
+import HomePage from './pages/HomePage';
+import CoursePage from './pages/CoursePage';
+import ModulePage from './pages/ModulePage';
+import GlossaryPage from './pages/GlossaryPage';
+import AIAssistantPage from './pages/AIAssistantPage';
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
+// API Configuration
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
+
+// Theme Context
+export const ThemeContext = React.createContext();
+export const APIContext = React.createContext();
+
+function App() {
+  const [theme, setTheme] = useState('light');
+  const [user, setUser] = useState({ email: 'demo@example.com', name: 'Demo User' });
+
+  // Load theme from localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('irs-escape-theme');
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+  }, []);
+
+  // Apply theme to document
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('irs-escape-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
+
+  // API helper functions
+  const api = {
+    baseUrl: API_BASE_URL,
+    
+    async get(endpoint) {
+      const response = await fetch(`${API_BASE_URL}${endpoint}`);
+      if (!response.ok) throw new Error(`API Error: ${response.status}`);
+      return response.json();
+    },
+    
+    async post(endpoint, data) {
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!response.ok) throw new Error(`API Error: ${response.status}`);
+      return response.json();
     }
   };
 
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
-
   return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
-
-function App() {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <APIContext.Provider value={api}>
+      <ThemeContext.Provider value={{ theme, toggleTheme }}>
+        <Router>
+          <div className="app">
+            <Header user={user} />
+            <main className="main-content">
+              <Routes>
+                <Route path="/" element={<HomePage user={user} />} />
+                <Route path="/course/:courseId" element={<CoursePage user={user} />} />
+                <Route path="/course/:courseId/module/:moduleId" element={<ModulePage user={user} />} />
+                <Route path="/glossary" element={<GlossaryPage />} />
+                <Route path="/glossary/:termKey" element={<GlossaryPage />} />
+                <Route path="/ai-assistant" element={<AIAssistantPage user={user} />} />
+              </Routes>
+            </main>
+          </div>
+        </Router>
+      </ThemeContext.Provider>
+    </APIContext.Provider>
   );
 }
 
