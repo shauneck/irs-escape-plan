@@ -124,129 +124,174 @@ class ChatMessage(BaseModel):
     content: str
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
-# Tax Glossary Data (stored in-memory for performance)
-TAX_GLOSSARY = {
-    "mso": {
-        "term": "MSO (Management Services Organization)",
-        "definition": "A legal entity that provides administrative and support services to healthcare practices while maintaining compliance with healthcare regulations.",
-        "plain_english": "A company that handles the business side of medical practices so doctors can focus on patient care.",
-        "case_study": {
-            "client": "Dr. Sarah Chen, Cardiothoracic Surgeon",
-            "situation": "Dr. Chen was paying $180,000 annually in self-employment taxes on her $600,000 practice income.",
-            "structure": "Established an MSO to provide administrative services to her practice, converting $400,000 of income to corporate distributions.",
-            "implementation": "MSO handles billing, HR, marketing, and facility management for the medical practice.",
-            "results": "Reduced self-employment tax by $56,400 annually while maintaining full operational control."
-        }
+# Tax Strategy Builder Data
+STRATEGY_DATABASE = [
+    {
+        "strategy": "Augusta Rule",
+        "match_tags": ["business_owner", "has_kids", "home_office"],
+        "impact": "Save $3K–$15K/year",
+        "module": "Pay Your Kids Legally",
+        "glossary": ["Augusta Rule"],
+        "description": "Rent your home to your business for up to 14 days per year tax-free, perfect for business meetings and events."
     },
-    "qsbs": {
-        "term": "QSBS (Qualified Small Business Stock)",
-        "definition": "Stock in a qualified small business that may be eligible for significant federal tax benefits under Section 1202.",
-        "plain_english": "Special stock that can save you millions in taxes when you sell your business if it meets specific criteria.",
-        "case_study": {
-            "client": "Marcus Rodriguez, Tech Entrepreneur",
-            "situation": "Marcus sold his software company for $15 million after 7 years of ownership.",
-            "structure": "Properly structured the business as a C-Corporation from inception to qualify for QSBS.",
-            "implementation": "Maintained detailed records and ensured all QSBS requirements were met throughout ownership.",
-            "results": "Saved $1.5 million in federal taxes on the sale, utilizing the full $10 million QSBS exclusion."
-        }
+    {
+        "strategy": "REPS (Real Estate Professional Status)",
+        "match_tags": ["real_estate", "business_owner", "llc"],
+        "impact": "Save $10K–$25K/year",
+        "module": "Real Estate Pro Tax Hacks",
+        "glossary": ["reps"],
+        "description": "Qualify as a real estate professional to deduct rental losses against other income without passive activity limitations."
     },
-    "cost_segregation": {
-        "term": "Cost Segregation",
-        "definition": "An accounting method that accelerates depreciation deductions by identifying components of a building that can be depreciated over shorter periods.",
-        "plain_english": "A way to get bigger tax deductions in the first few years after buying commercial property by breaking down the building into parts.",
-        "case_study": {
-            "client": "Jennifer Walsh, Real Estate Investor",
-            "situation": "Jennifer purchased a $2.8 million commercial office building and wanted to maximize depreciation.",
-            "structure": "Conducted cost segregation study identifying $840,000 in 5-7 year property components.",
-            "implementation": "Accelerated depreciation on electrical, plumbing, flooring, and specialized equipment.",
-            "results": "Generated $315,000 in additional first-year depreciation, saving $110,000 in taxes."
-        }
+    {
+        "strategy": "QSBS (Qualified Small Business Stock)",
+        "match_tags": ["investor", "c_corp"],
+        "impact": "Save up to $10M in capital gains",
+        "module": "Capital Gains Optimization",
+        "glossary": ["qsbs"],
+        "description": "Structure your business sale to potentially exclude up to $10 million in capital gains from federal taxes."
     },
-    "installment_sale": {
-        "term": "Installment Sale",
-        "definition": "A method of recognizing gain from the sale of property where payments are received over multiple tax years.",
-        "plain_english": "Spreading out the tax hit from selling property by receiving payments over several years instead of all at once.",
-        "case_study": {
-            "client": "Robert Kim, Business Owner",
-            "situation": "Robert sold his manufacturing business for $8 million, triggering a massive tax liability.",
-            "structure": "Structured as installment sale with $2 million down and $1.5 million annually for four years.",
-            "implementation": "Gain recognition spread over 5 years, keeping Robert in lower tax brackets.",
-            "results": "Reduced effective tax rate from 37% to 24%, saving over $800,000 in total taxes."
-        }
+    {
+        "strategy": "S Corp Salary Optimization",
+        "match_tags": ["s_corp", "business_owner"],
+        "impact": "Save $8K–$12K/year",
+        "module": "Salary Split Strategy",
+        "glossary": ["s_corp"],
+        "description": "Optimize your salary vs. distribution split to minimize self-employment taxes while maintaining IRS compliance."
     },
-    "qof": {
-        "term": "QOF (Qualified Opportunity Fund)",
-        "definition": "An investment vehicle designed to drive capital to distressed communities through temporary tax deferral and potential permanent exclusion.",
-        "plain_english": "A special investment fund that lets you defer and potentially eliminate capital gains taxes by investing in designated low-income areas.",
-        "case_study": {
-            "client": "Patricia Moore, Investment Advisor",
-            "situation": "Patricia had $3.2 million in capital gains from stock sales and faced a $640,000 tax bill.",
-            "structure": "Invested gains into Qualified Opportunity Fund focused on affordable housing development.",
-            "implementation": "Deferred all capital gains taxes and positioned for permanent exclusion after 10 years.",
-            "results": "Deferred $640,000 in taxes with potential for complete elimination if held for full term."
-        }
+    {
+        "strategy": "Paying Your Kids Legally",
+        "match_tags": ["business_owner", "has_kids"],
+        "impact": "Save $6K per child",
+        "module": "Pay Your Kids Legally",
+        "glossary": ["child_income"],
+        "description": "Hire your children in your business to shift income to lower tax brackets and teach them valuable work skills."
     },
-    "reps": {
-        "term": "REPS (Real Estate Professional Status)",
-        "definition": "A tax classification allowing real estate professionals to deduct rental losses against other income without passive activity limitations.",
-        "plain_english": "A special tax status that lets real estate professionals use property losses to offset their other income.",
-        "case_study": {
-            "client": "David Thompson, Real Estate Developer",
-            "situation": "David had $450,000 in rental losses but couldn't use them due to passive activity rules.",
-            "structure": "Qualified for Real Estate Professional Status by documenting 1,200+ hours in real estate activities.",
-            "implementation": "Restructured time allocation and maintained detailed logs of real estate professional activities.",
-            "results": "Unlocked $450,000 in previously suspended losses, generating $157,000 in tax savings."
-        }
+    {
+        "strategy": "Cost Segregation",
+        "match_tags": ["real_estate", "has_rentals"],
+        "impact": "Save $25K+ upfront",
+        "module": "Depreciation Acceleration",
+        "glossary": ["cost_segregation"],
+        "description": "Accelerate depreciation on commercial properties by identifying components that can be depreciated over shorter periods."
     },
-    "oil_gas_depletion": {
-        "term": "Oil & Gas Depletion",
-        "definition": "Tax deductions available to owners of oil and gas properties for the reduction in reserves as resources are extracted.",
-        "plain_english": "Special tax breaks for oil and gas investments that let you deduct more than you actually invested.",
-        "case_study": {
-            "client": "Michael Stevens, High-Income Executive",
-            "situation": "Michael needed tax shelters for his $850,000 annual W-2 income.",
-            "structure": "Invested in oil and gas drilling partnerships with intangible drilling costs and depletion allowances.",
-            "implementation": "Claimed 75% of investment as immediate deduction plus ongoing percentage depletion.",
-            "results": "Generated $320,000 in first-year deductions from $400,000 investment, saving $112,000 in taxes."
-        }
+    {
+        "strategy": "Installment Sales",
+        "match_tags": ["investor", "exit_planning"],
+        "impact": "Spread out capital gains, reduce tax burden",
+        "module": "Smart Exit Planning",
+        "glossary": ["installment_sale"],
+        "description": "Structure asset sales to receive payments over multiple years, keeping you in lower tax brackets."
     },
-    "like_kind_exchange": {
-        "term": "1031 Like-Kind Exchange",
-        "definition": "A transaction allowing taxpayers to defer capital gains taxes by exchanging investment property for other investment property of like kind.",
-        "plain_english": "Swapping one investment property for another without paying capital gains taxes right away.",
-        "case_study": {
-            "client": "Lisa Garcia, Property Investor",
-            "situation": "Lisa wanted to sell her $1.8M apartment building (basis $600K) but avoid $240K in capital gains taxes.",
-            "structure": "Executed 1031 exchange into larger commercial property worth $2.5M using qualified intermediary.",
-            "implementation": "Identified replacement property within 45 days and completed exchange within 180 days.",
-            "results": "Deferred $240,000 in capital gains taxes while upgrading to higher-value property with better cash flow."
-        }
+    {
+        "strategy": "QBI Deduction Optimization",
+        "match_tags": ["s_corp", "llc", "business_owner"],
+        "impact": "Save $10K/year",
+        "module": "Business Income Strategies",
+        "glossary": ["qbi"],
+        "description": "Maximize your 20% qualified business income deduction through proper entity structuring and income planning."
     },
-    "conservation_easement": {
-        "term": "Conservation Easement",
-        "definition": "A legal agreement that permanently limits uses of land to protect its conservation values while allowing continued private ownership.",
-        "plain_english": "Donating development rights on your land to charity for a big tax deduction while still owning the property.",
-        "case_study": {
-            "client": "William Parker, Private Equity Partner",
-            "situation": "William earned $2.4M annually and needed significant charitable deductions.",
-            "structure": "Donated conservation easement on 400-acre ranch, appraised at $3.2M for charitable value.",
-            "implementation": "Preserved land for agricultural use while maintaining ownership and limited development rights.",
-            "results": "Claimed $3.2M charitable deduction over 6 years, saving $1.1M in federal and state taxes."
-        }
+    {
+        "strategy": "Home Office Deduction",
+        "match_tags": ["home_office", "business_owner", "contractor_income"],
+        "impact": "Save $2K–$4K/year",
+        "module": "Home Office Tax Breaks",
+        "glossary": ["home_office"],
+        "description": "Properly claim home office expenses to reduce taxable income while avoiding IRS red flags."
     },
-    "captive_insurance": {
-        "term": "Captive Insurance Company",
-        "definition": "A wholly-owned subsidiary created to provide insurance coverage to its parent company and related entities.",
-        "plain_english": "Creating your own insurance company to insure your business risks while getting tax deductions and building wealth.",
-        "case_study": {
-            "client": "Rachel Green, Manufacturing CEO",
-            "situation": "Rachel's company had high insurance costs and wanted to retain underwriting profits.",
-            "structure": "Formed captive insurance company to cover product liability, cyber security, and key person risks.",
-            "implementation": "Paid $600,000 annually in premiums to captive, building reserves for future claims.",
-            "results": "Deducted all premiums while building $3.2M in captive reserves over 5 years for family wealth transfer."
-        }
+    {
+        "strategy": "Conservation Easement",
+        "match_tags": ["investor", "build_wealth", "donates"],
+        "impact": "Six-figure charitable deduction opportunity",
+        "module": "Charitable Planning Strategies",
+        "glossary": ["conservation_easement"],
+        "description": "Donate development rights on land for significant charitable deductions while maintaining ownership."
+    },
+    {
+        "strategy": "Crypto Tax Loss Harvesting",
+        "match_tags": ["crypto", "investor"],
+        "impact": "Offset capital gains with crypto losses",
+        "module": "Crypto Tax Strategies",
+        "glossary": ["crypto_loss"],
+        "description": "Strategically realize crypto losses to offset capital gains from other investments."
+    },
+    {
+        "strategy": "QOF (Qualified Opportunity Fund)",
+        "match_tags": ["investor", "build_wealth"],
+        "impact": "Defer or exclude capital gains via Opportunity Zones",
+        "module": "Opportunity Fund Tax Planning",
+        "glossary": ["qof"],
+        "description": "Invest capital gains in Qualified Opportunity Funds to defer and potentially eliminate capital gains taxes."
     }
-}
+]
+
+def match_strategies(user_inputs):
+    """Match user inputs to relevant tax strategies"""
+    # Convert user inputs to tags
+    user_tags = []
+    
+    # Income types
+    income_map = {
+        "W-2": ["w2_income"],
+        "1099": ["contractor_income"],
+        "Business Owner": ["business_owner"],
+        "Real Estate": ["real_estate"],
+        "Investments": ["investor"],
+        "Crypto": ["crypto"]
+    }
+    
+    for income_type in user_inputs.get("income_types", []):
+        user_tags.extend(income_map.get(income_type, []))
+    
+    # Entity type
+    entity_map = {
+        "Sole Proprietorship": ["sole_prop"],
+        "LLC": ["llc"],
+        "S Corp": ["s_corp"],
+        "C Corp": ["c_corp"]
+    }
+    
+    entity_type = user_inputs.get("entity_type", "")
+    user_tags.extend(entity_map.get(entity_type, []))
+    
+    # Lifestyle factors
+    lifestyle_map = {
+        "Minor children": ["has_kids"],
+        "Home office": ["home_office"],
+        "Charitable giving": ["donates"],
+        "Rental properties": ["has_rentals"],
+        "Business travel": ["business_travel"]
+    }
+    
+    for lifestyle in user_inputs.get("lifestyle_factors", []):
+        user_tags.extend(lifestyle_map.get(lifestyle, []))
+    
+    # Goals
+    goal_map = {
+        "Pay less now": ["reduce_taxes"],
+        "Build wealth": ["build_wealth"],
+        "Reduce audit risk": ["reduce_risk"],
+        "Exit planning": ["exit_planning"]
+    }
+    
+    for goal in user_inputs.get("goals", []):
+        user_tags.extend(goal_map.get(goal, []))
+    
+    # Match strategies
+    matched_strategies = []
+    
+    for strategy in STRATEGY_DATABASE:
+        # Check if any of the strategy's required tags match user tags
+        if any(tag in user_tags for tag in strategy["match_tags"]):
+            # Calculate match score based on number of matching tags
+            match_score = len(set(strategy["match_tags"]) & set(user_tags))
+            strategy_copy = strategy.copy()
+            strategy_copy["match_score"] = match_score
+            matched_strategies.append(strategy_copy)
+    
+    # Sort by match score (highest first)
+    matched_strategies.sort(key=lambda x: x["match_score"], reverse=True)
+    
+    return matched_strategies
 
 # Helper function to convert MongoDB documents
 def serialize_doc(doc):
@@ -565,31 +610,17 @@ async def toggle_module_bookmark(data: dict):
         await db.user_bookmarks.insert_one(bookmark_data)
         return {"message": "Bookmark added", "is_bookmarked": True}
 
-# Tax Glossary API
-@app.get("/api/glossary")
-async def get_tax_glossary(search: Optional[str] = Query(None)):
-    """Get tax glossary terms with optional search"""
-    glossary = TAX_GLOSSARY
-    
-    if search:
-        search_lower = search.lower()
-        filtered_glossary = {
-            key: value for key, value in glossary.items()
-            if search_lower in value["term"].lower() or 
-               search_lower in value["definition"].lower() or
-               search_lower in value["plain_english"].lower()
-        }
-        return {"glossary": filtered_glossary}
-    
-    return {"glossary": glossary}
+# Strategy Builder API
+@app.post("/api/strategy-builder")
+async def get_tax_strategies(data: dict):
+    """Get matched tax strategies based on user inputs"""
+    matched_strategies = match_strategies(data)
+    return {"strategies": matched_strategies}
 
-@app.get("/api/glossary/{term_key}")
-async def get_glossary_term(term_key: str):
-    """Get specific glossary term details"""
-    if term_key not in TAX_GLOSSARY:
-        raise HTTPException(status_code=404, detail="Glossary term not found")
-    
-    return {"term": TAX_GLOSSARY[term_key]}
+@app.get("/api/strategies")
+async def get_all_strategies():
+    """Get all available tax strategies"""
+    return {"strategies": STRATEGY_DATABASE}
 
 # AI Assistant APIs (placeholder for now)
 @app.get("/api/ai-assistant/access/{user_email}")
