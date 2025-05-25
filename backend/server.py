@@ -414,6 +414,7 @@ async def get_status():
 async def get_categories():
     """Get all course categories"""
     categories = await db.categories.find({}).to_list(100)
+    categories = [serialize_doc(cat) for cat in categories]
     return {"categories": categories}
 
 @app.get("/api/courses")
