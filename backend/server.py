@@ -613,14 +613,81 @@ async def toggle_module_bookmark(data: dict):
 # Strategy Builder API
 @app.post("/api/strategy-builder")
 async def get_tax_strategies(data: dict):
-    """Get matched tax strategies based on user inputs"""
+    """Get personalized tax strategy recommendations with access control"""
+    user_email = data.get("user_email")
+    
+    if not user_email:
+        raise HTTPException(status_code=400, detail="user_email is required")
+    
+    # Check if user has access (premium course purchase) - for now we'll allow demo access
+    # TODO: Implement proper access control when purchase system is ready
+    # user_purchases = await db.user_purchases.find({"user_email": user_email}).to_list(100)
+    # if not user_purchases:
+    #     raise HTTPException(status_code=403, detail="Premium course access required")
+    
+    # Match strategies based on user inputs
     matched_strategies = match_strategies(data)
-    return {"strategies": matched_strategies}
+    
+    # Save results to database
+    result_data = {
+        "id": str(uuid.uuid4()),
+        "user_email": user_email,
+        "income_types": data.get("income_types", []),
+        "entity_type": data.get("entity_type", ""),
+        "lifestyle_factors": data.get("lifestyle_factors", []),
+        "goals": data.get("goals", []),
+        "matched_strategies": [serialize_doc(s) for s in matched_strategies],
+        "completed_at": datetime.utcnow()
+    }
+    
+    await db.strategy_builder_results.insert_one(result_data)
+    
+    return {
+        "strategies": matched_strategies,
+        "total_matches": len(matched_strategies),
+        "user_inputs": {
+            "income_types": data.get("income_types", []),
+            "entity_type": data.get("entity_type", ""),
+            "lifestyle_factors": data.get("lifestyle_factors", []),
+            "goals": data.get("goals", [])
+        }
+    }
+
+@app.get("/api/strategy-builder/access/{user_email}")
+async def check_strategy_builder_access(user_email: str):
+    """Check if user has access to strategy builder"""
+    # For demo purposes, allow access. In production, check course purchases
+    # user_purchases = await db.user_purchases.find({"user_email": user_email}).to_list(100)
+    
+    # Check if user has completed strategy builder before
+    previous_result = await db.strategy_builder_results.find_one({"user_email": user_email})
+    
+    return {
+        "has_access": True,  # Demo access for all users
+        "has_completed": bool(previous_result),
+        "last_completed": serialize_doc(previous_result.get("completed_at")) if previous_result else None
+    }
+
+@app.get("/api/strategy-builder/results/{user_email}")
+async def get_user_strategy_results(user_email: str):
+    """Get user's previous strategy builder results"""
+    result = await db.strategy_builder_results.find_one(
+        {"user_email": user_email},
+        sort=[("completed_at", -1)]
+    )
+    
+    if not result:
+        raise HTTPException(status_code=404, detail="No strategy results found")
+    
+    return {"result": serialize_doc(result)}
 
 @app.get("/api/strategies")
 async def get_all_strategies():
     """Get all available tax strategies"""
-    return {"strategies": STRATEGY_DATABASE}
+    return {
+        "strategies": STRATEGY_DATABASE,
+        "total_strategies": len(STRATEGY_DATABASE)
+    }
 
 # AI Assistant APIs (placeholder for now)
 @app.get("/api/ai-assistant/access/{user_email}")
