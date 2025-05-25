@@ -11,7 +11,7 @@ import GlossaryPage from './pages/GlossaryPage';
 import AIAssistantPage from './pages/AIAssistantPage';
 
 // API Configuration
-const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
 // Theme Context
 export const ThemeContext = React.createContext();
