@@ -37,6 +37,16 @@ class User(BaseModel):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     subscription_status: str = "free"
 
+class StrategyBuilderResult(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_email: str
+    income_types: List[str]
+    entity_type: str
+    lifestyle_factors: List[str]
+    goals: List[str]
+    matched_strategies: List[Dict[str, Any]]
+    completed_at: datetime = Field(default_factory=datetime.utcnow)
+
 class Category(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
