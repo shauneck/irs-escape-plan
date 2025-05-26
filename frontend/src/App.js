@@ -77,6 +77,7 @@ function App() {
                 <Route path="/glossary/:termKey" element={<GlossaryPage />} />
                 <Route path="/ai-assistant" element={<AIAssistantPage user={user} />} />
                 <Route path="/ai-upsell" element={<AIUpsellPage />} />
+                <Route path="/strategy-builder" element={<StrategyBuilderPage user={user} />} />
               </Routes>
             </main>
           </div>
