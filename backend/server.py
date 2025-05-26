@@ -481,11 +481,11 @@ async def get_courses(user_email: Optional[str] = None):
 
 @app.get("/api/courses/{course_id}")
 async def get_course(course_id: str, user_email: Optional[str] = None):
-    course = await db.courses.find_one({"id": course_id})
+    course = await db.courses.find_one({"id": course_id}, {"_id": 0})
     if not course:
         raise HTTPException(status_code=404, detail="Course not found")
     
-    modules = await db.modules.find({"course_id": course_id}).sort("module_number").to_list(None)
+    modules = await db.modules.find({"course_id": course_id}, {"_id": 0}).sort("module_number").to_list(None)
     
     if user_email:
         # Add progress and bookmark information
@@ -493,11 +493,11 @@ async def get_course(course_id: str, user_email: Optional[str] = None):
             progress = await db.user_module_progress.find_one({
                 "user_email": user_email,
                 "module_id": module["id"]
-            })
+            }, {"_id": 0})
             bookmark = await db.user_bookmarks.find_one({
                 "user_email": user_email,
                 "module_id": module["id"]
-            })
+            }, {"_id": 0})
             
             module["progress"] = progress if progress else None
             module["bookmark"] = bookmark if bookmark else None
