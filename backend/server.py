@@ -450,12 +450,12 @@ async def get_categories():
 
 @app.get("/api/courses")
 async def get_courses(user_email: Optional[str] = None):
-    courses = await db.courses.find({}).to_list(None)
+    courses = await db.courses.find({}, {"_id": 0}).to_list(None)
     
     if user_email:
         # Add progress information for each course
         for course in courses:
-            modules = await db.modules.find({"course_id": course["id"]}).to_list(None)
+            modules = await db.modules.find({"course_id": course["id"]}, {"_id": 0}).to_list(None)
             total_modules = len(modules)
             
             if total_modules > 0:
@@ -465,7 +465,7 @@ async def get_courses(user_email: Optional[str] = None):
                         "user_email": user_email,
                         "module_id": module["id"],
                         "completed": True
-                    })
+                    }, {"_id": 0})
                     if progress:
                         completed_modules += 1
                 
