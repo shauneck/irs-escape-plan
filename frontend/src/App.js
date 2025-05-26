@@ -10,6 +10,7 @@ import ModulePage from './pages/ModulePage';
 import GlossaryPage from './pages/GlossaryPage';
 import AIAssistantPage from './pages/AIAssistantPage';
 import AIUpsellPage from './pages/AIUpsellPage';
+import StrategyBuilderPage from './pages/StrategyBuilderPage';
 
 // API Configuration
 const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
