@@ -565,7 +565,13 @@ class IRSEscapePlanAPITester:
         self.test_glossary()
         self.test_glossary_search()
         
-        # Strategy Builder tests (NEW FEATURE)
+        # Tax Calculator tests (NEW FEATURE)
+        self.test_tax_calculator_basic()
+        self.test_tax_calculator_real_estate()
+        self.test_tax_calculator_w2_employee()
+        self.test_tax_calculator_validation()
+        
+        # Strategy Builder tests (EXISTING FEATURE)
         self.test_strategy_builder_core()
         self.test_strategy_builder_access()
         self.test_strategy_matching_logic()
