@@ -271,6 +271,132 @@ class IRSEscapePlanAPITester:
         else:
             self.log_test("AI Assistant Packages", False, details)
 
+    def test_tax_calculator_basic(self):
+        """Test tax calculator with basic business owner data"""
+        print("\n💰 Testing Tax Calculator - Business Owner...")
+        test_data = {
+            "user_email": "demo@example.com",
+            "annual_income": 150000,
+            "income_types": ["business", "w2"],
+            "has_business": True,
+            "entity_type": "s_corp",
+            "minor_children": 2,
+            "work_from_home": True,
+            "has_rentals": False,
+            "donates_to_charity": True
+        }
+        
+        success, response, details = self.run_api_test("POST", "/api/tax-calculator", data=test_data)
+        
+        if success:
+            total_savings = response.get('total_estimated_savings', 0)
+            strategies = response.get('matched_strategies', [])
+            
+            # Verify expected strategies for business owner with S Corp
+            expected_strategies = ["S Corp Salary Optimization", "Paying Your Kids Legally", "Home Office Deduction"]
+            found_strategies = [s.get('strategy', '') for s in strategies]
+            
+            expected_found = sum(1 for expected in expected_strategies 
+                               if any(expected in found for found in found_strategies))
+            
+            if total_savings >= 10000 and expected_found >= 2:
+                self.log_test("Tax Calculator - Business Owner", True, 
+                             f"{details} - Savings: ${total_savings:,}, Strategies: {len(strategies)}, Key matches: {expected_found}/3")
+            else:
+                self.log_test("Tax Calculator - Business Owner", False, 
+                             f"{details} - Savings: ${total_savings:,} (expected ≥$10K), Key matches: {expected_found}/3")
+        else:
+            self.log_test("Tax Calculator - Business Owner", False, details)
+
+    def test_tax_calculator_real_estate(self):
+        """Test tax calculator with real estate investor data"""
+        print("\n🏠 Testing Tax Calculator - Real Estate Investor...")
+        test_data = {
+            "user_email": "investor@example.com",
+            "annual_income": 250000,
+            "income_types": ["real_estate", "investments"],
+            "has_business": True,
+            "entity_type": "llc",
+            "minor_children": 0,
+            "work_from_home": False,
+            "has_rentals": True,
+            "donates_to_charity": False
+        }
+        
+        success, response, details = self.run_api_test("POST", "/api/tax-calculator", data=test_data)
+        
+        if success:
+            total_savings = response.get('total_estimated_savings', 0)
+            strategies = response.get('matched_strategies', [])
+            found_strategies = [s.get('strategy', '') for s in strategies]
+            
+            # Verify expected strategies for real estate investor
+            expected_strategies = ["REPS", "Cost Segregation"]
+            expected_found = sum(1 for expected in expected_strategies 
+                               if any(expected in found for found in found_strategies))
+            
+            if total_savings >= 5000 and expected_found >= 1:
+                self.log_test("Tax Calculator - Real Estate", True, 
+                             f"{details} - Savings: ${total_savings:,}, Real estate strategies: {expected_found}/2")
+            else:
+                self.log_test("Tax Calculator - Real Estate", False, 
+                             f"{details} - Savings: ${total_savings:,}, Real estate strategies: {expected_found}/2")
+        else:
+            self.log_test("Tax Calculator - Real Estate", False, details)
+
+    def test_tax_calculator_w2_employee(self):
+        """Test tax calculator with W-2 employee data"""
+        print("\n👔 Testing Tax Calculator - W-2 Employee...")
+        test_data = {
+            "user_email": "employee@example.com",
+            "annual_income": 120000,
+            "income_types": ["w2"],
+            "has_business": False,
+            "entity_type": "",
+            "minor_children": 1,
+            "work_from_home": True,
+            "has_rentals": False,
+            "donates_to_charity": True
+        }
+        
+        success, response, details = self.run_api_test("POST", "/api/tax-calculator", data=test_data)
+        
+        if success:
+            total_savings = response.get('total_estimated_savings', 0)
+            strategies = response.get('matched_strategies', [])
+            
+            # W-2 employees should have limited strategies
+            if len(strategies) <= 4 and total_savings >= 0:
+                self.log_test("Tax Calculator - W-2 Employee", True, 
+                             f"{details} - Savings: ${total_savings:,}, Limited strategies: {len(strategies)}")
+            else:
+                self.log_test("Tax Calculator - W-2 Employee", False, 
+                             f"{details} - Too many strategies for W-2: {len(strategies)}")
+        else:
+            self.log_test("Tax Calculator - W-2 Employee", False, details)
+
+    def test_tax_calculator_validation(self):
+        """Test tax calculator input validation"""
+        print("\n⚠️ Testing Tax Calculator - Input Validation...")
+        
+        # Test with minimal data (should still work)
+        test_data = {
+            "user_email": "test@example.com",
+            "annual_income": 50000,
+            "income_types": ["w2"]
+        }
+        
+        success, response, details = self.run_api_test("POST", "/api/tax-calculator", data=test_data)
+        
+        if success:
+            total_savings = response.get('total_estimated_savings', 0)
+            strategies = response.get('matched_strategies', [])
+            
+            self.log_test("Tax Calculator - Minimal Input", True, 
+                         f"{details} - Handled minimal input, Savings: ${total_savings:,}")
+        else:
+            self.log_test("Tax Calculator - Minimal Input", False, details)
+
     def test_strategy_builder_core(self):
         """Test Strategy Builder core functionality"""
         print("\n🎯 Testing Strategy Builder Core...")
