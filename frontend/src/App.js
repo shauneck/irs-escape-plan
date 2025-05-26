@@ -81,6 +81,7 @@ function App() {
                 <Route path="/ai-upsell" element={<AIUpsellPage />} />
                 <Route path="/strategy-builder" element={<StrategyBuilderPage user={user} />} />
                 <Route path="/tax-calculator" element={<TaxCalculatorPage user={user} />} />
+                <Route path="/entity-wizard" element={<EntityWizardPage user={user} />} />
               </Routes>
             </main>
           </div>
