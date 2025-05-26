@@ -36,6 +36,14 @@ function Header({ user }) {
             </li>
             <li>
               <Link 
+                to="/strategy-builder" 
+                className={`nav-link ${isActiveLink('/strategy-builder') ? 'active' : ''}`}
+              >
+                Strategy Builder
+              </Link>
+            </li>
+            <li>
+              <Link 
                 to="/glossary" 
                 className={`nav-link ${isActiveLink('/glossary') ? 'active' : ''}`}
               >
