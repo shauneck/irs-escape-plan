@@ -772,7 +772,7 @@ async def build_strategy(request: StrategyBuilderRequest):
 @app.get("/api/strategy-builder/strategies")
 async def get_all_strategies():
     """Get complete database of tax strategies"""
-    strategies = await db.tax_strategies.find({}).to_list(None)
+    strategies = await db.tax_strategies.find({}, {"_id": 0}).to_list(None)
     return strategies
 
 # Content Routes
