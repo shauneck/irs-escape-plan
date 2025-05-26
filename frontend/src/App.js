@@ -79,6 +79,7 @@ function App() {
                 <Route path="/ai-assistant" element={<AIAssistantPage user={user} />} />
                 <Route path="/ai-upsell" element={<AIUpsellPage />} />
                 <Route path="/strategy-builder" element={<StrategyBuilderPage user={user} />} />
+                <Route path="/tax-calculator" element={<TaxCalculatorPage user={user} />} />
               </Routes>
             </main>
           </div>
