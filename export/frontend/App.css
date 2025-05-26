@@ -1,0 +1,439 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+/* CSS Variables for Theme System */
+:root[data-theme="light"] {
+  --background: #f9f9f9;
+  --foreground: #1f1f1f;
+  --card: #ffffff;
+  --card-foreground: #1f1f1f;
+  --popover: #ffffff;
+  --popover-foreground: #1f1f1f;
+  --primary: #2d4c45;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #e57e35;
+  --accent-foreground: #ffffff;
+  --accent-dark: #b95d26;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #2d4c45;
+  --premium-gold: #fbbf24;
+  --success: #10b981;
+}
+
+:root[data-theme="dark"] {
+  --background: #1e1e1e;
+  --foreground: #f5f5f5;
+  --card: #2a2a2a;
+  --card-foreground: #f5f5f5;
+  --popover: #2a2a2a;
+  --popover-foreground: #f5f5f5;
+  --primary: #2d4c45;
+  --primary-foreground: #ffffff;
+  --secondary: #1e293b;
+  --secondary-foreground: #f1f5f9;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #e57e35;
+  --accent-foreground: #ffffff;
+  --accent-dark: #b95d26;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #374151;
+  --input: #374151;
+  --ring: #2d4c45;
+  --premium-gold: #fbbf24;
+  --success: #10b981;
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Utility Classes */
+.bg-background { background-color: var(--background); }
+.bg-card { background-color: var(--card); }
+.bg-primary { background-color: var(--primary); }
+.bg-secondary { background-color: var(--secondary); }
+.bg-accent { background-color: var(--accent); }
+.bg-accent-dark { background-color: var(--accent-dark); }
+.bg-premium-gold { background-color: var(--premium-gold); }
+.bg-success { background-color: var(--success); }
+
+.text-foreground { color: var(--foreground); }
+.text-card-foreground { color: var(--card-foreground); }
+.text-primary { color: var(--primary); }
+.text-primary-foreground { color: var(--primary-foreground); }
+.text-secondary-foreground { color: var(--secondary-foreground); }
+.text-muted-foreground { color: var(--muted-foreground); }
+.text-accent { color: var(--accent); }
+.text-accent-foreground { color: var(--accent-foreground); }
+.text-premium-gold { color: var(--premium-gold); }
+
+.border { border: 1px solid var(--border); }
+.border-primary { border-color: var(--primary); }
+.border-accent { border-color: var(--accent); }
+
+/* Custom Component Styles */
+.btn {
+  @apply px-6 py-3 rounded-lg font-medium transition-all duration-200 cursor-pointer inline-flex items-center justify-center;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.btn-primary:hover {
+  background-color: color-mix(in srgb, var(--primary) 85%, black);
+  transform: translateY(-1px);
+}
+
+.btn-accent {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.btn-accent:hover {
+  background-color: var(--accent-dark);
+  transform: translateY(-1px);
+}
+
+.btn-premium {
+  background: linear-gradient(135deg, var(--premium-gold), color-mix(in srgb, var(--premium-gold) 80%, orange));
+  color: var(--background);
+  font-weight: 600;
+}
+
+.btn-premium:hover {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--premium-gold) 90%, orange), var(--premium-gold));
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  background: transparent;
+}
+
+.btn-outline:hover {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.card-premium {
+  border: 2px solid var(--premium-gold);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--premium-gold), var(--accent));
+}
+
+/* Input Styles */
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(45, 76, 69, 0.1);
+}
+
+/* Animation Classes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Progress Bar */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--muted);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transition: width 0.3s ease;
+}
+
+/* Badge Styles */
+.badge {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.badge-free {
+  background-color: var(--success);
+  color: white;
+}
+
+.badge-premium {
+  background-color: var(--premium-gold);
+  color: var(--background);
+}
+
+.badge-difficulty {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background-color: var(--card);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .card {
+    padding: 1rem;
+  }
+  
+  .btn {
+    padding: 0.75rem 1.5rem;
+  }
+  
+  .modal-content {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-dark);
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--muted);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Hero Section Specific */
+.hero-gradient {
+  background: linear-gradient(135deg, var(--primary), color-mix(in srgb, var(--primary) 80%, var(--accent)));
+}
+
+/* Course Grid */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+@media (max-width: 640px) {
+  .course-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Netflix-style hover effects */
+.course-card {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.course-card:hover {
+  transform: scale(1.05);
+  z-index: 10;
+}
+
+.course-card:hover .course-thumbnail {
+  transform: scale(1.1);
+}
+
+.course-thumbnail {
+  transition: transform 0.3s ease;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Wizard Steps */
+.wizard-step {
+  @apply flex items-center justify-center w-8 h-8 rounded-full font-medium text-sm;
+}
+
+.wizard-step.active {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.wizard-step.completed {
+  background-color: var(--success);
+  color: white;
+}
+
+.wizard-step.inactive {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}
+
+/* Glossary Search */
+.glossary-search {
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted-foreground);
+}
+
+.search-input {
+  padding-left: 3rem;
+}
+
+/* Strategy Cards */
+.strategy-card {
+  border-left: 4px solid var(--accent);
+  transition: all 0.3s ease;
+}
+
+.strategy-card:hover {
+  border-left-color: var(--primary);
+  transform: translateX(4px);
+}
+
+/* Impact Score Indicator */
+.impact-score {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.impact-score-bar {
+  width: 100px;
+  height: 6px;
+  background-color: var(--muted);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.impact-score-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--primary));
+  transition: width 0.3s ease;
+}
