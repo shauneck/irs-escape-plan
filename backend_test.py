@@ -439,7 +439,13 @@ class IRSEscapePlanAPITester:
         self.test_glossary()
         self.test_glossary_search()
         
-        # Functionality tests
+        # Strategy Builder tests (NEW FEATURE)
+        self.test_strategy_builder_core()
+        self.test_strategy_builder_access()
+        self.test_strategy_matching_logic()
+        self.test_strategy_builder_error_handling()
+        
+        # Other functionality tests
         self.test_progress_tracking()
         self.test_bookmark_functionality()
         self.test_ai_assistant_packages()
