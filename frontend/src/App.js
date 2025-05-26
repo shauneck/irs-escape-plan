@@ -1,53 +1,73 @@
-import { useEffect } from "react";
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.css';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+// Components
+import Header from './components/Header';
+import Footer from './components/Footer';
+import HomePage from './pages/HomePage';
+import CoursesPage from './pages/CoursesPage';
+import CourseDetailPage from './pages/CourseDetailPage';
+import ModulePage from './pages/ModulePage';
+import ToolsPage from './pages/ToolsPage';
+import GlossaryPage from './pages/GlossaryPage';
+import TaxCalculator from './pages/TaxCalculator';
+import StrategyBuilder from './pages/StrategyBuilder';
+import AIAssistantLanding from './pages/AIAssistantLanding';
+import TaxCalculatorLanding from './pages/TaxCalculatorLanding';
+import StrategyBuilderLanding from './pages/StrategyBuilderLanding';
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
-
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
-
-  return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
+// Theme Context
+export const ThemeContext = React.createContext();
 
 function App() {
+  const [theme, setTheme] = useState('light');
+  const [user, setUser] = useState({ email: 'demo@example.com', name: 'Demo User' }); // Mock user for demo
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+  };
+
+  const themeValue = {
+    theme,
+    toggleTheme,
+    user,
+    setUser
+  };
+
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <ThemeContext.Provider value={themeValue}>
+      <Router>
+        <div className="min-h-screen bg-background text-foreground">
+          <Header />
+          <main className="min-h-screen">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/courses" element={<CoursesPage />} />
+              <Route path="/course/:courseId" element={<CourseDetailPage />} />
+              <Route path="/course/:courseId/module/:moduleId" element={<ModulePage />} />
+              <Route path="/tools" element={<ToolsPage />} />
+              <Route path="/glossary" element={<GlossaryPage />} />
+              <Route path="/calculator" element={<TaxCalculator />} />
+              <Route path="/strategies" element={<StrategyBuilder />} />
+              <Route path="/ai-assistant" element={<AIAssistantLanding />} />
+              <Route path="/tax-calculator" element={<TaxCalculatorLanding />} />
+              <Route path="/strategy-builder" element={<StrategyBuilderLanding />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </Router>
+    </ThemeContext.Provider>
   );
 }
 
