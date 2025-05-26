@@ -267,7 +267,7 @@ async def initialize_sample_data():
 5. Make the election before March 15th for current year treatment
 
 **Advanced Tip:** For high earners, we often recommend the Augusta Rule strategy - rent your home to your business for up to 14 days annually, tax-free income up to $20,000+.
-            """",
+            """,
             "module_number": 2,
             "estimated_duration": 75
         }
