@@ -44,6 +44,14 @@ function Header({ user }) {
             </li>
             <li>
               <Link 
+                to="/tax-calculator" 
+                className={`nav-link ${isActiveLink('/tax-calculator') ? 'active' : ''}`}
+              >
+                Tax Calculator
+              </Link>
+            </li>
+            <li>
+              <Link 
                 to="/glossary" 
                 className={`nav-link ${isActiveLink('/glossary') ? 'active' : ''}`}
               >
