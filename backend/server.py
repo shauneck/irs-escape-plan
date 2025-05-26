@@ -694,7 +694,7 @@ async def get_all_strategies():
 async def calculate_tax_savings(data: dict):
     """Calculate potential tax savings based on user inputs"""
     user_email = data.get("user_email")
-    annual_income = data.get("annual_income", 0)
+    annual_income = float(data.get("annual_income", 0))  # Convert to float
     
     # Convert inputs to tags for strategy matching
     user_tags = []
