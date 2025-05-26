@@ -689,31 +689,116 @@ async def get_all_strategies():
         "total_strategies": len(STRATEGY_DATABASE)
     }
 
-# AI Assistant APIs (placeholder for now)
-@app.get("/api/ai-assistant/access/{user_email}")
-async def check_ai_access(user_email: str):
-    """Check if user has AI assistant access"""
-    purchase = await db.ai_assistant_purchases.find_one({
-        "user_email": user_email,
-        "status": "active"
-    })
+# Tax Calculator API
+@app.post("/api/tax-calculator")
+async def calculate_tax_savings(data: dict):
+    """Calculate potential tax savings based on user inputs"""
+    user_email = data.get("user_email")
+    annual_income = data.get("annual_income", 0)
     
-    if not purchase:
-        return {"has_access": False, "message": "No active AI assistant subscription"}
+    # Convert inputs to tags for strategy matching
+    user_tags = []
     
-    purchase = serialize_doc(purchase)
+    # Income types mapping
+    income_type_map = {
+        'w2': ['w2_income'],
+        '1099': ['contractor_income'],
+        'business': ['business_owner'],
+        'real_estate': ['real_estate'],
+        'investments': ['investor'],
+        'crypto': ['crypto']
+    }
     
-    # Check if monthly subscription is expired
-    if purchase["plan_type"] == "monthly" and purchase["expires_at"]:
-        expires_at = datetime.fromisoformat(purchase["expires_at"].replace('Z', '+00:00')) if isinstance(purchase["expires_at"], str) else purchase["expires_at"]
-        if datetime.utcnow() > expires_at:
-            await db.ai_assistant_purchases.update_one(
-                {"id": purchase["id"]},
-                {"$set": {"status": "expired"}}
-            )
-            return {"has_access": False, "message": "AI assistant subscription expired"}
+    for income_type in data.get("income_types", []):
+        user_tags.extend(income_type_map.get(income_type, []))
     
-    return {"has_access": True, "plan_type": purchase["plan_type"]}
+    # Business and entity mapping
+    if data.get("has_business", False):
+        user_tags.append("business_owner")
+        entity_type = data.get("entity_type", "")
+        entity_map = {
+            'sole_prop': ['sole_prop'],
+            'llc': ['llc'],
+            's_corp': ['s_corp'],
+            'c_corp': ['c_corp']
+        }
+        user_tags.extend(entity_map.get(entity_type, []))
+    
+    # Lifestyle factors
+    if data.get("minor_children", 0) > 0:
+        user_tags.append("has_kids")
+    if data.get("work_from_home", False):
+        user_tags.append("home_office")
+    if data.get("has_rentals", False):
+        user_tags.append("has_rentals")
+    if data.get("donates_to_charity", False):
+        user_tags.append("donates")
+    
+    # Match strategies
+    matched_strategies = []
+    total_savings = 0
+    
+    for strategy in STRATEGY_DATABASE:
+        # Check if any of the strategy's required tags match user tags
+        if any(tag in user_tags for tag in strategy["match_tags"]):
+            strategy_copy = strategy.copy()
+            
+            # Calculate match score
+            match_score = len(set(strategy["match_tags"]) & set(user_tags))
+            strategy_copy["match_score"] = match_score
+            
+            # Adjust savings based on income level (for some strategies)
+            impact_value = strategy.get("impact_value", 0)
+            
+            # Income-based adjustments for certain strategies
+            if strategy["strategy"] == "QBI Deduction Optimization" and annual_income:
+                # QBI is up to 20% of qualified income, capped
+                qbi_savings = min(annual_income * 0.20 * 0.32, 10000)  # 32% tax rate assumption
+                impact_value = qbi_savings
+                
+            elif strategy["strategy"] == "S Corp Salary Optimization" and annual_income:
+                # Self-employment tax savings roughly 15.3% on amount above reasonable salary
+                se_savings = min(annual_income * 0.153 * 0.6, 15000)  # Conservative estimate
+                impact_value = se_savings
+                
+            elif strategy["strategy"] == "Paying Your Kids Legally":
+                # Multiple by number of kids
+                kids_count = data.get("minor_children", 1)
+                impact_value = impact_value * min(kids_count, 3)  # Cap at 3 kids for calculation
+            
+            strategy_copy["impact_value"] = int(impact_value)
+            matched_strategies.append(strategy_copy)
+            total_savings += impact_value
+    
+    # Sort by match score and impact
+    matched_strategies.sort(key=lambda x: (x["match_score"], x["impact_value"]), reverse=True)
+    
+    # Limit to top 6 strategies for display
+    matched_strategies = matched_strategies[:6]
+    
+    # Save calculation result
+    if user_email and user_email != "anonymous":
+        calculation_data = {
+            "id": str(uuid.uuid4()),
+            "user_email": user_email,
+            "annual_income": annual_income,
+            "inputs": data,
+            "matched_strategies": [serialize_doc(s) for s in matched_strategies],
+            "total_estimated_savings": int(total_savings),
+            "calculated_at": datetime.utcnow()
+        }
+        
+        await db.tax_calculations.insert_one(calculation_data)
+    
+    return {
+        "total_estimated_savings": int(total_savings),
+        "matched_strategies": matched_strategies,
+        "calculation_summary": {
+            "annual_income": annual_income,
+            "strategies_found": len(matched_strategies),
+            "user_tags": user_tags
+        }
+    }
 
 @app.get("/api/ai-assistant/packages")
 async def get_ai_packages():
