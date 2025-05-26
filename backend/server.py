@@ -665,7 +665,7 @@ async def check_strategy_builder_access(user_email: str):
     return {
         "has_access": True,  # Demo access for all users
         "has_completed": bool(previous_result),
-        "last_completed": serialize_doc(previous_result.get("completed_at")) if previous_result else None
+        "last_completed": previous_result.get("completed_at").isoformat() if previous_result and previous_result.get("completed_at") else None
     }
 
 @app.get("/api/strategy-builder/results/{user_email}")
