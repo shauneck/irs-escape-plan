@@ -789,13 +789,13 @@ async def get_glossary(search: Optional[str] = None):
             ]
         }
     
-    terms = await db.glossary_terms.find(query).to_list(None)
+    terms = await db.glossary_terms.find(query, {"_id": 0}).to_list(None)
     return terms
 
 @app.get("/api/strategies")
 async def get_strategies():
     """Get all tax strategies"""
-    strategies = await db.tax_strategies.find({}).to_list(None)
+    strategies = await db.tax_strategies.find({}, {"_id": 0}).to_list(None)
     return strategies
 
 if __name__ == "__main__":
