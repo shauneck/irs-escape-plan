@@ -676,7 +676,7 @@ async def build_strategy(request: StrategyBuilderRequest):
     """Generate personalized tax strategy recommendations"""
     
     # Get all available strategies
-    all_strategies = await db.tax_strategies.find({}).to_list(None)
+    all_strategies = await db.tax_strategies.find({}, {"_id": 0}).to_list(None)
     
     # Strategy matching logic based on user profile
     matched_strategies = []
