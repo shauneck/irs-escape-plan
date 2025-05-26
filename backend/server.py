@@ -689,6 +689,178 @@ async def get_all_strategies():
         "total_strategies": len(STRATEGY_DATABASE)
     }
 
+# Entity Structure Wizard Data
+ENTITY_RECOMMENDATIONS = [
+    {
+        "income_range": "<$30K",
+        "owner_type": "solo",
+        "recommendation": "Sole Proprietor or Single-Member LLC",
+        "description": "Simple setup with minimal compliance. Suitable for new or low-income businesses.",
+        "impact_score": 2,
+        "suggested_modules": ["Forming Your First LLC", "Self-Employed Tax Basics"],
+        "tax_benefits": "Minimal setup costs, simple tax reporting",
+        "considerations": "Higher self-employment tax, unlimited personal liability"
+    },
+    {
+        "income_range": "$30K-$75K",
+        "owner_type": "solo",
+        "recommendation": "Single-Member LLC or S Corporation",
+        "description": "A sole proprietor should consider an LLC or S Corp to begin reducing self-employment tax.",
+        "impact_score": 3,
+        "suggested_modules": ["LLC Setup Checklist", "Intro to S Corp Elections"],
+        "tax_benefits": "Asset protection with LLC, potential SE tax savings with S Corp",
+        "considerations": "S Corp requires payroll, LLC may not reduce SE tax"
+    },
+    {
+        "income_range": "$75K-$150K",
+        "owner_type": "solo",
+        "recommendation": "S Corporation",
+        "description": "S Corp offers significant self-employment tax savings while keeping admin manageable.",
+        "impact_score": 4,
+        "suggested_modules": ["S Corp Payroll Optimization", "S Corp vs. LLC Deep Dive"],
+        "tax_benefits": "Save $8K-$15K annually in self-employment taxes",
+        "considerations": "Requires reasonable salary, quarterly payroll taxes"
+    },
+    {
+        "income_range": "$150K-$500K",
+        "owner_type": "solo",
+        "recommendation": "S Corporation",
+        "description": "At this level, S Corp is highly tax-efficient. Consider REPS or Augusta Rule to layer benefits.",
+        "impact_score": 5,
+        "suggested_modules": ["Advanced S Corp Planning", "REPS & Augusta Rule in Action"],
+        "tax_benefits": "Save $15K-$35K annually, plus advanced strategy layering",
+        "considerations": "Complex payroll optimization, may hit QBI phase-out limits"
+    },
+    {
+        "income_range": "$500K+",
+        "owner_type": "solo",
+        "recommendation": "C Corporation or S Corporation",
+        "description": "C Corp may offer long-term tax deferral, QSBS treatment, and advanced planning. S Corp still viable with expert support.",
+        "impact_score": 5,
+        "suggested_modules": ["C Corp Strategy for High Earners", "QSBS Optimization"],
+        "tax_benefits": "Potential QSBS exclusion up to $10M, income deferral strategies",
+        "considerations": "Double taxation risk, requires sophisticated planning"
+    },
+    {
+        "income_range": "$30K+",
+        "owner_type": "spouse",
+        "recommendation": "S Corporation or Multi-Member LLC",
+        "description": "With a spouse, S Corp allows flexible compensation. LLC provides operational flexibility.",
+        "impact_score": 4,
+        "suggested_modules": ["Spouse Employment Strategies", "Family Business Tax Planning"],
+        "tax_benefits": "Split income between spouses, family employment benefits",
+        "considerations": "Must justify spouse salary, family employment rules apply"
+    },
+    {
+        "income_range": "$75K+",
+        "owner_type": "partners",
+        "recommendation": "Multi-Member LLC or C Corporation",
+        "description": "With partners, choose a multi-member LLC for flexibility or a C Corp if planning to scale or raise funds.",
+        "impact_score": 4,
+        "suggested_modules": ["LLC Partnership Agreement", "C Corp for Scaling Ventures"],
+        "tax_benefits": "Flexible profit/loss allocation, investment-ready structure",
+        "considerations": "Complex partnership taxation, potential K-1 delays"
+    },
+    {
+        "income_range": "<$75K",
+        "owner_type": "partners",
+        "recommendation": "Multi-Member LLC",
+        "description": "For lower-income partnerships, LLC provides simplicity and flexibility without S Corp complexity.",
+        "impact_score": 3,
+        "suggested_modules": ["Basic Partnership Structures", "LLC Operating Agreements"],
+        "tax_benefits": "Simple partnership taxation, operational flexibility",
+        "considerations": "Self-employment tax on active partners, no salary requirements"
+    }
+]
+
+def match_entity_recommendation(user_inputs):
+    """Match user inputs to appropriate entity recommendation"""
+    income_range = user_inputs.get("income_range", "")
+    owner_type = user_inputs.get("owner_type", "solo")
+    goals = user_inputs.get("goals", [])
+    
+    # Find matching recommendation
+    for recommendation in ENTITY_RECOMMENDATIONS:
+        # Check income range match
+        if recommendation["income_range"] == income_range:
+            # Check owner type match
+            if recommendation["owner_type"] == owner_type:
+                result = recommendation.copy()
+                
+                # Adjust recommendation based on goals
+                if "Raising money or scaling" in goals and income_range in ["$150K-$500K", "$500K+"]:
+                    if "LLC" in result["recommendation"]:
+                        result["recommendation"] = "C Corporation"
+                        result["description"] = "For scaling and investment, C Corp provides the best structure for raising capital and future growth."
+                        result["suggested_modules"] = ["C Corp for Scaling Ventures", "Investment-Ready Entity Structures"]
+                
+                if "Keeping it simple" in goals and "S Corporation" in result["recommendation"]:
+                    if income_range in ["$30K-$75K"]:
+                        result["recommendation"] = "Single-Member LLC with S Corp election later"
+                        result["description"] = "Start with LLC for simplicity, elect S Corp status when income justifies the complexity."
+                
+                return result
+    
+    # Fallback recommendation
+    return {
+        "income_range": income_range,
+        "owner_type": owner_type,
+        "recommendation": "Single-Member LLC",
+        "description": "A flexible starting point that can be easily converted to other entity types as your business grows.",
+        "impact_score": 3,
+        "suggested_modules": ["Basic Business Entity Setup"],
+        "tax_benefits": "Asset protection and business expense deductions",
+        "considerations": "May be subject to self-employment tax on all income"
+    }
+
+# Entity Structure Wizard API
+@app.post("/api/entity-structure-wizard")
+async def get_entity_recommendation(data: dict):
+    """Get entity structure recommendation based on user inputs"""
+    user_email = data.get("user_email")
+    
+    if not user_email:
+        raise HTTPException(status_code=400, detail="user_email is required")
+    
+    # Get recommendation based on inputs
+    recommendation = match_entity_recommendation(data)
+    
+    # Save wizard result
+    wizard_data = {
+        "id": str(uuid.uuid4()),
+        "user_email": user_email,
+        "income_range": data.get("income_range", ""),
+        "owner_type": data.get("owner_type", "solo"),
+        "income_types": data.get("income_types", []),
+        "goals": data.get("goals", []),
+        "recommendation": recommendation,
+        "completed_at": datetime.utcnow()
+    }
+    
+    await db.entity_wizard_results.insert_one(wizard_data)
+    
+    return {
+        "recommendation": recommendation,
+        "user_inputs": {
+            "income_range": data.get("income_range", ""),
+            "owner_type": data.get("owner_type", "solo"),
+            "income_types": data.get("income_types", []),
+            "goals": data.get("goals", [])
+        }
+    }
+
+@app.get("/api/entity-structure-wizard/access/{user_email}")
+async def check_entity_wizard_access(user_email: str):
+    """Check if user has access to entity structure wizard"""
+    # For demo purposes, allow access to all users
+    previous_result = await db.entity_wizard_results.find_one({"user_email": user_email})
+    
+    return {
+        "has_access": True,
+        "has_completed": bool(previous_result),
+        "last_completed": serialize_doc(previous_result.get("completed_at")) if previous_result else None
+    }
+
 # Tax Calculator API
 @app.post("/api/tax-calculator")
 async def calculate_tax_savings(data: dict):
