@@ -271,6 +271,160 @@ class IRSEscapePlanAPITester:
         else:
             self.log_test("AI Assistant Packages", False, details)
 
+    def test_strategy_builder_core(self):
+        """Test Strategy Builder core functionality"""
+        print("\n🎯 Testing Strategy Builder Core...")
+        
+        # Test get all strategies
+        success, response, details = self.run_api_test("GET", "/api/strategies")
+        
+        if success:
+            strategies = response.get("strategies", [])
+            total_strategies = response.get("total_strategies", 0)
+            
+            if len(strategies) == 12 and total_strategies == 12:
+                # Check for key strategies
+                strategy_names = [s.get("strategy", "") for s in strategies]
+                key_strategies = ["Augusta Rule", "S Corp Salary Optimization", "REPS (Real Estate Professional Status)", "QSBS (Qualified Small Business Stock)"]
+                
+                found_strategies = [s for s in key_strategies if s in strategy_names]
+                
+                if len(found_strategies) == len(key_strategies):
+                    self.log_test("Strategy Database", True, 
+                                 f"{details} - Found all 12 strategies including key ones: {found_strategies}")
+                else:
+                    self.log_test("Strategy Database", False, 
+                                 f"{details} - Missing key strategies. Found: {found_strategies}")
+            else:
+                self.log_test("Strategy Database", False, 
+                             f"{details} - Expected 12 strategies, got {len(strategies)}")
+        else:
+            self.log_test("Strategy Database", False, details)
+
+    def test_strategy_builder_access(self):
+        """Test Strategy Builder access control"""
+        print("\n🔍 Testing Strategy Builder Access...")
+        
+        success, response, details = self.run_api_test("GET", "/api/strategy-builder/access/demo@example.com")
+        
+        if success:
+            has_access = response.get("has_access", False)
+            has_completed = response.get("has_completed", False)
+            
+            if has_access:
+                self.log_test("Strategy Builder Access", True, 
+                             f"{details} - Demo user has access, completed: {has_completed}")
+            else:
+                self.log_test("Strategy Builder Access", False, 
+                             f"{details} - Demo user should have access")
+        else:
+            self.log_test("Strategy Builder Access", False, details)
+
+    def test_strategy_matching_logic(self):
+        """Test Strategy Builder matching logic with different combinations"""
+        print("\n🧠 Testing Strategy Matching Logic...")
+        
+        # Test Case 1: Business Owner + S Corp
+        test_case_1 = {
+            "user_email": "demo@example.com",
+            "income_types": ["Business Owner"],
+            "entity_type": "S Corp",
+            "lifestyle_factors": ["Home office"],
+            "goals": ["Pay less now"]
+        }
+        
+        success, response, details = self.run_api_test("POST", "/api/strategy-builder", data=test_case_1)
+        
+        if success:
+            strategies = response.get("strategies", [])
+            total_matches = response.get("total_matches", 0)
+            user_inputs = response.get("user_inputs", {})
+            
+            if strategies and total_matches > 0:
+                strategy_names = [s.get("strategy", "") for s in strategies]
+                
+                # Should match S Corp Salary Optimization
+                if "S Corp Salary Optimization" in strategy_names:
+                    self.log_test("S Corp Strategy Matching", True, 
+                                 f"{details} - Correctly matched S Corp strategy among {total_matches} total")
+                else:
+                    self.log_test("S Corp Strategy Matching", False, 
+                                 f"{details} - S Corp strategy not found in matches: {strategy_names}")
+            else:
+                self.log_test("Business Owner + S Corp Matching", False, 
+                             f"{details} - No strategies matched")
+        else:
+            self.log_test("Business Owner + S Corp Matching", False, details)
+        
+        # Test Case 2: Real Estate + LLC
+        test_case_2 = {
+            "user_email": "demo@example.com",
+            "income_types": ["Real Estate"],
+            "entity_type": "LLC",
+            "lifestyle_factors": ["Rental properties"],
+            "goals": ["Build wealth"]
+        }
+        
+        success, response, details = self.run_api_test("POST", "/api/strategy-builder", data=test_case_2)
+        
+        if success:
+            strategies = response.get("strategies", [])
+            strategy_names = [s.get("strategy", "") for s in strategies]
+            
+            # Should match REPS strategy
+            if "REPS (Real Estate Professional Status)" in strategy_names:
+                self.log_test("REPS Strategy Matching", True, 
+                             f"{details} - Correctly matched REPS for Real Estate + LLC")
+            else:
+                self.log_test("REPS Strategy Matching", False, 
+                             f"{details} - REPS not found for Real Estate + LLC")
+        else:
+            self.log_test("Real Estate + LLC Matching", False, details)
+        
+        # Test Case 3: Investor + C Corp
+        test_case_3 = {
+            "user_email": "demo@example.com",
+            "income_types": ["Investments"],
+            "entity_type": "C Corp",
+            "lifestyle_factors": [],
+            "goals": ["Build wealth"]
+        }
+        
+        success, response, details = self.run_api_test("POST", "/api/strategy-builder", data=test_case_3)
+        
+        if success:
+            strategies = response.get("strategies", [])
+            strategy_names = [s.get("strategy", "") for s in strategies]
+            
+            # Should match QSBS strategy
+            if "QSBS (Qualified Small Business Stock)" in strategy_names:
+                self.log_test("QSBS Strategy Matching", True, 
+                             f"{details} - Correctly matched QSBS for Investor + C Corp")
+            else:
+                self.log_test("QSBS Strategy Matching", False, 
+                             f"{details} - QSBS not found for Investor + C Corp")
+        else:
+            self.log_test("Investor + C Corp Matching", False, details)
+
+    def test_strategy_builder_error_handling(self):
+        """Test Strategy Builder error handling"""
+        print("\n⚠️ Testing Strategy Builder Error Handling...")
+        
+        # Test missing user email
+        test_data = {
+            "income_types": ["Business Owner"],
+            "entity_type": "S Corp"
+        }
+        
+        success, response, details = self.run_api_test("POST", "/api/strategy-builder", 
+                                                      data=test_data, expected_status=400)
+        
+        if success:
+            self.log_test("Strategy Builder Missing Email", True, 
+                         f"{details} - Correctly returned 400 for missing email")
+        else:
+            self.log_test("Strategy Builder Missing Email", False, details)
+
     def run_all_tests(self):
         """Run all API tests"""
         print("🚀 Starting IRS Escape Plan API Testing...")
