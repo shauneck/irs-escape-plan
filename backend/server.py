@@ -445,7 +445,7 @@ async def startup_event():
 # Course Management Routes
 @app.get("/api/categories")
 async def get_categories():
-    categories = await db.categories.find({}).to_list(None)
+    categories = await db.categories.find({}, {"_id": 0}).to_list(None)
     return categories
 
 @app.get("/api/courses")
