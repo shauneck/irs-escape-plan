@@ -508,14 +508,14 @@ async def get_course(course_id: str, user_email: Optional[str] = None):
 @app.get("/api/courses/{course_id}/modules/{module_id}")
 async def get_module(course_id: str, module_id: str, user_email: Optional[str] = None):
     # Check if course exists and user has access
-    course = await db.courses.find_one({"id": course_id})
+    course = await db.courses.find_one({"id": course_id}, {"_id": 0})
     if not course:
         raise HTTPException(status_code=404, detail="Course not found")
     
     # For premium courses, you would check user subscription here
     # For now, allowing access to demonstrate functionality
     
-    module = await db.modules.find_one({"id": module_id, "course_id": course_id})
+    module = await db.modules.find_one({"id": module_id, "course_id": course_id}, {"_id": 0})
     if not module:
         raise HTTPException(status_code=404, detail="Module not found")
     
@@ -523,11 +523,11 @@ async def get_module(course_id: str, module_id: str, user_email: Optional[str] =
         progress = await db.user_module_progress.find_one({
             "user_email": user_email,
             "module_id": module_id
-        })
+        }, {"_id": 0})
         bookmark = await db.user_bookmarks.find_one({
             "user_email": user_email,
             "module_id": module_id
-        })
+        }, {"_id": 0})
         
         module["progress"] = progress if progress else None
         module["bookmark"] = bookmark if bookmark else None
