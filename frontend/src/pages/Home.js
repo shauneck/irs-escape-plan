@@ -60,13 +60,17 @@ const CourseCard = ({ module }) => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
         <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+          <div className="flex justify-between items-center mb-2">
+            <span className="bg-yellow-400 text-black text-xs px-2 py-1 rounded-full">{module.badge}</span>
+            <span className="text-yellow-400 font-bold">{module.price}</span>
+          </div>
           <h3 className="font-bold text-lg mb-1 group-hover:text-yellow-400 transition-colors">
             {module.title}
           </h3>
-          <p className="text-sm text-gray-200 mb-2 line-clamp-2">{module.hook}</p>
+          <p className="text-sm text-gray-200 mb-2 line-clamp-2">{module.tagline}</p>
           <div className="flex justify-between items-center text-xs text-gray-300 mb-2">
             <span>{module.duration}</span>
-            <span>{module.progress}% complete</span>
+            <span>{module.modules} modules</span>
           </div>
           {module.progress > 0 && (
             <div className="w-full bg-gray-700 rounded-full h-1.5">
