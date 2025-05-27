@@ -8,11 +8,9 @@ const Navigation = ({ theme, toggleTheme }) => {
 
   const navItems = [
     { name: "Home", path: "/" },
-    { name: "My Plan", path: "/my-plan" },
-    { name: "Explore", path: "/explore" },
-    { name: "Documents", path: "/documents" },
+    { name: "Glossary", path: "/explore" },
+    { name: "Dashboard", path: "/my-plan" },
     { name: "Community", path: "/community" },
-    { name: "Marketplace", path: "/marketplace" },
   ];
 
   const exploreSubItems = [
