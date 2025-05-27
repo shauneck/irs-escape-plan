@@ -8,6 +8,7 @@ import Explore from "./pages/Explore";
 import Marketplace from "./pages/Marketplace";
 import CourseDetail from "./pages/CourseDetail";
 import AdvisorDashboard from './pages/AdvisorDashboard';
+import DocumentReader from './pages/DocumentReader';
 
 function App() {
   return (
