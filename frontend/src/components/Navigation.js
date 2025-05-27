@@ -10,6 +10,7 @@ const Navigation = () => {
     { name: "Home", path: "/" },
     { name: "My Plan", path: "/my-plan" },
     { name: "Explore", path: "/explore" },
+    { name: "Documents", path: "/documents" },
     { name: "Marketplace", path: "/marketplace" },
   ];
 
