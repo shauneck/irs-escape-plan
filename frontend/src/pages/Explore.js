@@ -406,52 +406,294 @@ const Explore = () => {
 
         {/* Content Sections */}
         {activeSection === "glossary" && (
-          <div className="bg-white rounded-lg shadow">
-            <div className="p-6 border-b border-gray-200">
-              <h3 className="text-lg font-medium text-gray-900">Tax Strategy Glossary</h3>
-              <p className="mt-1 text-sm text-gray-600">Key terms and definitions for tax optimization</p>
-            </div>
-            <div className="p-6">
-              <div className="space-y-6">
-                {glossaryTerms.map((item, index) => (
-                  <div key={index} className="border-l-4 border-yellow-400 pl-4">
-                    <h4 className="font-semibold text-gray-900">{item.term}</h4>
-                    <p className="mt-1 text-gray-600">{item.definition}</p>
+          <div className="space-y-6">
+            {/* Glossary Header with Progress */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900">Advanced Tax Strategy Glossary</h3>
+                  <p className="mt-1 text-sm text-gray-600">Master complex tax terms with interactive learning</p>
+                </div>
+                <div className="flex items-center space-x-6">
+                  <ProgressRing />
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-yellow-500">{userStats.xp}</div>
+                    <div className="text-sm text-gray-600">XP</div>
                   </div>
-                ))}
+                </div>
+              </div>
+
+              {/* User Badges */}
+              {userStats.badges.length > 0 && (
+                <div className="mb-6">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">Your Badges</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {userStats.badges.map((badge, index) => (
+                      <Badge key={index} badge={badge} />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Search and Filters */}
+              <div className="space-y-4">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex-1">
+                    <input
+                      type="text"
+                      placeholder="Search terms..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    />
+                  </div>
+                  <button
+                    onClick={() => setActiveSection("quiz-mode")}
+                    className="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors"
+                  >
+                    Start Quiz
+                  </button>
+                </div>
+
+                {/* Tag Filters */}
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">Filter by Category:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {allTags.map(tag => (
+                      <button
+                        key={tag}
+                        onClick={() => toggleTag(tag)}
+                        className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                          selectedTags.includes(tag)
+                            ? 'bg-yellow-500 text-white'
+                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        }`}
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                    {selectedTags.length > 0 && (
+                      <button
+                        onClick={() => setSelectedTags([])}
+                        className="px-3 py-1 rounded-full text-sm bg-red-500 text-white hover:bg-red-600"
+                      >
+                        Clear All
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
+
+            {/* Glossary Terms */}
+            <div className="space-y-4">
+              {filteredTerms.map((term, index) => {
+                const termProgress = userProgress[term.term];
+                const isMastered = userStats.masteredTerms.includes(term.term);
+                const isFavorited = favorites.includes(term.term);
+
+                return (
+                  <div key={index} className="bg-white rounded-lg shadow p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-3 mb-2">
+                          <h4 className="font-semibold text-gray-900 text-lg">{term.term}</h4>
+                          {isMastered && (
+                            <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs">
+                              ✓ Mastered
+                            </span>
+                          )}
+                          <button
+                            onClick={() => toggleFavorite(term.term)}
+                            className={`text-xl ${isFavorited ? 'text-yellow-500' : 'text-gray-400'} hover:text-yellow-500`}
+                          >
+                            {isFavorited ? '★' : '☆'}
+                          </button>
+                        </div>
+                        <div className="flex flex-wrap gap-1 mb-3">
+                          {term.tags.map(tag => (
+                            <span key={tag} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div>
+                        <h5 className="font-medium text-gray-700 mb-1">Definition:</h5>
+                        <p className="text-gray-600">{term.definition}</p>
+                      </div>
+                      
+                      <div>
+                        <h5 className="font-medium text-gray-700 mb-1">Real-World Example:</h5>
+                        <p className="text-gray-600 italic">{term.example}</p>
+                      </div>
+
+                      {termProgress && (
+                        <div className="pt-3 border-t border-gray-200">
+                          <div className="flex justify-between text-sm text-gray-600">
+                            <span>Quiz Progress:</span>
+                            <span>{termProgress.correct} correct, {termProgress.incorrect} incorrect</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {filteredTerms.length === 0 && (
+              <div className="bg-white rounded-lg shadow p-8 text-center">
+                <p className="text-gray-500">No terms match your current filters.</p>
+              </div>
+            )}
           </div>
         )}
 
         {activeSection === "quiz-mode" && (
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Tax Strategy Quiz</h3>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-              <h4 className="font-semibold text-blue-900 mb-3">Question 1 of 10</h4>
-              <p className="text-blue-800 mb-4">What is the maximum amount you can contribute to a SEP-IRA in 2024?</p>
-              <div className="space-y-2">
-                <label className="flex items-center">
-                  <input type="radio" name="quiz" className="text-blue-600" />
-                  <span className="ml-2">$6,500</span>
-                </label>
-                <label className="flex items-center">
-                  <input type="radio" name="quiz" className="text-blue-600" />
-                  <span className="ml-2">$22,500</span>
-                </label>
-                <label className="flex items-center">
-                  <input type="radio" name="quiz" className="text-blue-600" />
-                  <span className="ml-2">$66,000</span>
-                </label>
-                <label className="flex items-center">
-                  <input type="radio" name="quiz" className="text-blue-600" />
-                  <span className="ml-2">$69,000</span>
-                </label>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-medium text-gray-900">Tax Strategy Quiz</h3>
+              <div className="flex items-center space-x-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-600">{userStats.correct}</div>
+                  <div className="text-xs text-gray-600">Correct</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-red-600">{userStats.incorrect}</div>
+                  <div className="text-xs text-gray-600">Incorrect</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-yellow-600">{userStats.xp}</div>
+                  <div className="text-xs text-gray-600">XP</div>
+                </div>
               </div>
             </div>
-            <button className="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors">
-              Next Question
-            </button>
+
+            {!currentQuizTerm && (
+              <div className="text-center py-8">
+                <div className="mb-6">
+                  <ProgressRing />
+                </div>
+                <h4 className="text-xl font-medium text-gray-800 mb-2">
+                  Ready to test your knowledge?
+                </h4>
+                <p className="text-gray-600 mb-6">
+                  {userStats.masteredTerms.length} of {glossaryTerms.length} terms mastered
+                </p>
+                <button
+                  onClick={startQuiz}
+                  className="bg-yellow-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-yellow-600 transition-colors"
+                >
+                  Start Quiz
+                </button>
+              </div>
+            )}
+
+            {currentQuizTerm && !showAnswer && (
+              <div className="space-y-6">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                  <h4 className="font-semibold text-blue-900 mb-3">
+                    {currentQuizTerm.question}
+                  </h4>
+
+                  {currentQuizTerm.type === "multiple-choice" && (
+                    <div className="space-y-2">
+                      {currentQuizTerm.options.map((option, index) => (
+                        <label key={index} className="flex items-center">
+                          <input
+                            type="radio"
+                            name="quiz"
+                            value={option}
+                            onChange={(e) => setUserAnswer(e.target.value)}
+                            className="text-blue-600 mr-3"
+                          />
+                          <span className="text-blue-800">{option}</span>
+                        </label>
+                      ))}
+                    </div>
+                  )}
+
+                  {(currentQuizTerm.type === "fill-blank" || currentQuizTerm.type === "definition") && (
+                    <input
+                      type="text"
+                      value={userAnswer}
+                      onChange={(e) => setUserAnswer(e.target.value)}
+                      placeholder="Type your answer..."
+                      className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  )}
+                </div>
+
+                <div className="flex space-x-4">
+                  <button
+                    onClick={submitAnswer}
+                    disabled={!userAnswer}
+                    className="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  >
+                    Submit Answer
+                  </button>
+                  <button
+                    onClick={() => setCurrentQuizTerm(null)}
+                    className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors"
+                  >
+                    Skip Question
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {currentQuizTerm && showAnswer && (
+              <div className="space-y-6">
+                <div className={`border rounded-lg p-6 ${
+                  userAnswer === currentQuizTerm.correct || 
+                  (currentQuizTerm.type !== "multiple-choice" && userAnswer.toLowerCase().trim() === currentQuizTerm.correct.toLowerCase())
+                    ? 'bg-green-50 border-green-200' 
+                    : 'bg-red-50 border-red-200'
+                }`}>
+                  <h4 className="font-semibold mb-3">
+                    {userAnswer === currentQuizTerm.correct || 
+                     (currentQuizTerm.type !== "multiple-choice" && userAnswer.toLowerCase().trim() === currentQuizTerm.correct.toLowerCase())
+                      ? '✅ Correct!' 
+                      : '❌ Incorrect'}
+                  </h4>
+                  <p className="mb-2"><strong>Correct Answer:</strong> {currentQuizTerm.correct}</p>
+                  <p><strong>Your Answer:</strong> {userAnswer}</p>
+                  
+                  {userProgress[currentQuizTerm.term] && (
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <p className="text-sm text-gray-600">
+                        Progress on "{currentQuizTerm.term}": {userProgress[currentQuizTerm.term].correct} correct answers
+                        {userStats.masteredTerms.includes(currentQuizTerm.term) && (
+                          <span className="text-green-600 font-medium"> - MASTERED! 🎉</span>
+                        )}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex space-x-4">
+                  <button
+                    onClick={() => {
+                      setCurrentQuizTerm(null);
+                      startQuiz();
+                    }}
+                    className="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors"
+                  >
+                    Next Question
+                  </button>
+                  <button
+                    onClick={() => setCurrentQuizTerm(null)}
+                    className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors"
+                  >
+                    End Quiz
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
