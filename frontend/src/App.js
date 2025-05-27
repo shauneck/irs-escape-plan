@@ -4,6 +4,7 @@ import Navigation from './components/Navigation';
 import Home from './pages/Home';
 import MyPlan from './pages/MyPlan';
 import Explore from './pages/Explore';
+import Tools from './pages/Tools';
 import Marketplace from './pages/Marketplace';
 import CourseDetail from './pages/CourseDetail';
 import AdvisorDashboard from './pages/AdvisorDashboard';
