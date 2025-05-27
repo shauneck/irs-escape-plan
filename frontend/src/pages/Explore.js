@@ -432,72 +432,7 @@ const Explore = () => {
     localStorage.setItem('userStats', JSON.stringify(userStats));
   }, [userStats]);
 
-  // Duplicate function removed - using the one defined earlier
-
-  // Calculate category completion
-  const getCategoryCompletion = () => {
-    const categories = {};
-    
-    glossaryTerms.forEach(term => {
-      const category = getCategoryForTerm(term.term);
-      if (!categories[category]) {
-        categories[category] = { total: 0, completed: 0, xp: 0 };
-      }
-      categories[category].total++;
-      
-      if (userStats.masteredTerms.includes(term.term)) {
-        categories[category].completed++;
-      }
-      
-      // Calculate XP for this category
-      const termProgress = userProgress[term.term];
-      if (termProgress) {
-        categories[category].xp += termProgress.correct * 10;
-      }
-    });
-    
-    return categories;
-  };
-
-  // Retake quiz functions
-  const retakeCategory = (category) => {
-    const categoryTerms = glossaryTerms.filter(term => 
-      getCategoryForTerm(term.term) === category
-    );
-    
-    if (categoryTerms.length > 0) {
-      const randomTerm = categoryTerms[Math.floor(Math.random() * categoryTerms.length)];
-      const questions = generateQuizQuestions(randomTerm);
-      const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-      setCurrentQuizTerm(randomQuestion);
-      setUserAnswer("");
-      setShowAnswer(false);
-      setActiveSection("quiz-mode");
-    }
-  };
-
-  const retakeMissedTerms = () => {
-    if (missedTerms.length > 0) {
-      const randomMissedTerm = glossaryTerms.find(term => 
-        missedTerms.includes(term.term)
-      );
-      
-      if (randomMissedTerm) {
-        const questions = generateQuizQuestions(randomMissedTerm);
-        const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-        setCurrentQuizTerm(randomQuestion);
-        setUserAnswer("");
-        setShowAnswer(false);
-        setActiveSection("quiz-mode");
-      }
-    }
-  };
-
-  const shuffleFullQuiz = () => {
-    const randomTerm = glossaryTerms[Math.floor(Math.random() * glossaryTerms.length)];
-    const questions = generateQuizQuestions(randomTerm);
-    const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-    setCurrentQuizTerm(randomQuestion);
+  // Duplicate functions removed - using the ones defined earlier
     setUserAnswer("");
     setShowAnswer(false);
     setActiveSection("quiz-mode");
