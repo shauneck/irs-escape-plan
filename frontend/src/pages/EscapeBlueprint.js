@@ -39,35 +39,76 @@ const EscapeBlueprint = () => {
 
   // Handle video completion
   const handleVideoComplete = (moduleId) => {
+    console.log('Video completion triggered for:', moduleId);
+    
     if (moduleId === 'vsl') {
+      console.log('VSL completed - updating state');
       setWatchedVSL(true);
       localStorage.setItem('watchedVSL', 'true');
+      
+      // Award XP for watching VSL
+      const userStats = JSON.parse(localStorage.getItem('userStats') || '{}');
+      userStats.totalXP = (userStats.totalXP || 0) + 10;
+      userStats.xpHistory = userStats.xpHistory || [];
+      userStats.xpHistory.push({
+        amount: 10,
+        reason: 'Watched The Escape Blueprint VSL',
+        timestamp: new Date().toISOString()
+      });
+      localStorage.setItem('userStats', JSON.stringify(userStats));
+      
       // Auto-advance to Module 1 after VSL
       setTimeout(() => {
+        console.log('Auto-advancing to Module 1');
         setCurrentModule(1);
-      }, 1000);
+      }, 1500);
       return;
     }
 
+    console.log('Module completed:', moduleId);
     const newCompleted = [...completedModules];
     if (!newCompleted.includes(moduleId)) {
       newCompleted.push(moduleId);
     }
 
+    // Award XP for module completion
+    const userStats = JSON.parse(localStorage.getItem('userStats') || '{}');
+    userStats.totalXP = (userStats.totalXP || 0) + 25;
+    userStats.xpHistory = userStats.xpHistory || [];
+    userStats.xpHistory.push({
+      amount: 25,
+      reason: `Completed Escape Blueprint Module ${moduleId}`,
+      timestamp: new Date().toISOString()
+    });
+
     // Auto-advance to next module
     const nextModule = moduleId < 3 ? moduleId + 1 : 3;
     saveProgress(newCompleted, nextModule);
 
-    // Show upgrade prompt after completing all modules
+    // Show upgrade prompt and award badge after completing all modules
     if (newCompleted.length === 3) {
+      console.log('All modules completed - awarding badge');
       setTimeout(() => {
         setShowUpgrade(true);
-        // Award badge
-        const userStats = JSON.parse(localStorage.getItem('userStats') || '{}');
-        const newBadges = [...(userStats.badges || []), 'Escape Artist'];
-        userStats.badges = [...new Set(newBadges)]; // Remove duplicates
-        localStorage.setItem('userStats', JSON.stringify(userStats));
+        
+        // Award Escape Artist badge
+        const finalStats = JSON.parse(localStorage.getItem('userStats') || '{}');
+        const newBadges = [...(finalStats.badges || []), 'Escape Artist'];
+        finalStats.badges = [...new Set(newBadges)]; // Remove duplicates
+        finalStats.totalXP = (finalStats.totalXP || 0) + 50; // Bonus XP for completion
+        finalStats.xpHistory = finalStats.xpHistory || [];
+        finalStats.xpHistory.push({
+          amount: 50,
+          reason: 'Earned Escape Artist Badge - Course Complete!',
+          timestamp: new Date().toISOString()
+        });
+        localStorage.setItem('userStats', JSON.stringify(finalStats));
+        
+        // Show completion notification
+        alert('🎉 Congratulations! You\'ve earned the "Escape Artist" badge and 85 total XP!');
       }, 1500);
+    } else {
+      localStorage.setItem('userStats', JSON.stringify(userStats));
     }
   };
 
