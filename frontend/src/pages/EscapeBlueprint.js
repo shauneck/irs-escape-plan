@@ -10,19 +10,47 @@ const EscapeBlueprint = () => {
   const [videoProgress, setVideoProgress] = useState({});
   const navigate = useNavigate();
 
-  // Load progress from localStorage
+  // Initialize state and load progress
   useEffect(() => {
-    const savedProgress = localStorage.getItem('escapeBlueprintProgress');
-    const savedVSL = localStorage.getItem('watchedVSL');
+    console.log('EscapeBlueprint component mounting - loading progress...');
     
-    if (savedProgress) {
-      const progress = JSON.parse(savedProgress);
-      setCompletedModules(progress.completed || []);
-      setCurrentModule(progress.currentModule || 0);
-    }
-    if (savedVSL) {
+    // Load VSL completion status
+    const savedVSL = localStorage.getItem('watchedVSL');
+    console.log('Saved VSL status:', savedVSL);
+    if (savedVSL === 'true') {
       setWatchedVSL(true);
     }
+
+    // Load course progress
+    const savedProgress = localStorage.getItem('escapeBlueprintProgress');
+    console.log('Saved progress:', savedProgress);
+    if (savedProgress) {
+      try {
+        const { completed, current } = JSON.parse(savedProgress);
+        console.log('Parsed progress - completed:', completed, 'current:', current);
+        setCompletedModules(completed || []);
+        setCurrentModule(current || (savedVSL === 'true' ? 1 : 0));
+      } catch (error) {
+        console.error('Error parsing saved progress:', error);
+        // Reset to default if corrupted
+        setCompletedModules([]);
+        setCurrentModule(savedVSL === 'true' ? 1 : 0);
+      }
+    } else {
+      // Initialize progress if none exists
+      console.log('No saved progress found - initializing');
+      setCompletedModules([]);
+      setCurrentModule(savedVSL === 'true' ? 1 : 0);
+    }
+
+    // Load track selection
+    const savedTrack = localStorage.getItem('selectedTrack');
+    if (savedTrack) {
+      setSelectedTrack(savedTrack);
+      setShowUpgrade(true);
+    }
+
+    console.log('Progress loading complete');
   }, []);
 
   // Save progress
