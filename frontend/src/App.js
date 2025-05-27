@@ -22,6 +22,7 @@ function App() {
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/course/:courseId" element={<CourseDetail />} />
           <Route path="/advisor" element={<AdvisorDashboard />} />
+          <Route path="/documents" element={<DocumentReader />} />
         </Routes>
       </BrowserRouter>
     </div>
