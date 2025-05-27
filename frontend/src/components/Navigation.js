@@ -18,9 +18,7 @@ const Navigation = () => {
     "Glossary",
     "Quiz Mode", 
     "Document Reader",
-    "Community",
-    "Leaderboard",
-    "Office Hours"
+    "Free Course - Escape Blueprint"
   ];
 
   const isActive = (path) => location.pathname === path;
