@@ -169,15 +169,19 @@ const EscapeBlueprint = () => {
     const [hasCompleted, setHasCompleted] = useState(false);
 
     useEffect(() => {
+      console.log(`VideoPlayer effect running for ${moduleId} - isPlaying:`, isPlaying, 'progress:', progress);
+      
       let interval;
       if (isPlaying && progress < 100 && !hasCompleted) {
+        console.log(`Starting progress interval for ${moduleId}`);
         interval = setInterval(() => {
           setProgress(prev => {
-            const newProgress = prev + (100 / (duration * 10)); // Complete in 1 second per minute for demo
-            console.log(`Video progress for ${moduleId}:`, Math.round(newProgress));
+            const increment = 100 / (duration * 10); // Complete in 1 second per minute for demo
+            const newProgress = prev + increment;
+            console.log(`Video progress for ${moduleId}:`, Math.round(newProgress) + '%');
             
             if (newProgress >= 95 && !hasCompleted) { // Trigger slightly before 100% for better UX
-              console.log(`Video ${moduleId} completing...`);
+              console.log(`Video ${moduleId} completing at ${Math.round(newProgress)}%`);
               setHasCompleted(true);
               setTimeout(() => {
                 console.log(`Calling onComplete for ${moduleId}`);
@@ -188,13 +192,29 @@ const EscapeBlueprint = () => {
           });
         }, 100);
       }
-      return () => clearInterval(interval);
+      
+      return () => {
+        if (interval) {
+          console.log(`Clearing interval for ${moduleId}`);
+          clearInterval(interval);
+        }
+      };
     }, [isPlaying, progress, duration, hasCompleted, onComplete, moduleId]);
 
     const handlePlayClick = () => {
-      console.log('Play button clicked for:', moduleId);
+      console.log('=== PLAY BUTTON CLICKED ===');
+      console.log('Module ID:', moduleId);
+      console.log('Current isPlaying state:', isPlaying);
+      console.log('Setting isPlaying to true...');
+      
       setIsPlaying(true);
+      setProgress(0); // Reset progress when starting
+      setHasCompleted(false); // Reset completion state
+      
+      console.log('State should now be updated to playing');
     };
+
+    console.log(`VideoPlayer render for ${moduleId} - isPlaying:`, isPlaying, 'hasCompleted:', hasCompleted);
 
     return (
       <div className="bg-black rounded-lg overflow-hidden relative">
@@ -203,6 +223,7 @@ const EscapeBlueprint = () => {
             <button
               onClick={handlePlayClick}
               className="bg-red-600 hover:bg-red-700 text-white rounded-full p-6 transition-all transform hover:scale-110 z-10"
+              type="button"
             >
               <svg className="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z"/>
