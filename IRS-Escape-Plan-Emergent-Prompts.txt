@@ -1,0 +1,106 @@
+
+# The IRS Escape Plan — Emergent Prompt Archive
+## Master Prompt Backup for GitHub
+
+---
+
+## 📘 Prompt 1: Homepage – Course Selector
+
+Prompt:
+Design the homepage as a clean, conversion-focused course hub. It should display three main courses:
+1. The Escape Blueprint – Free intro course
+2. W-2 Escape Plan – Premium course for employees
+3. Business Owner Escape Plan – Premium course for entrepreneurs
+
+Each course card should show:
+- Title
+- Hook
+- Locked/unlocked status
+- CTA button
+- Progress bar
+
+---
+
+## 📘 Prompt 2: Navigation Structure
+
+Prompt:
+Use a simplified navigation with these sections:
+- Home
+- My Plan
+- Explore
+- Marketplace
+
+My Plan = Dashboard + Tax Assistant  
+Explore = Glossary, Quiz, Document Reader, Community, Leaderboard  
+Marketplace = Curated investments, strategy partners
+
+---
+
+## 📘 Prompt 3: Glossary + Quiz Mode
+
+Prompt:
+Build a glossary with:
+- Definition
+- Tags (e.g., W2, Real Estate)
+- Plain English
+- Quiz mode with flashcards
+- XP system
+- Badge unlocks
+- Quiz filtering by persona
+
+---
+
+## 📘 Prompt 4: Glossary Filtering Logic
+
+Prompt:
+Add filters to the glossary:
+- Persona: W2 Earner, Business Owner, Real Estate Investor
+- Category: Capital Gains, Retirement, Real Estate, Estate Planning, Insurance, etc.
+- Complexity: Beginner, Intermediate, Advanced
+
+Support multi-select filters and persistent filtering in quiz mode.
+
+---
+
+## 📘 Enhanced Glossary Terms (1–20)
+
+(Formatted as JSON-ready blocks, shortened below for space)
+
+Each term includes:
+- term
+- definition
+- tags
+- plain_english
+- case_study { client_profile, structure, implementation, results }
+- key_benefit
+
+[See attached JSON files or glossary.json in this repo for full data.]
+
+---
+
+## 📘 JSON: Glossary Filter Logic
+
+```json
+{
+  "filter_logic": {
+    "categories": [
+      "Capital Gains", "Retirement", "Real Estate", "Estate Planning",
+      "Deductions", "Advanced Planning", "Insurance", "Charitable"
+    ],
+    "personas": [
+      "W-2 Earner", "Business Owner", "Real Estate Investor"
+    ],
+    "complexity_levels": [
+      "Beginner", "Intermediate", "Advanced"
+    ]
+  }
+}
+```
+
+---
+
+## ✅ Final Backup Notes
+
+- Add this file to GitHub as `IRS-Escape-Plan-Emergent-Prompts.txt`
+- Commit regularly as you update glossary, prompts, or logic
+- Use it to rebuild inside Emergent or reimport into future apps
