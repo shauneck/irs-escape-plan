@@ -42,7 +42,7 @@ const Tools = () => {
       icon: '📋',
       personas: ['w2', 'business', 'investor'],
       status: 'available',
-      route: '/tools/playbooks'
+      route: '/tools/strategy-playbooks'
     },
     {
       id: 'strategy-finder',
