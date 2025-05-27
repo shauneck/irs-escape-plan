@@ -34,6 +34,7 @@ const Explore = () => {
   const sections = [
     { id: "glossary", name: "Glossary", icon: "📚" },
     { id: "quiz-mode", name: "Quiz Mode", icon: "🧠" },
+    { id: "quiz-dashboard", name: "Quiz Dashboard", icon: "📊" },
     { id: "document-reader", name: "Document Reader", icon: "📄" },
     { id: "community", name: "Community", icon: "👥" },
     { id: "leaderboard", name: "Leaderboard", icon: "🏆" },
