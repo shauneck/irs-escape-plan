@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import AITaxAssistant from "../components/AITaxAssistant";
 
 const Explore = () => {
   const [activeSection, setActiveSection] = useState("glossary");
