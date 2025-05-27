@@ -362,16 +362,16 @@ const MyPlan = () => {
                 </p>
                 <div className="flex items-center space-x-6">
                   <div className="text-center">
-                    <div className="text-2xl font-bold">{userStats.xp}</div>
-                    <div className="text-sm opacity-80">Total XP</div>
+                    <div className="metric-value text-2xl font-bold">{userStats.xp}</div>
+                    <div className="stat-label text-sm opacity-80">Total XP</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold">{strategyCategories.filter(c => c.unlocked).length}</div>
-                    <div className="text-sm opacity-80">Unlocked Strategies</div>
+                    <div className="metric-value text-2xl font-bold">{strategyCategories.filter(c => c.unlocked).length}</div>
+                    <div className="stat-label text-sm opacity-80">Unlocked Strategies</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold">{userStats.badges.length}</div>
-                    <div className="text-sm opacity-80">Badges Earned</div>
+                    <div className="metric-value text-2xl font-bold">{userStats.badges.length}</div>
+                    <div className="stat-label text-sm opacity-80">Badges Earned</div>
                   </div>
                 </div>
               </div>
