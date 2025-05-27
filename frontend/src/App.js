@@ -54,6 +54,8 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/tools" element={<Tools />} />
+          <Route path="/tools/strategy-playbooks" element={<StrategyPlaybooks />} />
+          <Route path="/tools/strategy-playbooks/:playbookId" element={<StrategyPlaybooks />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/course/:courseId" element={<CourseDetail />} />
           <Route path="/advisor" element={<AdvisorDashboard />} />
