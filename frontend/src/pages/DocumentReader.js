@@ -318,6 +318,79 @@ const DocumentReader = () => {
       };
     },
 
+    analyzeRentalProperty: function(document) {
+      return {
+        summary: "Rental property Schedule E analysis reveals significant passive loss optimization opportunities and potential REPS qualification.",
+        keyMetrics: {
+          "Total Rental Income": "$84,000",
+          "Total Rental Expenses": "$127,500",
+          "Net Rental Loss": "($43,500)",
+          "Depreciation Deduction": "$32,000",
+          "Property Count": "3 properties",
+          "Passive Activity Limitation": "Applied"
+        },
+        redFlags: [
+          {
+            severity: "high",
+            issue: "Passive loss limitations blocking deductions",
+            impact: "Cannot use $43,500 in rental losses against other income",
+            recommendation: "Qualify for Real Estate Professional Status to unlock losses"
+          },
+          {
+            severity: "medium",
+            issue: "No cost segregation studies performed",
+            impact: "Missing accelerated depreciation benefits",
+            recommendation: "Implement cost segregation for immediate tax savings"
+          },
+          {
+            severity: "medium",
+            issue: "Properties may qualify for STR conversion",
+            impact: "Potential active income treatment for losses",
+            recommendation: "Evaluate short-term rental material participation"
+          }
+        ],
+        strategyOpportunities: [
+          {
+            strategy: "REPS (Real Estate Professional Status)",
+            applicability: "high",
+            potentialSavings: "$15,225",
+            complexity: "medium",
+            timeframe: "Current tax year",
+            requirements: "750+ hours in real estate, material participation"
+          },
+          {
+            strategy: "Cost Segregation Study",
+            applicability: "high",
+            potentialSavings: "$25,000-40,000",
+            complexity: "medium",
+            timeframe: "Current tax year",
+            requirements: "Property ownership, engineering study"
+          },
+          {
+            strategy: "STR (Short-Term Rental) Conversion",
+            applicability: "medium",
+            potentialSavings: "$18,000",
+            complexity: "high",
+            timeframe: "Next tax year",
+            requirements: "Property conversion, active management, material participation"
+          }
+        ],
+        glossaryLinks: [
+          "REPS (Real Estate Professional Status)",
+          "Cost Segregation",
+          "STR (Short-Term Rental)",
+          "Material Participation",
+          "Passive Activity Rules"
+        ],
+        courseRecommendations: [
+          "Real Estate Tax Optimization",
+          "Passive Income Shields",
+          "Advanced Real Estate Strategies"
+        ],
+        confidence: 0.91
+      };
+    },
+
     generateGenericAnalysis: function(document) {
       return {
         summary: "Document uploaded successfully. Basic analysis completed with general tax planning recommendations.",
