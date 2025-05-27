@@ -16,6 +16,7 @@ const Navigation = ({ theme, toggleTheme }) => {
   // Menu dropdown items
   const menuItems = [
     { name: "My Plan", path: "/my-plan", icon: "📋" },
+    { name: "Dashboard", path: "/dashboard", icon: "🎯" },
     { name: "Tools", path: "/tools", icon: "🔧" },
     { name: "Documents", path: "/documents", icon: "📄", conditional: true }, // Only if user has uploads
     { name: "Advisor Mode", path: "/advisor", icon: "👨‍💼", adminOnly: true },
