@@ -6,6 +6,7 @@ import MyPlan from './pages/MyPlan';
 import Dashboard from './pages/Dashboard';
 import Explore from './pages/Explore';
 import Tools from './pages/Tools';
+import StrategyPlaybooks from './pages/StrategyPlaybooks';
 import Marketplace from './pages/Marketplace';
 import CourseDetail from './pages/CourseDetail';
 import AdvisorDashboard from './pages/AdvisorDashboard';
