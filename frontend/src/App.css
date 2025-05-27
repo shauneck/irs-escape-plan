@@ -516,8 +516,435 @@ body.dark .badge {
 }
 
 /* =================================================================================
-   MENU DROPDOWN/SIDEBAR STYLES
+   TEXT VISIBILITY & ACCESSIBILITY ON COLORED BACKGROUNDS
    ================================================================================= */
+
+/* Global rule: White text on any colored/gradient background */
+.bg-colored,
+.bg-gradient,
+.bg-accent,
+.bg-primary,
+.bg-success,
+.bg-warning,
+.bg-error,
+.bg-info,
+.badge,
+.progress-fill,
+.xp-fill,
+.cta-block,
+.colored-section,
+.quiz-dashboard,
+.leaderboard-header,
+.progress-banner,
+.streak-banner,
+.milestone-popup,
+.upgrade-prompt,
+.summary-card {
+  color: #ffffff !important;
+}
+
+/* Headings on colored backgrounds */
+.bg-colored h1,
+.bg-colored h2,
+.bg-colored h3,
+.bg-colored h4,
+.bg-colored h5,
+.bg-colored h6,
+.bg-gradient h1,
+.bg-gradient h2,
+.bg-gradient h3,
+.bg-gradient h4,
+.bg-gradient h5,
+.bg-gradient h6,
+.colored-section h1,
+.colored-section h2,
+.colored-section h3,
+.colored-section h4,
+.colored-section h5,
+.colored-section h6,
+.quiz-dashboard h1,
+.quiz-dashboard h2,
+.quiz-dashboard h3,
+.quiz-dashboard h4,
+.leaderboard-header h1,
+.leaderboard-header h2,
+.leaderboard-header h3,
+.progress-banner h1,
+.progress-banner h2,
+.progress-banner h3,
+.streak-banner h1,
+.streak-banner h2,
+.streak-banner h3,
+.milestone-popup h1,
+.milestone-popup h2,
+.milestone-popup h3,
+.upgrade-prompt h1,
+.upgrade-prompt h2,
+.upgrade-prompt h3 {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Subheadings and labels on colored backgrounds */
+.bg-colored .subtitle,
+.bg-colored .label,
+.bg-colored .stat-label,
+.bg-colored .metric-label,
+.bg-gradient .subtitle,
+.bg-gradient .label,
+.bg-gradient .stat-label,
+.bg-gradient .metric-label,
+.colored-section .subtitle,
+.colored-section .label,
+.colored-section .stat-label,
+.colored-section .metric-label,
+.quiz-dashboard .subtitle,
+.quiz-dashboard .label,
+.quiz-dashboard .stat-label,
+.quiz-dashboard .metric-label,
+.leaderboard-header .subtitle,
+.leaderboard-header .label,
+.progress-banner .subtitle,
+.progress-banner .label,
+.streak-banner .subtitle,
+.streak-banner .label,
+.milestone-popup .subtitle,
+.milestone-popup .label,
+.upgrade-prompt .subtitle,
+.upgrade-prompt .label {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Metric values and stats on colored backgrounds */
+.bg-colored .metric-value,
+.bg-colored .stat-value,
+.bg-colored .xp-value,
+.bg-colored .accuracy-value,
+.bg-colored .streak-value,
+.bg-colored .badge-count,
+.bg-gradient .metric-value,
+.bg-gradient .stat-value,
+.bg-gradient .xp-value,
+.bg-gradient .accuracy-value,
+.bg-gradient .streak-value,
+.bg-gradient .badge-count,
+.colored-section .metric-value,
+.colored-section .stat-value,
+.colored-section .xp-value,
+.colored-section .accuracy-value,
+.colored-section .streak-value,
+.colored-section .badge-count,
+.quiz-dashboard .metric-value,
+.quiz-dashboard .stat-value,
+.quiz-dashboard .xp-value,
+.quiz-dashboard .accuracy-value,
+.quiz-dashboard .streak-value,
+.quiz-dashboard .badge-count,
+.leaderboard-header .metric-value,
+.leaderboard-header .stat-value,
+.progress-banner .metric-value,
+.progress-banner .stat-value,
+.streak-banner .metric-value,
+.streak-banner .stat-value,
+.milestone-popup .metric-value,
+.milestone-popup .stat-value,
+.upgrade-prompt .metric-value,
+.upgrade-prompt .stat-value {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* CTA text on buttons with colored backgrounds */
+.btn-primary,
+.btn-accent,
+.btn-success,
+.btn-warning,
+.btn-error,
+.cta-button,
+.upgrade-button,
+.action-button {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* =================================================================================
+   SPECIFIC COMPONENT OVERRIDES FOR BETTER VISIBILITY
+   ================================================================================= */
+
+/* Quiz Dashboard */
+.quiz-score-card,
+.quiz-stats-grid,
+.quiz-progress-section {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-alt));
+  color: #ffffff !important;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.quiz-score-card .score-value,
+.quiz-stats-grid .stat-item .value,
+.quiz-progress-section .progress-value {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 2rem !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.quiz-score-card .score-label,
+.quiz-stats-grid .stat-item .label,
+.quiz-progress-section .progress-label {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  opacity: 0.95 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Progress Banners */
+.progress-banner,
+.streak-banner,
+.achievement-banner {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: #ffffff !important;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.progress-banner .progress-text,
+.streak-banner .streak-text,
+.achievement-banner .achievement-text {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Leaderboard Headers */
+.leaderboard-header,
+.community-header,
+.dashboard-header {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent-alt));
+  color: #ffffff !important;
+  padding: 1.5rem;
+  border-radius: 12px 12px 0 0;
+}
+
+.leaderboard-header .title,
+.community-header .title,
+.dashboard-header .title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Badge Milestone Popups */
+.milestone-popup,
+.badge-notification,
+.achievement-popup {
+  background: linear-gradient(135deg, var(--badge-gold), var(--color-accent));
+  color: #ffffff !important;
+  padding: 2rem;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.milestone-popup .popup-title,
+.badge-notification .notification-title,
+.achievement-popup .popup-title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 1.75rem !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+  margin-bottom: 0.5rem;
+}
+
+.milestone-popup .popup-message,
+.badge-notification .notification-message,
+.achievement-popup .popup-message {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  opacity: 0.95 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Upgrade Prompts and CTA Blocks */
+.upgrade-prompt,
+.cta-block,
+.summary-card {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-primary));
+  color: #ffffff !important;
+  padding: 2rem;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+}
+
+.upgrade-prompt .prompt-title,
+.cta-block .cta-title,
+.summary-card .summary-title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  margin-bottom: 1rem;
+}
+
+.upgrade-prompt .prompt-description,
+.cta-block .cta-description,
+.summary-card .summary-description {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  opacity: 0.95 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+  line-height: 1.6;
+}
+
+/* =================================================================================
+   ENHANCED BADGE SYSTEM WITH BETTER CONTRAST
+   ================================================================================= */
+
+.badge {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.badge-bronze {
+  background: linear-gradient(135deg, var(--badge-bronze), #a89080) !important;
+}
+
+.badge-silver {
+  background: linear-gradient(135deg, var(--badge-silver), #6b5a4b) !important;
+}
+
+.badge-gold {
+  background: linear-gradient(135deg, var(--badge-gold), #c97632) !important;
+}
+
+.badge-master {
+  background: linear-gradient(135deg, var(--badge-master), #1e2d28) !important;
+}
+
+/* =================================================================================
+   RESPONSIVE TEXT VISIBILITY
+   ================================================================================= */
+
+@media (max-width: 768px) {
+  /* Mobile: Ensure text remains white and centered */
+  .quiz-dashboard,
+  .progress-banner,
+  .streak-banner,
+  .milestone-popup,
+  .upgrade-prompt,
+  .leaderboard-header {
+    text-align: center;
+  }
+
+  .quiz-score-card .score-value,
+  .quiz-stats-grid .stat-item .value {
+    font-size: 1.75rem !important;
+  }
+
+  .milestone-popup .popup-title,
+  .upgrade-prompt .prompt-title {
+    font-size: 1.5rem !important;
+  }
+
+  /* Increase text shadow for better mobile visibility */
+  .bg-colored,
+  .bg-gradient,
+  .colored-section {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+  }
+}
+
+/* =================================================================================
+   DARK MODE ADJUSTMENTS FOR TEXT VISIBILITY
+   ================================================================================= */
+
+body.dark .bg-colored,
+body.dark .bg-gradient,
+body.dark .colored-section {
+  /* In dark mode, colored backgrounds may be darker, so ensure white text */
+  color: #ffffff !important;
+}
+
+body.dark .quiz-dashboard,
+body.dark .progress-banner,
+body.dark .streak-banner,
+body.dark .milestone-popup,
+body.dark .upgrade-prompt,
+body.dark .leaderboard-header {
+  /* Option: Use slightly off-white for very dark backgrounds */
+  color: #f0f0f0 !important;
+}
+
+/* Ensure proper contrast on dark mode colored sections */
+body.dark .quiz-score-card .score-value,
+body.dark .quiz-stats-grid .stat-item .value,
+body.dark .milestone-popup .popup-title,
+body.dark .upgrade-prompt .prompt-title {
+  color: #ffffff !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* =================================================================================
+   ACCESSIBILITY COMPLIANCE (WCAG AA+)
+   ================================================================================= */
+
+/* Ensure minimum contrast ratio of 4.5:1 for normal text, 3:1 for large text */
+.high-contrast-text {
+  color: #ffffff !important;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 0.125rem 0.25rem;
+  border-radius: 4px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Large text (18px+ or 14px+ bold) can use lower contrast */
+.large-text-contrast {
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Focus states for accessibility */
+.bg-colored *:focus,
+.bg-gradient *:focus,
+.colored-section *:focus {
+  outline: 3px solid #ffffff !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* =================================================================================
+   CUSTOM SCROLLBAR THEMING
+   ================================================================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
 
 .menu-toggle {
   background-color: var(--bg-secondary);
