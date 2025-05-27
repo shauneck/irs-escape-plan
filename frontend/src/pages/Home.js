@@ -82,30 +82,7 @@ const CourseCard = ({ module }) => {
   );
 };
 
-const PlaybookCard = ({ playbook }) => {
-  return (
-    <div className="group cursor-pointer transition-all duration-300 hover:scale-105">
-      <div className="relative overflow-hidden rounded-lg shadow-lg bg-gray-900">
-        <img
-          src={playbook.image}
-          alt={playbook.title}
-          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-          <h3 className="font-bold text-lg mb-1 group-hover:text-green-400 transition-colors">
-            {playbook.title}
-          </h3>
-          <p className="text-sm text-gray-200 mb-2 line-clamp-2">{playbook.hook}</p>
-          <div className="flex justify-between items-center text-xs text-gray-300">
-            <span className="bg-green-600 px-2 py-1 rounded-full">{playbook.personas}</span>
-            <span>{playbook.tactics}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+
 
 const Home = () => {
   return (
