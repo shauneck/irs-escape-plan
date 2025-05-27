@@ -14,11 +14,6 @@ const Explore = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [quizProgress, setQuizProgress] = useState({ current: 0, total: 0, questions: [] });
 
-  // Enhanced quiz statistics and category tracking
-  const [weeklyStreak, setWeeklyStreak] = useState(0);
-  const [categoryStats, setCategoryStats] = useState({});
-  const [missedTerms, setMissedTerms] = useState([]);
-
   // Category mapping for terms
   const getCategoryForTerm = (term) => {
     const termObj = glossaryTerms.find(t => t.term === term);
