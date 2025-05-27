@@ -70,15 +70,15 @@ body.dark {
   --bg-primary: #1a1a1a;
   --bg-secondary: #232323;
   --bg-tertiary: #2a2a2a;
-  --bg-nav: #1e2a28;
+  --bg-nav: #232323;
   --bg-card: #232323;
   --bg-modal: #2a2a2a;
 
   /* Text Colors */
-  --text-primary: #ffffff;
+  --text-primary: #d0d0d0;
   --text-secondary: #d0d0d0;
   --text-muted: #999999;
-  --text-inverse: #253c37;
+  --text-inverse: #1a1a1a;
 
   /* Interactive Colors */
   --color-cta: #de8843;
@@ -130,6 +130,23 @@ body {
   margin: 0;
   padding: 0;
 }
+
+/* Override Tailwind's base styles with theme variables */
+.bg-white { background-color: var(--bg-primary) !important; }
+.bg-gray-50 { background-color: var(--bg-secondary) !important; }
+.bg-gray-100 { background-color: var(--bg-tertiary) !important; }
+.bg-gray-800 { background-color: var(--bg-card) !important; }
+.bg-gray-900 { background-color: var(--bg-primary) !important; }
+
+.text-gray-900 { color: var(--text-primary) !important; }
+.text-gray-800 { color: var(--text-primary) !important; }
+.text-gray-700 { color: var(--text-secondary) !important; }
+.text-gray-600 { color: var(--text-muted) !important; }
+.text-gray-500 { color: var(--text-muted) !important; }
+.text-white { color: var(--text-primary) !important; }
+
+.border-gray-200 { border-color: var(--border-light) !important; }
+.border-gray-300 { border-color: var(--border-medium) !important; }
 
 /* =================================================================================
    NAVIGATION THEMING
@@ -217,6 +234,18 @@ body {
   background-color: var(--bg-secondary);
   border-color: var(--color-accent);
 }
+
+/* Override existing button classes */
+.bg-blue-600 { background-color: var(--color-cta) !important; }
+.bg-blue-700 { background-color: var(--color-cta-hover) !important; }
+.text-blue-600 { color: var(--color-cta) !important; }
+.text-blue-700 { color: var(--color-cta-hover) !important; }
+.hover\:bg-blue-700:hover { background-color: var(--color-cta-hover) !important; }
+.hover\:text-blue-600:hover { color: var(--color-cta) !important; }
+
+.bg-yellow-500 { background-color: var(--color-cta) !important; }
+.bg-yellow-600 { background-color: var(--color-cta-hover) !important; }
+.hover\:bg-yellow-600:hover { background-color: var(--color-cta-hover) !important; }
 
 /* =================================================================================
    PROGRESS & XP THEMING
@@ -451,39 +480,39 @@ body.dark .badge {
    ================================================================================= */
 
 .text-primary {
-  color: var(--text-primary);
+  color: var(--text-primary) !important;
 }
 
 .text-secondary {
-  color: var(--text-secondary);
+  color: var(--text-secondary) !important;
 }
 
 .text-muted {
-  color: var(--text-muted);
+  color: var(--text-muted) !important;
 }
 
 .text-accent {
-  color: var(--color-accent);
+  color: var(--color-accent) !important;
 }
 
 .bg-primary {
-  background-color: var(--bg-primary);
+  background-color: var(--bg-primary) !important;
 }
 
 .bg-secondary {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-secondary) !important;
 }
 
 .bg-card {
-  background-color: var(--bg-card);
+  background-color: var(--bg-card) !important;
 }
 
 .border-light {
-  border-color: var(--border-light);
+  border-color: var(--border-light) !important;
 }
 
 .border-accent {
-  border-color: var(--color-accent);
+  border-color: var(--color-accent) !important;
 }
 
 /* =================================================================================
