@@ -26,6 +26,7 @@ function App() {
           <Route path="/advisor" element={<AdvisorDashboard />} />
           <Route path="/documents" element={<DocumentReader />} />
           <Route path="/escape-blueprint" element={<EscapeBlueprint />} />
+          <Route path="/community" element={<Community />} />
         </Routes>
       </BrowserRouter>
     </div>
