@@ -10,7 +10,7 @@ const Navigation = ({ theme, toggleTheme }) => {
   const topNavItems = [
     { name: "Courses", path: "/" },
     { name: "Glossary", path: "/explore" },
-    { name: "Dashboard", path: "/my-plan" },
+    { name: "Dashboard", path: "/dashboard" },
   ];
 
   // Menu dropdown items
