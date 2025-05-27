@@ -499,24 +499,24 @@ const MyPlan = () => {
         {activeSection === "scorecard" && (
           <div className="space-y-6">
             {/* Overall Progress */}
-            <div className="bg-gradient-to-r from-green-500 to-teal-500 rounded-lg shadow text-white p-6">
+            <div className="quiz-dashboard bg-gradient-to-r from-green-500 to-teal-500 rounded-lg shadow text-white p-6">
               <h3 className="text-xl font-bold mb-4">Implementation Scorecard</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="text-center">
-                  <div className="text-3xl font-bold">{Math.round(courseModules.reduce((acc, m) => acc + m.completion, 0) / courseModules.length)}%</div>
-                  <div className="text-sm opacity-90">Course Progress</div>
+                  <div className="metric-value text-3xl font-bold">{Math.round(courseModules.reduce((acc, m) => acc + m.completion, 0) / courseModules.length)}%</div>
+                  <div className="stat-label text-sm opacity-90">Course Progress</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold">{Math.round((userStats.masteredTerms?.length || 0) / 20 * 100)}%</div>
-                  <div className="text-sm opacity-90">Glossary Mastery</div>
+                  <div className="metric-value text-3xl font-bold">{Math.round((userStats.masteredTerms?.length || 0) / 20 * 100)}%</div>
+                  <div className="stat-label text-sm opacity-90">Glossary Mastery</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold">{userStats.xp}</div>
-                  <div className="text-sm opacity-90">Quiz XP</div>
+                  <div className="metric-value text-3xl font-bold">{userStats.xp}</div>
+                  <div className="stat-label text-sm opacity-90">Quiz XP</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold">{readyToImplement.length}</div>
-                  <div className="text-sm opacity-90">Ready Strategies</div>
+                  <div className="metric-value text-3xl font-bold">{readyToImplement.length}</div>
+                  <div className="stat-label text-sm opacity-90">Ready Strategies</div>
                 </div>
               </div>
             </div>
