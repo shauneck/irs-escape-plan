@@ -381,7 +381,7 @@ const Explore = () => {
     } else {
       return {
         type: "definition",
-        question: `Given this example: "${term.example}" - What tax concept is being described?`,
+        question: `Given this scenario: "${term.case_study.client_profile} ${term.case_study.results}" - What tax concept is being described?`,
         correct: term.term,
         term: term.term
       };
