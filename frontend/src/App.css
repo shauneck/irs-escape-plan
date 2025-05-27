@@ -1,38 +1,39 @@
-.App {
-    text-align: center;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for better Netflix-like appearance */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+/* Better card shadows */
+.shadow-lg {
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+/* Custom gradient overlays */
+.bg-gradient-to-t {
+  background: linear-gradient(to top, var(--tw-gradient-stops));
 }
 
-.App-link {
-    color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+/* Responsive text */
+@media (max-width: 640px) {
+  .text-7xl {
+    font-size: 3.5rem;
+    line-height: 1;
+  }
+  
+  .text-2xl {
+    font-size: 1.5rem;
+    line-height: 1.375;
+  }
 }
