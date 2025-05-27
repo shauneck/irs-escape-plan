@@ -17,6 +17,7 @@ const Explore = () => {
   const [missedTerms, setMissedTerms] = useState([]);
   const [currentQuizQuestion, setCurrentQuizQuestion] = useState(null);
   const [quizSession, setQuizSession] = useState(null);
+  const [showAIAssistant, setShowAIAssistant] = useState(false);
 
   // Category mapping for terms
   const getCategoryForTerm = (term) => {
