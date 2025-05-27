@@ -347,7 +347,7 @@ const MyPlan = () => {
           <div className="space-y-6">
             {/* Hero Section */}
             <div 
-              className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-xl text-white p-8"
+              className="bg-gradient bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-xl text-white p-8"
               style={{
                 backgroundImage: `linear-gradient(rgba(37, 99, 235, 0.8), rgba(147, 51, 234, 0.8)), url('https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg')`,
                 backgroundSize: 'cover',
