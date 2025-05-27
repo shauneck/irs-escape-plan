@@ -516,6 +516,68 @@ const Explore = () => {
     setShowAnswer(false);
   };
 
+  // Submit quiz answer
+  const submitAnswer = () => {
+    if (!currentQuizTerm) return;
+
+    const isCorrect = currentQuizTerm.type === "multiple-choice" 
+      ? userAnswer === currentQuizTerm.correct
+      : userAnswer.toLowerCase().trim() === currentQuizTerm.correct.toLowerCase();
+
+    const newStats = { ...userStats };
+    
+    if (isCorrect) {
+      newStats.correct += 1;
+      newStats.xp += 10;
+      
+      // Track progress for this term
+      const termProgress = userProgress[currentQuizTerm.term] || { correct: 0, incorrect: 0 };
+      termProgress.correct += 1;
+      
+      // Master term if answered correctly 3 times
+      if (termProgress.correct >= 3 && !newStats.masteredTerms.includes(currentQuizTerm.term)) {
+        newStats.masteredTerms.push(currentQuizTerm.term);
+        newStats.xp += 25; // Bonus XP for mastering
+        
+        // Award badges
+        const masteredCount = newStats.masteredTerms.length;
+        if (masteredCount === 5 && !newStats.badges.includes("5-terms")) {
+          newStats.badges.push("5-terms");
+        } else if (masteredCount === 10 && !newStats.badges.includes("10-terms")) {
+          newStats.badges.push("10-terms");
+        } else if (masteredCount === 25 && !newStats.badges.includes("25-terms")) {
+          newStats.badges.push("25-terms");
+        } else if (masteredCount === 50 && !newStats.badges.includes("50-terms")) {
+          newStats.badges.push("50-terms");
+        }
+      }
+
+      // Update persona stats
+      const personaKey = getPersonaKey(currentQuizTerm.term);
+      if (personaKey && newStats.personaStats[personaKey]) {
+        newStats.personaStats[personaKey].correct += 1;
+        newStats.personaStats[personaKey].xp += 10;
+      }
+      
+      setUserProgress(prev => ({ ...prev, [currentQuizTerm.term]: termProgress }));
+    } else {
+      newStats.incorrect += 1;
+      const termProgress = userProgress[currentQuizTerm.term] || { correct: 0, incorrect: 0 };
+      termProgress.incorrect += 1;
+
+      // Update persona stats for incorrect answers
+      const personaKey = getPersonaKey(currentQuizTerm.term);
+      if (personaKey && newStats.personaStats[personaKey]) {
+        newStats.personaStats[personaKey].incorrect += 1;
+      }
+
+      setUserProgress(prev => ({ ...prev, [currentQuizTerm.term]: termProgress }));
+    }
+    
+    setUserStats(newStats);
+    setShowAnswer(true);
+  };
+
   // Enhanced submit answer with comprehensive scoring
   const submitQuizAnswer = () => {
     if (!currentQuizQuestion || !quizSession) return;
