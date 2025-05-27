@@ -516,403 +516,443 @@ body.dark .badge {
 }
 
 /* =================================================================================
-   GLOBAL TEXT COLOR FIX FOR COLORED BACKGROUNDS
+   TARGETED TEXT VISIBILITY FOR COLORED BACKGROUNDS ONLY
    ================================================================================= */
 
-/* UNIVERSAL RULE: White text on ANY colored or gradient background */
-[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent),
-.bg-gradient,
-.bg-colored,
-.colored-background,
+/* Apply white text ONLY to specific elements with colored backgrounds */
+.card-gradient-text,
+.cta-button,
+.badge-block,
+.colored-card,
 .gradient-background,
-[style*="background:"],
-[style*="background-color:"]:not([style*="background-color: white"]):not([style*="background-color: #ffffff"]),
-[style*="background-image:"],
-.btn-primary,
-.btn-secondary,
-.btn-accent,
-.btn-success,
-.btn-warning,
-.btn-error,
-.btn-info,
-.cta-button,
-.upgrade-button,
-.action-button,
-.bg-blue-500,
-.bg-blue-600,
-.bg-green-500,
-.bg-green-600,
-.bg-yellow-500,
-.bg-yellow-600,
-.bg-purple-500,
-.bg-purple-600,
-.bg-red-500,
-.bg-red-600,
-.bg-orange-500,
-.bg-orange-600,
-.bg-indigo-500,
-.bg-indigo-600,
-.bg-teal-500,
-.bg-teal-600,
-.bg-pink-500,
-.bg-pink-600 {
-  color: #ffffff !important;
-}
-
-/* Apply to ALL child text elements */
-[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent) *,
-.bg-gradient *,
-.bg-colored *,
-.colored-background *,
-.gradient-background *,
-[style*="background:"] *,
-[style*="background-color:"]:not([style*="background-color: white"]):not([style*="background-color: #ffffff"]) *,
-[style*="background-image:"] *,
-.btn-primary *,
-.btn-secondary *,
-.btn-accent *,
-.btn-success *,
-.btn-warning *,
-.btn-error *,
-.btn-info *,
-.cta-button *,
-.upgrade-button *,
-.action-button *,
-.bg-blue-500 *,
-.bg-blue-600 *,
-.bg-green-500 *,
-.bg-green-600 *,
-.bg-yellow-500 *,
-.bg-yellow-600 *,
-.bg-purple-500 *,
-.bg-purple-600 *,
-.bg-red-500 *,
-.bg-red-600 *,
-.bg-orange-500 *,
-.bg-orange-600 *,
-.bg-indigo-500 *,
-.bg-indigo-600 *,
-.bg-teal-500 *,
-.bg-teal-600 *,
-.bg-pink-500 *,
-.bg-pink-600 * {
-  color: #ffffff !important;
-}
-
-/* Enhanced text styling for colored backgrounds */
-[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent) h1,
-[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent) h2,
-[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent) h3,
-[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent) h4,
-[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent) h5,
-[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent) h6,
-.bg-gradient h1,
-.bg-gradient h2,
-.bg-gradient h3,
-.bg-gradient h4,
-.bg-gradient h5,
-.bg-gradient h6,
-.colored-background h1,
-.colored-background h2,
-.colored-background h3,
-.colored-background h4,
-.colored-background h5,
-.colored-background h6 {
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
-}
-
-/* Button text enhancement */
-.btn-primary,
-.btn-secondary,
-.btn-accent,
-.btn-success,
-.btn-warning,
-.btn-error,
-.btn-info,
-.cta-button,
-.upgrade-button,
-.action-button,
-button[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100),
-a[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100) {
+.highlight-card {
   color: #ffffff !important;
   font-weight: 600 !important;
   text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
 }
 
-/* Hover states maintain white text */
-.btn-primary:hover,
-.btn-secondary:hover,
-.btn-accent:hover,
-.btn-success:hover,
-.btn-warning:hover,
-.btn-error:hover,
-.btn-info:hover,
+/* Specific colored background elements that need white text */
+.bg-gradient-to-r,
+.bg-gradient-to-l,
+.bg-gradient-to-t,
+.bg-gradient-to-b,
+.bg-gradient-to-br,
+.bg-gradient-to-bl,
+.bg-gradient-to-tr,
+.bg-gradient-to-tl {
+  color: #ffffff !important;
+}
+
+/* Buttons with colored backgrounds */
+.btn-primary,
+.btn-accent,
+.upgrade-button,
+.action-button {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Specific Tailwind colored backgrounds that need white text */
+.bg-blue-500,
+.bg-blue-600,
+.bg-purple-500,
+.bg-purple-600,
+.bg-green-500,
+.bg-green-600,
+.bg-orange-500,
+.bg-orange-600,
+.bg-red-500,
+.bg-red-600,
+.bg-yellow-500,
+.bg-yellow-600,
+.bg-indigo-500,
+.bg-indigo-600,
+.bg-teal-500,
+.bg-teal-600 {
+  color: #ffffff !important;
+}
+
+/* Badge and milestone elements */
+.badge,
+.badge-bronze,
+.badge-silver,
+.badge-gold,
+.badge-master,
+.milestone-popup,
+.achievement-notification {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* XP Dashboard and quiz scoring with colored backgrounds */
+.xp-dashboard,
+.quiz-scoring-card,
+.progress-card {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-alt));
+  color: #ffffff !important;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.xp-dashboard .metric-value,
+.quiz-scoring-card .score-value,
+.progress-card .progress-value {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 2rem !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Smart recommendation highlight cards */
+.recommendation-highlight,
+.next-strategy-highlight {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: #ffffff !important;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+}
+
+.recommendation-highlight *,
+.next-strategy-highlight * {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Course cards with solid colored backgrounds */
+.course-card-colored {
+  background: var(--color-accent);
+  color: #ffffff !important;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.course-card-colored * {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Hover states for colored elements */
 .cta-button:hover,
-.upgrade-button:hover,
-.action-button:hover,
-button[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):hover,
-a[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):hover,
-[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):hover * {
+.btn-primary:hover,
+.btn-accent:hover,
+.card-gradient-text:hover {
   color: #f0f0f0 !important;
   text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* =================================================================================
-   COMPONENT-SPECIFIC FIXES
+   RESTORE LIGHT MODE DEFAULTS
    ================================================================================= */
 
-/* Course Cards and Netflix-style Homepage */
-.course-card,
-.netflix-card,
-.course-cta,
-.course-button {
-  background-attachment: fixed;
+/* Ensure light mode uses proper dark text on light backgrounds */
+body:not(.dark) {
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
 }
 
-.course-card *,
-.netflix-card *,
-.course-cta *,
-.course-button * {
-  color: #ffffff !important;
-  font-weight: 600 !important;
-  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+/* Default text colors for light mode */
+body:not(.dark) .text-primary,
+body:not(.dark) h1,
+body:not(.dark) h2,
+body:not(.dark) h3,
+body:not(.dark) h4,
+body:not(.dark) h5,
+body:not(.dark) h6 {
+  color: var(--text-primary) !important;
 }
 
-/* Strategy Stack Cards */
-.strategy-card,
-.strategy-stack-item,
-.strategy-badge,
-.implementation-card {
-  background-clip: padding-box;
+body:not(.dark) .text-secondary,
+body:not(.dark) p,
+body:not(.dark) span:not(.badge):not(.btn-primary):not(.cta-button) {
+  color: var(--text-secondary) !important;
 }
 
-.strategy-card *,
-.strategy-stack-item *,
-.strategy-badge *,
-.implementation-card * {
-  color: #ffffff !important;
-  font-weight: 600 !important;
-  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+body:not(.dark) .text-muted,
+body:not(.dark) .text-gray-500,
+body:not(.dark) .text-gray-600 {
+  color: var(--text-muted) !important;
 }
 
-/* Smart Recommendations */
-.recommendation-card,
-.recommendation-tile,
-.suggestion-card,
-.next-strategy-card {
-  background-blend-mode: normal;
+/* Course module cards - restore default styling */
+.course-module-card,
+.module-card:not(.course-card-colored) {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
 }
 
-.recommendation-card *,
-.recommendation-tile *,
-.suggestion-card *,
-.next-strategy-card * {
-  color: #ffffff !important;
-  font-weight: 600 !important;
-  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+.course-module-card *,
+.module-card:not(.course-card-colored) * {
+  color: var(--text-primary) !important;
 }
 
-/* Document Vault */
-.document-card,
-.document-banner,
-.document-tag,
-.vault-section {
-  background-origin: border-box;
+/* Quiz dashboard metrics - only white text if on colored background */
+.quiz-dashboard:not(.xp-dashboard):not(.quiz-scoring-card) {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
 }
 
-.document-card *,
-.document-banner *,
-.document-tag *,
-.vault-section * {
-  color: #ffffff !important;
-  font-weight: 600 !important;
-  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+.quiz-dashboard:not(.xp-dashboard):not(.quiz-scoring-card) * {
+  color: var(--text-primary) !important;
 }
 
-/* Quiz Dashboard and Progress Sections */
-.quiz-dashboard,
-.quiz-score-card,
-.quiz-stats-grid,
-.progress-section,
-.progress-banner,
-.streak-banner,
-.achievement-banner {
-  background-repeat: no-repeat;
+/* Document vault list - restore default styling */
+.document-list,
+.document-item:not(.document-highlight) {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
 }
 
-.quiz-dashboard *,
-.quiz-score-card *,
-.quiz-stats-grid *,
-.progress-section *,
-.progress-banner *,
-.streak-banner *,
-.achievement-banner * {
-  color: #ffffff !important;
-  font-weight: 600 !important;
-  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+.document-list *,
+.document-item:not(.document-highlight) * {
+  color: var(--text-primary) !important;
 }
 
-/* Badge System */
-.badge,
-.badge-bronze,
-.badge-silver,
-.badge-gold,
-.badge-master,
-.achievement-badge,
-.milestone-badge {
-  background-clip: text;
-  -webkit-background-clip: border-box;
+/* Strategy stack - default styling except highlights */
+.strategy-item:not(.strategy-highlight),
+.strategy-card:not(.strategy-card-colored) {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
 }
 
-.badge,
-.badge-bronze,
-.badge-silver,
-.badge-gold,
-.badge-master,
-.achievement-badge,
-.milestone-badge {
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.4) !important;
+.strategy-item:not(.strategy-highlight) *,
+.strategy-card:not(.strategy-card-colored) * {
+  color: var(--text-primary) !important;
+}
+
+/* Smart recommendations - default styling except highlights */
+.recommendation-item:not(.recommendation-highlight),
+.suggestion-card:not(.next-strategy-highlight) {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.recommendation-item:not(.recommendation-highlight) *,
+.suggestion-card:not(.next-strategy-highlight) * {
+  color: var(--text-primary) !important;
 }
 
 /* =================================================================================
    DARK MODE CONSISTENCY
    ================================================================================= */
 
-body.dark [class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent),
-body.dark .bg-gradient,
-body.dark .bg-colored,
-body.dark .colored-background,
-body.dark .gradient-background {
-  color: #f0f0f0 !important;
-}
-
-body.dark [class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent) *,
-body.dark .bg-gradient *,
-body.dark .bg-colored *,
-body.dark .colored-background *,
-body.dark .gradient-background * {
-  color: #f0f0f0 !important;
+body.dark .card-gradient-text,
+body.dark .cta-button,
+body.dark .badge-block,
+body.dark .btn-primary,
+body.dark .btn-accent {
+  color: #ffffff !important;
   text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Dark mode buttons */
-body.dark .btn-primary,
-body.dark .btn-secondary,
-body.dark .btn-accent,
-body.dark .cta-button,
-body.dark .upgrade-button,
-body.dark button[class*="bg-"]:not(.bg-white),
-body.dark a[class*="bg-"]:not(.bg-white) {
-  color: #ffffff !important;
-  text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.6) !important;
+/* =================================================================================
+   NAVIGATION THEMING (RESTORED)
+   ================================================================================= */
+
+.nav-container {
+  background-color: var(--bg-nav);
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-link {
+  color: var(--text-primary);
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--color-accent);
+}
+
+.nav-brand {
+  color: var(--color-primary);
+  font-weight: 700;
 }
 
 /* =================================================================================
-   ACCESSIBILITY ENHANCEMENTS
+   CARD & MODULE THEMING (RESTORED)
    ================================================================================= */
 
-/* High contrast for critical elements */
-.high-contrast,
-.critical-text,
-.important-stat,
-.primary-metric {
-  background-color: rgba(0, 0, 0, 0.1) !important;
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5) !important;
-  padding: 0.125rem 0.25rem !important;
-  border-radius: 4px !important;
+.card,
+.module-card:not(.course-card-colored),
+.course-card:not(.course-card-colored) {
+  background-color: var(--bg-card);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
 }
 
-/* Focus states for colored backgrounds */
-[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100) *:focus,
-.bg-gradient *:focus,
-.colored-background *:focus {
+.card:hover,
+.module-card:hover,
+.course-card:hover {
+  border-color: var(--card-hover-border);
+  box-shadow: var(--card-hover-shadow);
+  transform: translateY(-2px);
+}
+
+/* =================================================================================
+   PROGRESS & XP THEMING (SELECTIVE)
+   ================================================================================= */
+
+.progress-bar {
+  background-color: var(--progress-bg);
+  overflow: hidden;
+  border-radius: 9999px;
+}
+
+.progress-fill {
+  background-color: var(--progress-fill);
+  color: #ffffff !important;
+  transition: width 0.5s ease-in-out;
+}
+
+.xp-bar {
+  background-color: var(--xp-bar-bg);
+  overflow: hidden;
+  border-radius: 9999px;
+}
+
+.xp-fill {
+  background-color: var(--xp-bar-fill);
+  color: #ffffff !important;
+  transition: width 0.5s ease-in-out;
+}
+
+/* =================================================================================
+   FORM THEMING (RESTORED)
+   ================================================================================= */
+
+.form-input,
+.form-textarea,
+.form-select {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(222, 136, 67, 0.1);
+  outline: none;
+}
+
+.form-label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* =================================================================================
+   COMMUNITY & LEADERBOARD THEMING (RESTORED)
+   ================================================================================= */
+
+.leaderboard-item {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.leaderboard-item:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--color-accent);
+}
+
+.leaderboard-item.current-user {
+  border-color: var(--color-accent);
+  background-color: rgba(222, 136, 67, 0.05);
+}
+
+.community-channel {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+}
+
+.community-message {
+  background-color: var(--bg-secondary);
+  border-radius: 0.5rem;
+  color: var(--text-primary);
+  transition: background-color 0.2s ease;
+}
+
+.community-message:hover {
+  background-color: var(--bg-tertiary);
+}
+
+/* =================================================================================
+   ACCESSIBILITY ENHANCEMENTS (SELECTIVE)
+   ================================================================================= */
+
+/* High contrast focus states */
+*:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Focus states for colored backgrounds only */
+.card-gradient-text:focus,
+.cta-button:focus,
+.btn-primary:focus,
+.badge:focus {
   outline: 3px solid #ffffff !important;
   outline-offset: 2px !important;
   box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.3) !important;
 }
 
-/* Ensure minimum contrast ratios */
-.wcag-aa-text {
-  color: #ffffff !important;
-  background-color: rgba(0, 0, 0, 0.2) !important;
-  padding: 0.25rem !important;
-  border-radius: 4px !important;
-  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75) !important;
-}
-
-/* Large text optimization (18px+ or 14px+ bold) */
-.large-text,
-.hero-text,
-.display-text {
-  font-size: 1.125rem !important;
-  font-weight: 600 !important;
-  color: #ffffff !important;
-  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3) !important;
-}
-
 /* =================================================================================
-   RESPONSIVE ENHANCEMENTS
+   UTILITY CLASSES (SELECTIVE APPLICATION)
    ================================================================================= */
 
-@media (max-width: 768px) {
-  /* Mobile: Enhanced text shadows and contrast */
-  [class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100) *,
-  .bg-gradient *,
-  .colored-background * {
-    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5) !important;
-    font-weight: 600 !important;
-  }
-
-  /* Mobile button enhancement */
-  .btn-primary,
-  .btn-secondary,
-  .cta-button,
-  button[class*="bg-"]:not(.bg-white) {
-    font-size: 1rem !important;
-    font-weight: 700 !important;
-    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4) !important;
-  }
-
-  /* Mobile card text */
-  .course-card *,
-  .strategy-card *,
-  .recommendation-card * {
-    text-align: center !important;
-    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.6) !important;
-  }
+.text-primary {
+  color: var(--text-primary) !important;
 }
 
-/* =================================================================================
-   UTILITY CLASSES FOR MANUAL APPLICATION
-   ================================================================================= */
+.text-secondary {
+  color: var(--text-secondary) !important;
+}
 
-.force-white-text,
-.white-text-on-color {
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
+.text-accent {
+  color: var(--color-accent) !important;
+}
+
+.text-white-on-color {
   color: #ffffff !important;
   font-weight: 600 !important;
   text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
 }
 
-.force-white-text *,
-.white-text-on-color * {
-  color: #ffffff !important;
-  font-weight: 600 !important;
-  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+.bg-primary {
+  background-color: var(--bg-primary) !important;
 }
 
-.enhanced-contrast {
-  color: #ffffff !important;
-  background-color: rgba(0, 0, 0, 0.2) !important;
-  font-weight: 700 !important;
-  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.6) !important;
-  padding: 0.25rem 0.5rem !important;
-  border-radius: 6px !important;
+.bg-secondary {
+  background-color: var(--bg-secondary) !important;
+}
+
+.bg-card {
+  background-color: var(--bg-card) !important;
+}
+
+.border-light {
+  border-color: var(--border-light) !important;
+}
+
+.border-accent {
+  border-color: var(--color-accent) !important;
 }
 
 /* =================================================================================
