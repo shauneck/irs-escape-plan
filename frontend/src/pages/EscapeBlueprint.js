@@ -93,7 +93,7 @@ const EscapeBlueprint = () => {
       if (isPlaying && progress < 100) {
         interval = setInterval(() => {
           setProgress(prev => {
-            const newProgress = prev + (100 / (duration * 10)); // Simulate video progress
+            const newProgress = prev + (100 / (duration * 2)); // Faster for demo - complete in 2 seconds per minute
             if (newProgress >= 100 && !hasCompleted) {
               setHasCompleted(true);
               onComplete(moduleId);
