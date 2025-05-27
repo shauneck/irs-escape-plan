@@ -20,6 +20,7 @@ function App() {
           <Route path="/explore" element={<Explore />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/course/:courseId" element={<CourseDetail />} />
+          <Route path="/advisor" element={<AdvisorDashboard />} />
         </Routes>
       </BrowserRouter>
     </div>
