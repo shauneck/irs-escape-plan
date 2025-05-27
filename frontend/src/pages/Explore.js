@@ -455,8 +455,7 @@ const Explore = () => {
   // Category statistics for display
   const categoryStats = getCategoryCompletion();
 
-  // Get terms that need review (incorrect answers)
-  const missedTerms = [...new Set(incorrectAnswers.map(a => a.term))];
+  // Get terms that need review (incorrect answers) - using state variable missedTerms
 
   // Filter terms based on search and tags
   const filteredTerms = glossaryTerms.filter(term => {
