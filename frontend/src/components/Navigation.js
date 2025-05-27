@@ -74,7 +74,7 @@ const Navigation = () => {
                           {exploreSubItems.map((subItem) => (
                             <Link
                               key={subItem}
-                              to={`/explore#${subItem.toLowerCase().replace(" ", "-")}`}
+                              to={subItem === "Free Course - Escape Blueprint" ? "/escape-blueprint" : `/explore#${subItem.toLowerCase().replace(" ", "-")}`}
                               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                               onClick={() => setIsExploreOpen(false)}
                             >
