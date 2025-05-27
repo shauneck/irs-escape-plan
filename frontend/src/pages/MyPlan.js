@@ -880,6 +880,25 @@ const MyPlan = () => {
             </div>
           </div>
         )}
+
+        {/* AI Tax Assistant */}
+        <AITaxAssistant
+          isOpen={showAIAssistant}
+          onClose={() => setShowAIAssistant(false)}
+          userStats={userStats}
+          glossaryTerms={glossaryTerms}
+          courseModules={courseModules}
+          userProgress={userProgress}
+        />
+
+        {/* Floating AI Assistant Button */}
+        <button
+          onClick={() => setShowAIAssistant(true)}
+          className="fixed bottom-6 right-6 bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all z-40 flex items-center space-x-2"
+        >
+          <span className="text-2xl">🤖</span>
+          <span className="hidden md:block font-medium">AI Tax Assistant</span>
+        </button>
       </div>
     </div>
   );
