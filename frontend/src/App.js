@@ -9,6 +9,7 @@ import Marketplace from "./pages/Marketplace";
 import CourseDetail from "./pages/CourseDetail";
 import AdvisorDashboard from './pages/AdvisorDashboard';
 import DocumentReader from './pages/DocumentReader';
+import EscapeBlueprint from './pages/EscapeBlueprint';
 
 function App() {
   return (
