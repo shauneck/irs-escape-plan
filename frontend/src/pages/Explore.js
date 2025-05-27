@@ -751,31 +751,114 @@ const Explore = () => {
         )}
 
         {activeSection === "leaderboard" && (
-          <div className="bg-white rounded-lg shadow">
-            <div className="p-6 border-b border-gray-200">
-              <h3 className="text-lg font-medium text-gray-900">Leaderboard</h3>
-              <p className="mt-1 text-sm text-gray-600">Top performers this month</p>
-            </div>
-            <div className="p-6">
-              <div className="space-y-4">
-                {leaderboardData.map((user, index) => (
-                  <div key={index} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${
-                      user.rank === 1 ? 'bg-yellow-500' : user.rank === 2 ? 'bg-gray-400' : user.rank === 3 ? 'bg-amber-600' : 'bg-gray-300'
-                    }`}>
-                      {user.rank}
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-medium text-gray-900">{user.name}</p>
-                      <p className="text-sm text-gray-600">{user.modules} modules completed</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold text-gray-900">{user.points}</p>
-                      <p className="text-sm text-gray-600">points</p>
-                    </div>
-                  </div>
-                ))}
+          <div className="space-y-6">
+            {/* Course Leaderboard */}
+            <div className="bg-white rounded-lg shadow">
+              <div className="p-6 border-b border-gray-200">
+                <h3 className="text-lg font-medium text-gray-900">Course Progress Leaderboard</h3>
+                <p className="mt-1 text-sm text-gray-600">Top performers this month</p>
               </div>
+              <div className="p-6">
+                <div className="space-y-4">
+                  {leaderboardData.map((user, index) => (
+                    <div key={index} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${
+                        user.rank === 1 ? 'bg-yellow-500' : user.rank === 2 ? 'bg-gray-400' : user.rank === 3 ? 'bg-amber-600' : 'bg-gray-300'
+                      }`}>
+                        {user.rank}
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-900">{user.name}</p>
+                        <p className="text-sm text-gray-600">{user.modules} modules completed</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-gray-900">{user.points}</p>
+                        <p className="text-sm text-gray-600">points</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Glossary Leaderboard */}
+            <div className="bg-white rounded-lg shadow">
+              <div className="p-6 border-b border-gray-200">
+                <h3 className="text-lg font-medium text-gray-900">Glossary Mastery Leaderboard</h3>
+                <p className="mt-1 text-sm text-gray-600">Top performers in tax term mastery</p>
+              </div>
+              <div className="p-6">
+                <div className="space-y-4">
+                  {/* Mock glossary leaderboard data */}
+                  {[
+                    { rank: 1, name: "Sarah Chen", masteredTerms: 18, xp: 2450, badges: 3 },
+                    { rank: 2, name: "Michael Rodriguez", masteredTerms: 15, xp: 2100, badges: 3 },
+                    { rank: 3, name: "Jennifer Kim", masteredTerms: 12, xp: 1850, badges: 2 },
+                    { rank: 4, name: "David Thompson", masteredTerms: 8, xp: 1200, badges: 2 },
+                    { rank: 5, name: "You", masteredTerms: userStats.masteredTerms.length, xp: userStats.xp, badges: userStats.badges.length }
+                  ].map((user, index) => (
+                    <div key={index} className={`flex items-center space-x-4 p-3 rounded-lg ${
+                      user.name === "You" ? 'bg-yellow-50 border border-yellow-200' : 'bg-gray-50'
+                    }`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${
+                        user.rank === 1 ? 'bg-yellow-500' : user.rank === 2 ? 'bg-gray-400' : user.rank === 3 ? 'bg-amber-600' : 'bg-gray-300'
+                      }`}>
+                        {user.rank}
+                      </div>
+                      <div className="flex-1">
+                        <p className={`font-medium ${user.name === "You" ? 'text-yellow-800' : 'text-gray-900'}`}>
+                          {user.name}
+                        </p>
+                        <p className="text-sm text-gray-600">{user.masteredTerms} terms mastered • {user.badges} badges</p>
+                      </div>
+                      <div className="text-right">
+                        <p className={`font-bold ${user.name === "You" ? 'text-yellow-800' : 'text-gray-900'}`}>
+                          {user.xp}
+                        </p>
+                        <p className="text-sm text-gray-600">XP</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Current User Stats */}
+            <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-lg shadow text-white p-6">
+              <h3 className="text-lg font-medium mb-4">Your Progress</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold">{userStats.masteredTerms.length}</div>
+                  <div className="text-sm opacity-90">Terms Mastered</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold">{userStats.xp}</div>
+                  <div className="text-sm opacity-90">Total XP</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold">{userStats.badges.length}</div>
+                  <div className="text-sm opacity-90">Badges Earned</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold">
+                    {userStats.correct + userStats.incorrect > 0 
+                      ? Math.round((userStats.correct / (userStats.correct + userStats.incorrect)) * 100)
+                      : 0}%
+                  </div>
+                  <div className="text-sm opacity-90">Accuracy</div>
+                </div>
+              </div>
+              
+              {userStats.badges.length > 0 && (
+                <div className="mt-4 pt-4 border-t border-yellow-300">
+                  <h4 className="text-sm font-medium mb-2 opacity-90">Your Badges:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {userStats.badges.map((badge, index) => (
+                      <Badge key={index} badge={badge} />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
