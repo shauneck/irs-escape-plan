@@ -134,10 +134,14 @@ const EscapeBlueprint = () => {
       if (isPlaying && progress < 100 && !hasCompleted) {
         interval = setInterval(() => {
           setProgress(prev => {
-            const newProgress = prev + (100 / (duration * 2)); // Complete in 2 seconds per minute
+            const newProgress = prev + (100 / (duration * 10)); // Complete in 1 second per minute for demo
+            console.log(`Video progress for ${moduleId}:`, Math.round(newProgress));
+            
             if (newProgress >= 95 && !hasCompleted) { // Trigger slightly before 100% for better UX
+              console.log(`Video ${moduleId} completing...`);
               setHasCompleted(true);
               setTimeout(() => {
+                console.log(`Calling onComplete for ${moduleId}`);
                 onComplete(moduleId);
               }, 500);
             }
@@ -171,7 +175,7 @@ const EscapeBlueprint = () => {
                 <div className="text-xl font-semibold mb-2">{title}</div>
                 <div className="text-sm opacity-75">Playing...</div>
                 {hasCompleted && (
-                  <div className="text-green-400 mt-2">✓ Complete!</div>
+                  <div className="text-green-400 mt-2 animate-pulse">✓ Complete!</div>
                 )}
               </div>
             </div>
@@ -191,7 +195,7 @@ const EscapeBlueprint = () => {
         {progress > 0 && (
           <div className="p-3 bg-gray-800 text-white text-sm">
             Progress: {Math.round(progress)}% • {Math.round((duration * progress) / 100)} / {duration} minutes
-            {hasCompleted && <span className="text-green-400 ml-2">✓ Completed</span>}
+            {hasCompleted && <span className="text-green-400 ml-2 animate-pulse">✓ Completed</span>}
           </div>
         )}
       </div>
