@@ -384,6 +384,10 @@ const AdvisorDashboard = () => {
                 onClick={() => {
                   localStorage.removeItem('advisorAuthenticated');
                   setIsAuthenticated(false);
+                  // Clear other advisor data on logout
+                  setSelectedUser(null);
+                  setShowCallPrep(false);
+                  setActiveTab("users");
                 }}
                 className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300"
               >
