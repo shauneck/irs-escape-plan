@@ -435,9 +435,6 @@ const Explore = () => {
   // Extract all unique tags from glossary terms
   const allTags = [...new Set(glossaryTerms.flatMap(term => term.tags))];
 
-  // Get terms that need review (incorrect answers)
-  const termsToReview = [...new Set(incorrectAnswers.map(a => a.term))];
-
   // Calculate weekly streak (based on quiz activity in last 7 days)
   const weeklyStreak = (() => {
     if (!userStats.quizHistory.length) return 0;
@@ -459,11 +456,7 @@ const Explore = () => {
   const categoryStats = getCategoryCompletion();
 
   // Get terms that need review (incorrect answers)
-  const termsToReview = [...new Set(incorrectAnswers.map(a => a.term))];
-
-  // Calculate weekly streak (based on quiz activity in last 7 days)
-  const weeklyStreak = (() => {
-    if (!userStats.quizHistory.length) return 0;
+  const missedTerms = [...new Set(incorrectAnswers.map(a => a.term))];
     
     const now = new Date();
     const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
