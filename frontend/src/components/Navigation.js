@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Navigation = ({ theme, toggleTheme }) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isExploreOpen, setIsExploreOpen] = useState(false);
   const location = useLocation();
 
   const navItems = [
