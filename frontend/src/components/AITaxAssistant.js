@@ -23,28 +23,44 @@ const AITaxAssistant = ({ isOpen, onClose, userStats, glossaryTerms, courseModul
   // AI Knowledge Base and Context Engine
   const AIEngine = {
     // User context analysis
-    getUserContext: () => {
-      const completedModules = courseModules.filter(m => m.status === "Completed");
-      const inProgressModules = courseModules.filter(m => m.status === "In Progress");
-      const masteredTerms = userStats.masteredTerms || [];
-      const recentQuizzes = userStats.quizHistory || [];
-      const incorrectAnswers = JSON.parse(localStorage.getItem('incorrectAnswers') || '[]');
-      
-      return {
-        xp: userStats.xp,
-        level: this.getUserLevel(userStats.xp),
-        completedModules,
-        inProgressModules,
-        masteredTerms,
-        recentQuizzes,
-        incorrectAnswers,
-        strongAreas: this.getStrongAreas(),
-        weakAreas: this.getWeakAreas(),
-        recommendedPersona: this.getRecommendedPersona()
-      };
+    getUserContext: function() {
+      try {
+        const completedModules = (courseModules || []).filter(m => m.status === "Completed");
+        const inProgressModules = (courseModules || []).filter(m => m.status === "In Progress");
+        const masteredTerms = (userStats && userStats.masteredTerms) || [];
+        const recentQuizzes = (userStats && userStats.quizHistory) || [];
+        const incorrectAnswers = JSON.parse(localStorage.getItem('incorrectAnswers') || '[]');
+        
+        return {
+          xp: (userStats && userStats.xp) || 0,
+          level: this.getUserLevel((userStats && userStats.xp) || 0),
+          completedModules,
+          inProgressModules,
+          masteredTerms,
+          recentQuizzes,
+          incorrectAnswers,
+          strongAreas: this.getStrongAreas(),
+          weakAreas: this.getWeakAreas(),
+          recommendedPersona: this.getRecommendedPersona()
+        };
+      } catch (error) {
+        console.error("Error getting user context:", error);
+        return {
+          xp: 0,
+          level: "Tax Beginner",
+          completedModules: [],
+          inProgressModules: [],
+          masteredTerms: [],
+          recentQuizzes: [],
+          incorrectAnswers: [],
+          strongAreas: [],
+          weakAreas: [],
+          recommendedPersona: "W2"
+        };
+      }
     },
 
-    getUserLevel: (xp) => {
+    getUserLevel: function(xp) {
       if (xp >= 5000) return "Tax Master";
       if (xp >= 2500) return "Tax Expert";
       if (xp >= 1000) return "Tax Strategist";
@@ -52,29 +68,41 @@ const AITaxAssistant = ({ isOpen, onClose, userStats, glossaryTerms, courseModul
       return "Tax Beginner";
     },
 
-    getStrongAreas: () => {
-      const categoryStats = userStats.categoryStats || {};
-      return Object.entries(categoryStats)
-        .filter(([_, stats]) => stats.correct > stats.incorrect && stats.correct >= 3)
-        .map(([category, _]) => category);
+    getStrongAreas: function() {
+      try {
+        const categoryStats = (userStats && userStats.categoryStats) || {};
+        return Object.entries(categoryStats)
+          .filter(([_, stats]) => stats.correct > stats.incorrect && stats.correct >= 3)
+          .map(([category, _]) => category);
+      } catch (error) {
+        return [];
+      }
     },
 
-    getWeakAreas: () => {
-      const incorrectAnswers = JSON.parse(localStorage.getItem('incorrectAnswers') || '[]');
-      const weakTerms = [...new Set(incorrectAnswers.map(a => a.term))];
-      return weakTerms.slice(0, 5); // Top 5 weak areas
+    getWeakAreas: function() {
+      try {
+        const incorrectAnswers = JSON.parse(localStorage.getItem('incorrectAnswers') || '[]');
+        const weakTerms = [...new Set(incorrectAnswers.map(a => a.term))];
+        return weakTerms.slice(0, 5); // Top 5 weak areas
+      } catch (error) {
+        return [];
+      }
     },
 
-    getRecommendedPersona: () => {
-      const personaStats = userStats.personaStats || {};
-      const maxPersona = Object.entries(personaStats)
-        .reduce((max, [persona, stats]) => 
-          stats.xp > (max.stats?.xp || 0) ? { persona, stats } : max, {});
-      return maxPersona.persona || "W2";
+    getRecommendedPersona: function() {
+      try {
+        const personaStats = (userStats && userStats.personaStats) || {};
+        const maxPersona = Object.entries(personaStats)
+          .reduce((max, [persona, stats]) => 
+            stats.xp > (max.stats?.xp || 0) ? { persona, stats } : max, {});
+        return maxPersona.persona || "W2";
+      } catch (error) {
+        return "W2";
+      }
     },
 
     // Query analysis and response generation
-    analyzeQuery: (query) => {
+    analyzeQuery: function(query) {
       const lowerQuery = query.toLowerCase();
       
       // Intent detection
@@ -94,7 +122,7 @@ const AITaxAssistant = ({ isOpen, onClose, userStats, glossaryTerms, courseModul
       return { intents, entities, originalQuery: query };
     },
 
-    extractEntities: (query) => {
+    extractEntities: function(query) {
       const entities = {
         glossaryTerms: [],
         personas: [],
@@ -103,11 +131,13 @@ const AITaxAssistant = ({ isOpen, onClose, userStats, glossaryTerms, courseModul
       };
 
       // Extract glossary terms
-      glossaryTerms.forEach(term => {
-        if (query.toLowerCase().includes(term.term.toLowerCase())) {
-          entities.glossaryTerms.push(term);
-        }
-      });
+      if (glossaryTerms && Array.isArray(glossaryTerms)) {
+        glossaryTerms.forEach(term => {
+          if (query.toLowerCase().includes(term.term.toLowerCase())) {
+            entities.glossaryTerms.push(term);
+          }
+        });
+      }
 
       // Extract personas
       const personaKeywords = {
@@ -133,37 +163,54 @@ const AITaxAssistant = ({ isOpen, onClose, userStats, glossaryTerms, courseModul
     },
 
     // Response generation
-    generateResponse: (analysis) => {
-      const context = this.getUserContext();
-      const { intents, entities } = analysis;
+    generateResponse: function(analysis) {
+      try {
+        const context = this.getUserContext();
+        const { intents, entities } = analysis;
 
-      // Handle specific intents
-      if (intents.definition && entities.glossaryTerms.length > 0) {
-        return this.generateDefinitionResponse(entities.glossaryTerms[0], context);
+        // Handle specific intents
+        if (intents.definition && entities.glossaryTerms.length > 0) {
+          return this.generateDefinitionResponse(entities.glossaryTerms[0], context);
+        }
+
+        if (intents.caseStudy && entities.clients.length > 0) {
+          return this.generateCaseStudyResponse(entities.clients[0], context);
+        }
+
+        if (intents.strategy) {
+          return this.generateStrategyResponse(analysis, context);
+        }
+
+        if (intents.implementation) {
+          return this.generateImplementationResponse(analysis, context);
+        }
+
+        if (intents.nextSteps) {
+          return this.generateNextStepsResponse(context);
+        }
+
+        if (intents.comparison && entities.glossaryTerms.length >= 2) {
+          return this.generateComparisonResponse(entities.glossaryTerms, context);
+        }
+
+        // Fallback to general response
+        return this.generateGeneralResponse(analysis, context);
+      } catch (error) {
+        console.error("Error generating response:", error);
+        return this.generateErrorResponse();
       }
+    },
 
-      if (intents.caseStudy && entities.clients.length > 0) {
-        return this.generateCaseStudyResponse(entities.clients[0], context);
-      }
-
-      if (intents.strategy) {
-        return this.generateStrategyResponse(analysis, context);
-      }
-
-      if (intents.implementation) {
-        return this.generateImplementationResponse(analysis, context);
-      }
-
-      if (intents.nextSteps) {
-        return this.generateNextStepsResponse(context);
-      }
-
-      if (intents.comparison && entities.glossaryTerms.length >= 2) {
-        return this.generateComparisonResponse(entities.glossaryTerms, context);
-      }
-
-      // Fallback to general response
-      return this.generateGeneralResponse(analysis, context);
+    generateErrorResponse: function() {
+      return {
+        text: "I apologize, but I encountered an issue processing your request. Please try rephrasing your question or ask about specific tax strategies.",
+        suggestions: [
+          "What is QSBS?",
+          "How can I reduce my taxes?",
+          "What should I learn next?"
+        ],
+        ctas: []
+      };
     },
 
     generateDefinitionResponse: (term, context) => {
