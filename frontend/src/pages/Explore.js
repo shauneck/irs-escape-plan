@@ -150,6 +150,225 @@ const Explore = () => {
     }
   ];
 
+  // Load user data from localStorage on component mount
+  useEffect(() => {
+    const savedFavorites = localStorage.getItem('glossaryFavorites');
+    const savedProgress = localStorage.getItem('glossaryProgress');
+    const savedStats = localStorage.getItem('userStats');
+    
+    if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
+    if (savedProgress) setUserProgress(JSON.parse(savedProgress));
+    if (savedStats) setUserStats(JSON.parse(savedStats));
+  }, []);
+
+  // Save to localStorage whenever state changes
+  useEffect(() => {
+    localStorage.setItem('glossaryFavorites', JSON.stringify(favorites));
+  }, [favorites]);
+
+  useEffect(() => {
+    localStorage.setItem('glossaryProgress', JSON.stringify(userProgress));
+  }, [userProgress]);
+
+  useEffect(() => {
+    localStorage.setItem('userStats', JSON.stringify(userStats));
+  }, [userStats]);
+
+  // Get all unique tags
+  const allTags = [...new Set(glossaryTerms.flatMap(term => term.tags))];
+
+  // Filter terms based on search and tags
+  const filteredTerms = glossaryTerms.filter(term => {
+    const matchesSearch = term.term.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         term.definition.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesTags = selectedTags.length === 0 || selectedTags.some(tag => term.tags.includes(tag));
+    return matchesSearch && matchesTags;
+  });
+
+  // Toggle favorite
+  const toggleFavorite = (termName) => {
+    setFavorites(prev => 
+      prev.includes(termName) 
+        ? prev.filter(f => f !== termName)
+        : [...prev, termName]
+    );
+  };
+
+  // Toggle tag filter
+  const toggleTag = (tag) => {
+    setSelectedTags(prev =>
+      prev.includes(tag)
+        ? prev.filter(t => t !== tag)
+        : [...prev, tag]
+    );
+  };
+
+  // Generate quiz question
+  const generateQuizQuestion = (term) => {
+    const questionTypes = ["multiple-choice", "fill-blank", "definition"];
+    const type = questionTypes[Math.floor(Math.random() * questionTypes.length)];
+    
+    if (type === "multiple-choice") {
+      const wrongAnswers = glossaryTerms
+        .filter(t => t.term !== term.term)
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3)
+        .map(t => t.definition);
+      
+      const options = [...wrongAnswers, term.definition].sort(() => Math.random() - 0.5);
+      
+      return {
+        type: "multiple-choice",
+        question: `What is the definition of "${term.term}"?`,
+        options,
+        correct: term.definition,
+        term: term.term
+      };
+    } else if (type === "fill-blank") {
+      const words = term.definition.split(' ');
+      const blankIndex = Math.floor(Math.random() * words.length);
+      const blankWord = words[blankIndex];
+      const questionText = words.map((word, index) => 
+        index === blankIndex ? '______' : word
+      ).join(' ');
+      
+      return {
+        type: "fill-blank",
+        question: `Fill in the blank: ${questionText}`,
+        correct: blankWord.toLowerCase(),
+        term: term.term
+      };
+    } else {
+      return {
+        type: "definition",
+        question: `Given this example: "${term.example}" - What tax concept is being described?`,
+        correct: term.term,
+        term: term.term
+      };
+    }
+  };
+
+  // Start quiz
+  const startQuiz = () => {
+    const availableTerms = glossaryTerms.filter(term => 
+      !userStats.masteredTerms.includes(term.term)
+    );
+    
+    if (availableTerms.length === 0) {
+      alert("Congratulations! You've mastered all terms!");
+      return;
+    }
+    
+    const randomTerm = availableTerms[Math.floor(Math.random() * availableTerms.length)];
+    const question = generateQuizQuestion(randomTerm);
+    setCurrentQuizTerm(question);
+    setUserAnswer("");
+    setShowAnswer(false);
+  };
+
+  // Submit quiz answer
+  const submitAnswer = () => {
+    const isCorrect = currentQuizTerm.type === "multiple-choice" 
+      ? userAnswer === currentQuizTerm.correct
+      : userAnswer.toLowerCase().trim() === currentQuizTerm.correct.toLowerCase();
+
+    const newStats = { ...userStats };
+    
+    if (isCorrect) {
+      newStats.correct += 1;
+      newStats.xp += 10;
+      
+      // Track progress for this term
+      const termProgress = userProgress[currentQuizTerm.term] || { correct: 0, incorrect: 0 };
+      termProgress.correct += 1;
+      
+      // Master term if answered correctly 3 times
+      if (termProgress.correct >= 3 && !newStats.masteredTerms.includes(currentQuizTerm.term)) {
+        newStats.masteredTerms.push(currentQuizTerm.term);
+        newStats.xp += 25; // Bonus XP for mastering
+        
+        // Award badges
+        const masteredCount = newStats.masteredTerms.length;
+        if (masteredCount === 5 && !newStats.badges.includes("5-terms")) {
+          newStats.badges.push("5-terms");
+        } else if (masteredCount === 10 && !newStats.badges.includes("10-terms")) {
+          newStats.badges.push("10-terms");
+        } else if (masteredCount === 25 && !newStats.badges.includes("25-terms")) {
+          newStats.badges.push("25-terms");
+        } else if (masteredCount === 50 && !newStats.badges.includes("50-terms")) {
+          newStats.badges.push("50-terms");
+        }
+      }
+      
+      setUserProgress(prev => ({ ...prev, [currentQuizTerm.term]: termProgress }));
+    } else {
+      newStats.incorrect += 1;
+      const termProgress = userProgress[currentQuizTerm.term] || { correct: 0, incorrect: 0 };
+      termProgress.incorrect += 1;
+      setUserProgress(prev => ({ ...prev, [currentQuizTerm.term]: termProgress }));
+    }
+    
+    setUserStats(newStats);
+    setShowAnswer(true);
+  };
+
+  // Badge component
+  const Badge = ({ badge }) => {
+    const badges = {
+      "5-terms": { name: "Tax Rookie", icon: "🌱", color: "bg-green-500" },
+      "10-terms": { name: "Tax Strategist", icon: "⚡", color: "bg-blue-500" },
+      "25-terms": { name: "Tax Expert", icon: "🎯", color: "bg-purple-500" },
+      "50-terms": { name: "Tax Master", icon: "👑", color: "bg-yellow-500" }
+    };
+    
+    const badgeInfo = badges[badge];
+    return (
+      <div className={`${badgeInfo.color} text-white px-3 py-1 rounded-full text-sm flex items-center space-x-1`}>
+        <span>{badgeInfo.icon}</span>
+        <span>{badgeInfo.name}</span>
+      </div>
+    );
+  };
+
+  // Progress ring component
+  const ProgressRing = () => {
+    const masteredCount = userStats.masteredTerms.length;
+    const percentage = (masteredCount / glossaryTerms.length) * 100;
+    const circumference = 2 * Math.PI * 40;
+    const strokeDasharray = circumference;
+    const strokeDashoffset = circumference - (percentage / 100) * circumference;
+
+    return (
+      <div className="relative w-24 h-24">
+        <svg className="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
+          <circle
+            cx="50"
+            cy="50"
+            r="40"
+            stroke="currentColor"
+            strokeWidth="8"
+            fill="transparent"
+            className="text-gray-200"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="40"
+            stroke="currentColor"
+            strokeWidth="8"
+            fill="transparent"
+            strokeDasharray={strokeDasharray}
+            strokeDashoffset={strokeDashoffset}
+            className="text-yellow-500 transition-all duration-300"
+          />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-sm font-bold">{masteredCount}/{glossaryTerms.length}</span>
+        </div>
+      </div>
+    );
+  };
+
   const leaderboardData = [
     { rank: 1, name: "Sarah Chen", points: 2450, modules: 9 },
     { rank: 2, name: "Michael Rodriguez", points: 2380, modules: 8 },
