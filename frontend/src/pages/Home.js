@@ -49,37 +49,141 @@ const coreCourses = [
   }
 ];
 
-const CourseCard = ({ module }) => {
+const CourseCard = ({ course, index }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  const getBadgeColor = (index) => {
+    switch(index) {
+      case 0: return "bg-green-500";
+      case 1: return "bg-blue-500";
+      case 2: return "bg-purple-500";
+      default: return "bg-gray-500";
+    }
+  };
+
+  const getCtaColor = (locked, index) => {
+    if (!locked) return "bg-green-500 hover:bg-green-600";
+    switch(index) {
+      case 1: return "bg-blue-500 hover:bg-blue-600";
+      case 2: return "bg-purple-500 hover:bg-purple-600";
+      default: return "bg-gray-500 hover:bg-gray-600";
+    }
+  };
+
   return (
-    <div className="group cursor-pointer transition-all duration-300 hover:scale-105">
-      <div className="relative overflow-hidden rounded-lg shadow-lg bg-gray-900">
-        <img
-          src={module.image}
-          alt={module.title}
-          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-          <div className="flex justify-between items-center mb-2">
-            <span className="bg-yellow-400 text-black text-xs px-2 py-1 rounded-full">{module.badge}</span>
-            <span className="text-yellow-400 font-bold">{module.price}</span>
+    <div 
+      className={`relative group cursor-pointer transition-all duration-500 ${
+        index === 1 ? 'transform scale-105 z-10' : ''
+      } hover:scale-110`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Popular badge for middle course */}
+      {index === 1 && (
+        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
+          <span className="bg-yellow-400 text-black px-4 py-1 rounded-full text-sm font-bold">
+            MOST POPULAR
+          </span>
+        </div>
+      )}
+      
+      <div className="bg-white rounded-xl shadow-2xl overflow-hidden border-2 border-gray-100 group-hover:border-yellow-400 transition-all duration-300">
+        {/* Course Image */}
+        <div className="relative h-48 overflow-hidden">
+          <img
+            src={course.image}
+            alt={course.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+          
+          {/* Badge */}
+          <div className={`absolute top-4 left-4 ${getBadgeColor(index)} text-white px-3 py-1 rounded-full text-sm font-semibold`}>
+            {course.badge}
           </div>
-          <h3 className="font-bold text-lg mb-1 group-hover:text-yellow-400 transition-colors">
-            {module.title}
-          </h3>
-          <p className="text-sm text-gray-200 mb-2 line-clamp-2">{module.tagline}</p>
-          <div className="flex justify-between items-center text-xs text-gray-300 mb-2">
-            <span>{module.duration}</span>
-            <span>{module.modules} modules</span>
-          </div>
-          {module.progress > 0 && (
-            <div className="w-full bg-gray-700 rounded-full h-1.5">
-              <div
-                className="bg-yellow-400 h-1.5 rounded-full transition-all duration-300"
-                style={{ width: `${module.progress}%` }}
-              ></div>
+
+          {/* Lock icon for premium courses */}
+          {course.locked && (
+            <div className="absolute top-4 right-4 bg-gray-800 text-white p-2 rounded-full">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+              </svg>
             </div>
           )}
+        </div>
+
+        {/* Course Content */}
+        <div className="p-6">
+          {/* Price */}
+          <div className="flex justify-between items-start mb-3">
+            <span className={`text-2xl font-bold ${course.locked ? 'text-gray-800' : 'text-green-600'}`}>
+              {course.price}
+            </span>
+            {!course.locked && (
+              <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-sm font-semibold">
+                FREE
+              </span>
+            )}
+          </div>
+
+          {/* Title */}
+          <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-yellow-600 transition-colors">
+            {course.title}
+          </h3>
+
+          {/* Tagline */}
+          <p className="text-gray-600 font-medium mb-3 text-sm">
+            {course.tagline}
+          </p>
+
+          {/* Description */}
+          <p className="text-gray-500 text-sm mb-4 leading-relaxed">
+            {course.description}
+          </p>
+
+          {/* Course Details */}
+          <div className="mb-4">
+            <div className="flex justify-between items-center text-sm text-gray-600 mb-2">
+              <span><strong>Audience:</strong> {course.audience}</span>
+            </div>
+            <div className="flex justify-between items-center text-sm text-gray-600">
+              <span><strong>Duration:</strong> {course.duration}</span>
+              <span><strong>Modules:</strong> {course.modules}</span>
+            </div>
+          </div>
+
+          {/* Progress Bar (if applicable) */}
+          {course.progress > 0 && (
+            <div className="mb-4">
+              <div className="flex justify-between text-sm text-gray-600 mb-1">
+                <span>Progress</span>
+                <span>{course.progress}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-green-500 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${course.progress}%` }}
+                ></div>
+              </div>
+            </div>
+          )}
+
+          {/* CTA Button */}
+          <button
+            className={`w-full ${getCtaColor(course.locked, index)} text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg`}
+            disabled={course.locked}
+          >
+            {course.locked ? (
+              <span className="flex items-center justify-center">
+                <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                </svg>
+                {course.cta}
+              </span>
+            ) : (
+              course.cta
+            )}
+          </button>
         </div>
       </div>
     </div>
