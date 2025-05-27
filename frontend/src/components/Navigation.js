@@ -127,16 +127,17 @@ const Navigation = ({ theme, toggleTheme }) => {
           {/* User Menu */}
           <div className="hidden md:block">
             <div className="flex items-center space-x-4">
-              <button className="text-gray-600 hover:text-gray-900">
+              <ThemeToggle />
+              <button className="text-muted hover:text-primary">
                 <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM16 3H8a2 2 0 00-2 2v14a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2z" />
                 </svg>
               </button>
-              <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+              <button className="btn-primary px-4 py-2 rounded-md text-sm font-medium">
                 Upgrade
               </button>
-              <div className="h-8 w-8 bg-gray-300 rounded-full flex items-center justify-center">
-                <span className="text-sm font-medium text-gray-700">U</span>
+              <div className="h-8 w-8 bg-accent rounded-full flex items-center justify-center">
+                <span className="text-sm font-medium text-white">U</span>
               </div>
             </div>
           </div>
