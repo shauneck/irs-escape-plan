@@ -435,6 +435,9 @@ const Explore = () => {
   // Extract all unique tags from glossary terms
   const allTags = [...new Set(glossaryTerms.flatMap(term => term.tags))];
 
+  // Get terms that need review (incorrect answers)
+  const termsToReview = [...new Set(incorrectAnswers.map(a => a.term))];
+
   // Calculate weekly streak (based on quiz activity in last 7 days)
   const weeklyStreak = (() => {
     if (!userStats.quizHistory.length) return 0;
