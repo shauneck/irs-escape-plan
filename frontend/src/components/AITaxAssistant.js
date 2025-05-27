@@ -213,174 +213,202 @@ const AITaxAssistant = ({ isOpen, onClose, userStats, glossaryTerms, courseModul
       };
     },
 
-    generateDefinitionResponse: (term, context) => {
-      const relatedTerms = this.findRelatedTerms(term);
-      const userLevel = context.level;
-      
-      return {
-        text: `## ${term.term}\n\n**Definition:** ${term.definition}\n\n**In Plain English:** ${term.plain_english}\n\n**Key Benefit:** ${term.key_benefit}\n\n${this.getPersonalizedInsight(term, context)}`,
-        suggestions: [
-          `Tell me about the ${term.term} case study`,
-          `How do I implement ${term.term}?`,
-          `What other strategies work with ${term.term}?`
-        ],
-        relatedTerms: relatedTerms.slice(0, 3),
-        ctas: this.generateCTAs(term, context)
-      };
-    },
-
-    generateCaseStudyResponse: (clientName, context) => {
-      const term = glossaryTerms.find(t => 
-        t.case_study.client_profile.includes(clientName)
-      );
-      
-      if (!term) {
-        return this.generateGeneralResponse({ entities: { clients: [clientName] } }, context);
-      }
-
-      return {
-        text: `## ${clientName}'s Case Study - ${term.term}\n\n**Client Profile:** ${term.case_study.client_profile}\n\n**Structure Used:** ${term.case_study.structure}\n\n**Implementation:** ${term.case_study.implementation}\n\n**Results:** ${term.case_study.results}\n\n${this.getPersonalizedApplicationAdvice(term, context)}`,
-        suggestions: [
-          `How can I apply ${term.term} to my situation?`,
-          `What are the requirements for ${term.term}?`,
-          `Show me other similar strategies`
-        ],
-        relatedTerms: this.findRelatedTerms(term).slice(0, 2),
-        ctas: this.generateCTAs(term, context)
-      };
-    },
-
-    generateStrategyResponse: (analysis, context) => {
-      const { entities } = analysis;
-      const userPersona = context.recommendedPersona;
-      const relevantStrategies = this.getStrategiesForPersona(userPersona);
-      
-      let response = `## Tax Strategies for ${userPersona.replace(/([A-Z])/g, ' $1').trim()}\n\n`;
-      
-      if (entities.personas.length > 0) {
-        const requestedPersona = entities.personas[0];
-        response = `## Tax Strategies for ${requestedPersona.toUpperCase()} Professionals\n\n`;
-        relevantStrategies.forEach((strategy, index) => {
-          response += `**${index + 1}. ${strategy.term}**\n${strategy.plain_english}\n\n`;
-        });
-      } else {
-        response += `Based on your progress (${context.xp} XP, ${context.level}), here are strategies to consider:\n\n`;
-        relevantStrategies.slice(0, 3).forEach((strategy, index) => {
-          response += `**${index + 1}. ${strategy.term}**\n${strategy.plain_english}\n\n`;
-        });
-      }
-
-      return {
-        text: response + this.getPersonalizedRecommendation(context),
-        suggestions: [
-          `How do I implement these strategies?`,
-          `What are the risks of these strategies?`,
-          `Which strategy should I start with?`
-        ],
-        relatedTerms: relevantStrategies.slice(0, 3),
-        ctas: this.generateStrategyCTAs(context)
-      };
-    },
-
-    generateImplementationResponse: (analysis, context) => {
-      const { entities } = analysis;
-      const term = entities.glossaryTerms[0];
-      
-      if (!term) {
+    generateDefinitionResponse: function(term, context) {
+      try {
+        const relatedTerms = this.findRelatedTerms(term);
+        const userLevel = context.level;
+        
         return {
-          text: `## Implementation Guidance\n\nTo provide specific implementation advice, I need to know which strategy you're interested in. Based on your progress, I recommend starting with:\n\n${this.getNextBestStrategy(context)}`,
+          text: `## ${term.term}\n\n**Definition:** ${term.definition}\n\n**In Plain English:** ${term.plain_english}\n\n**Key Benefit:** ${term.key_benefit}\n\n${this.getPersonalizedInsight(term, context)}`,
           suggestions: [
-            "What's the best strategy for my situation?",
-            "Show me implementation checklists",
-            "What documents do I need?"
+            `Tell me about the ${term.term} case study`,
+            `How do I implement ${term.term}?`,
+            `What other strategies work with ${term.term}?`
           ],
+          relatedTerms: relatedTerms.slice(0, 3),
+          ctas: this.generateCTAs(term, context)
+        };
+      } catch (error) {
+        return this.generateErrorResponse();
+      }
+    },
+
+    generateCaseStudyResponse: function(clientName, context) {
+      try {
+        const term = (glossaryTerms || []).find(t => 
+          t.case_study && t.case_study.client_profile.includes(clientName)
+        );
+        
+        if (!term) {
+          return this.generateGeneralResponse({ entities: { clients: [clientName] } }, context);
+        }
+
+        return {
+          text: `## ${clientName}'s Case Study - ${term.term}\n\n**Client Profile:** ${term.case_study.client_profile}\n\n**Structure Used:** ${term.case_study.structure}\n\n**Implementation:** ${term.case_study.implementation}\n\n**Results:** ${term.case_study.results}\n\n${this.getPersonalizedApplicationAdvice(term, context)}`,
+          suggestions: [
+            `How can I apply ${term.term} to my situation?`,
+            `What are the requirements for ${term.term}?`,
+            `Show me other similar strategies`
+          ],
+          relatedTerms: this.findRelatedTerms(term).slice(0, 2),
+          ctas: this.generateCTAs(term, context)
+        };
+      } catch (error) {
+        return this.generateErrorResponse();
+      }
+    },
+
+    generateStrategyResponse: function(analysis, context) {
+      try {
+        const { entities } = analysis;
+        const userPersona = context.recommendedPersona;
+        const relevantStrategies = this.getStrategiesForPersona(userPersona);
+        
+        let response = `## Tax Strategies for ${userPersona.replace(/([A-Z])/g, ' $1').trim()}\n\n`;
+        
+        if (entities.personas.length > 0) {
+          const requestedPersona = entities.personas[0];
+          response = `## Tax Strategies for ${requestedPersona.toUpperCase()} Professionals\n\n`;
+          relevantStrategies.forEach((strategy, index) => {
+            response += `**${index + 1}. ${strategy.term}**\n${strategy.plain_english}\n\n`;
+          });
+        } else {
+          response += `Based on your progress (${context.xp} XP, ${context.level}), here are strategies to consider:\n\n`;
+          relevantStrategies.slice(0, 3).forEach((strategy, index) => {
+            response += `**${index + 1}. ${strategy.term}**\n${strategy.plain_english}\n\n`;
+          });
+        }
+
+        return {
+          text: response + this.getPersonalizedRecommendation(context),
+          suggestions: [
+            `How do I implement these strategies?`,
+            `What are the risks of these strategies?`,
+            `Which strategy should I start with?`
+          ],
+          relatedTerms: relevantStrategies.slice(0, 3),
+          ctas: this.generateStrategyCTAs(context)
+        };
+      } catch (error) {
+        return this.generateErrorResponse();
+      }
+    },
+
+    generateImplementationResponse: function(analysis, context) {
+      try {
+        const { entities } = analysis;
+        const term = entities.glossaryTerms[0];
+        
+        if (!term) {
+          return {
+            text: `## Implementation Guidance\n\nTo provide specific implementation advice, I need to know which strategy you're interested in. Based on your progress, I recommend starting with:\n\n${this.getNextBestStrategy(context)}`,
+            suggestions: [
+              "What's the best strategy for my situation?",
+              "Show me implementation checklists",
+              "What documents do I need?"
+            ],
+            ctas: this.generateImplementationCTAs(context)
+          };
+        }
+
+        return {
+          text: `## Implementation Guide: ${term.term}\n\n**Prerequisites:**\n- ${context.level} understanding (✓ You qualify)\n- Relevant documentation\n- Professional consultation recommended\n\n**Implementation Steps:**\n1. Review all requirements\n2. Gather necessary documents\n3. Consult with tax professional\n4. Execute strategy\n5. Monitor and adjust\n\n**Based on your profile:** ${this.getPersonalizedImplementationAdvice(term, context)}`,
+          suggestions: [
+            "What documents do I need?",
+            "How long does implementation take?",
+            "What are the costs involved?"
+          ],
+          relatedTerms: [term],
           ctas: this.generateImplementationCTAs(context)
         };
+      } catch (error) {
+        return this.generateErrorResponse();
       }
-
-      return {
-        text: `## Implementation Guide: ${term.term}\n\n**Prerequisites:**\n- ${context.level} understanding (✓ You qualify)\n- Relevant documentation\n- Professional consultation recommended\n\n**Implementation Steps:**\n1. Review all requirements\n2. Gather necessary documents\n3. Consult with tax professional\n4. Execute strategy\n5. Monitor and adjust\n\n**Based on your profile:** ${this.getPersonalizedImplementationAdvice(term, context)}`,
-        suggestions: [
-          "What documents do I need?",
-          "How long does implementation take?",
-          "What are the costs involved?"
-        ],
-        relatedTerms: [term],
-        ctas: this.generateImplementationCTAs(context)
-      };
     },
 
-    generateNextStepsResponse: (context) => {
-      const recommendations = [];
-      
-      // Learning recommendations
-      if (context.xp < 1000) {
-        recommendations.push("📚 **Continue Learning**: Take more quizzes to unlock advanced strategies");
-      }
-      
-      // Module recommendations
-      if (context.inProgressModules.length > 0) {
-        recommendations.push(`📖 **Complete Module**: Finish "${context.inProgressModules[0].title}" (${100 - context.inProgressModules[0].completion}% remaining)`);
-      }
-      
-      // Review recommendations
-      if (context.weakAreas.length > 0) {
-        recommendations.push(`🔍 **Review Terms**: Focus on ${context.weakAreas.slice(0, 2).join(", ")}`);
-      }
-      
-      // Strategy recommendations
-      const nextStrategy = this.getNextBestStrategy(context);
-      if (nextStrategy) {
-        recommendations.push(`⚡ **Next Strategy**: Explore ${nextStrategy}`);
-      }
+    generateNextStepsResponse: function(context) {
+      try {
+        const recommendations = [];
+        
+        // Learning recommendations
+        if (context.xp < 1000) {
+          recommendations.push("📚 **Continue Learning**: Take more quizzes to unlock advanced strategies");
+        }
+        
+        // Module recommendations
+        if (context.inProgressModules.length > 0) {
+          recommendations.push(`📖 **Complete Module**: Finish "${context.inProgressModules[0].title}" (${100 - context.inProgressModules[0].completion}% remaining)`);
+        }
+        
+        // Review recommendations
+        if (context.weakAreas.length > 0) {
+          recommendations.push(`🔍 **Review Terms**: Focus on ${context.weakAreas.slice(0, 2).join(", ")}`);
+        }
+        
+        // Strategy recommendations
+        const nextStrategy = this.getNextBestStrategy(context);
+        if (nextStrategy) {
+          recommendations.push(`⚡ **Next Strategy**: Explore ${nextStrategy}`);
+        }
 
-      return {
-        text: `## Your Personalized Next Steps\n\n${recommendations.join('\n\n')}\n\n**Your Progress:** ${context.xp} XP, ${context.level} level\n**Strengths:** ${context.strongAreas.join(', ') || 'Building foundation'}\n**Focus Areas:** ${context.weakAreas.join(', ') || 'Continue learning'}`,
-        suggestions: [
-          "What quiz should I take next?",
-          "Which module should I prioritize?",
-          "How can I earn more XP quickly?"
-        ],
-        ctas: [
-          { text: "Take Practice Quiz", action: "quiz" },
-          { text: "Review Weak Terms", action: "review" },
-          { text: "Continue Learning", action: "learn" }
-        ]
-      };
+        return {
+          text: `## Your Personalized Next Steps\n\n${recommendations.join('\n\n')}\n\n**Your Progress:** ${context.xp} XP, ${context.level} level\n**Strengths:** ${context.strongAreas.join(', ') || 'Building foundation'}\n**Focus Areas:** ${context.weakAreas.join(', ') || 'Continue learning'}`,
+          suggestions: [
+            "What quiz should I take next?",
+            "Which module should I prioritize?",
+            "How can I earn more XP quickly?"
+          ],
+          ctas: [
+            { text: "Take Practice Quiz", action: "quiz" },
+            { text: "Review Weak Terms", action: "review" },
+            { text: "Continue Learning", action: "learn" }
+          ]
+        };
+      } catch (error) {
+        return this.generateErrorResponse();
+      }
     },
 
-    generateComparisonResponse: (terms, context) => {
-      const term1 = terms[0];
-      const term2 = terms[1];
-      
-      return {
-        text: `## Comparison: ${term1.term} vs ${term2.term}\n\n**${term1.term}:**\n${term1.plain_english}\n\n**${term2.term}:**\n${term2.plain_english}\n\n**Key Differences:**\n- Use cases and applications vary\n- Different complexity levels\n- Distinct implementation requirements\n\n**For your situation (${context.level}):** ${this.getPersonalizedComparison(term1, term2, context)}`,
-        suggestions: [
-          `Which is better for ${context.recommendedPersona}?`,
-          `Can I use both strategies together?`,
-          `What are the implementation costs?`
-        ],
-        relatedTerms: [term1, term2],
-        ctas: this.generateCTAs(term1, context)
-      };
+    generateComparisonResponse: function(terms, context) {
+      try {
+        const term1 = terms[0];
+        const term2 = terms[1];
+        
+        return {
+          text: `## Comparison: ${term1.term} vs ${term2.term}\n\n**${term1.term}:**\n${term1.plain_english}\n\n**${term2.term}:**\n${term2.plain_english}\n\n**Key Differences:**\n- Use cases and applications vary\n- Different complexity levels\n- Distinct implementation requirements\n\n**For your situation (${context.level}):** ${this.getPersonalizedComparison(term1, term2, context)}`,
+          suggestions: [
+            `Which is better for ${context.recommendedPersona}?`,
+            `Can I use both strategies together?`,
+            `What are the implementation costs?`
+          ],
+          relatedTerms: [term1, term2],
+          ctas: this.generateCTAs(term1, context)
+        };
+      } catch (error) {
+        return this.generateErrorResponse();
+      }
     },
 
-    generateGeneralResponse: (analysis, context) => {
-      const fallbackResponses = [
-        `Based on your current progress (${context.xp} XP, ${context.level}), I can help you with tax strategy questions. Try asking about specific strategies or concepts!`,
-        `I have extensive knowledge about advanced tax strategies. What specific area would you like to explore?`,
-        `Let me help you navigate tax strategies. You can ask about definitions, implementations, or get personalized recommendations!`
-      ];
+    generateGeneralResponse: function(analysis, context) {
+      try {
+        const fallbackResponses = [
+          `Based on your current progress (${context.xp} XP, ${context.level}), I can help you with tax strategy questions. Try asking about specific strategies or concepts!`,
+          `I have extensive knowledge about advanced tax strategies. What specific area would you like to explore?`,
+          `Let me help you navigate tax strategies. You can ask about definitions, implementations, or get personalized recommendations!`
+        ];
 
-      return {
-        text: fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)],
-        suggestions: [
-          "What strategies can reduce my tax burden?",
-          "Explain Qualified Opportunity Fund",
-          "What should I learn next?"
-        ],
-        ctas: this.generateGeneralCTAs(context)
-      };
+        return {
+          text: fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)],
+          suggestions: [
+            "What strategies can reduce my tax burden?",
+            "Explain Qualified Opportunity Fund",
+            "What should I learn next?"
+          ],
+          ctas: this.generateGeneralCTAs(context)
+        };
+      } catch (error) {
+        return this.generateErrorResponse();
+      }
     },
 
     // Helper methods for context and personalization
