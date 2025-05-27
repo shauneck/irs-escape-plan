@@ -26,9 +26,11 @@ const AdvisorDashboard = () => {
     if (savedNotes) setAdvisorNotes(JSON.parse(savedNotes));
     if (savedTags) setUserTags(JSON.parse(savedTags));
     
-    // Simulate authentication
+    // Check authentication status
     const isLoggedIn = localStorage.getItem('advisorAuthenticated');
-    setIsAuthenticated(!!isLoggedIn);
+    if (isLoggedIn === 'true') {
+      setIsAuthenticated(true);
+    }
   }, []);
 
   // Mock user data - in real app would come from backend API
