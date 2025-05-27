@@ -429,22 +429,7 @@ const Explore = () => {
     localStorage.setItem('userStats', JSON.stringify(userStats));
   }, [userStats]);
 
-  // Category mapping for terms
-  const getCategoryForTerm = (term) => {
-    const termObj = glossaryTerms.find(t => t.term === term);
-    if (!termObj) return "General";
-    
-    const tags = termObj.tags.map(t => t.toLowerCase());
-    
-    if (tags.some(tag => tag.includes("capital gains") || tag.includes("investment"))) return "Capital Gains";
-    if (tags.some(tag => tag.includes("real estate") || tag.includes("depreciation"))) return "Real Estate";
-    if (tags.some(tag => tag.includes("retirement") || tag.includes("tax timing"))) return "Retirement";
-    if (tags.some(tag => tag.includes("business") || tag.includes("entity"))) return "Business Structure";
-    if (tags.some(tag => tag.includes("estate") || tag.includes("wealth transfer"))) return "Estate Planning";
-    if (tags.some(tag => tag.includes("deductions") || tag.includes("w2"))) return "Deductions";
-    
-    return "Advanced Strategies";
-  };
+  // Duplicate function removed - using the one defined earlier
 
   // Badge tier system
   const getBadgeTier = (xp, category) => {
