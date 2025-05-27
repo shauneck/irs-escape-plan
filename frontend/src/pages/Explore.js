@@ -117,7 +117,7 @@ const Explore = () => {
     setShowAnswer(false);
     setActiveSection("quiz-mode");
   };
-  const [quizSession, setQuizSession] = useState(null);
+  
   const [incorrectAnswers, setIncorrectAnswers] = useState([]);
   const [userStats, setUserStats] = useState({
     xp: 0,
