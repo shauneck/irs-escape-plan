@@ -1,16 +1,16 @@
-import { useState } from "react";
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navigation from "./components/Navigation";
-import Home from "./pages/Home";
-import MyPlan from "./pages/MyPlan";
-import Explore from "./pages/Explore";
-import Marketplace from "./pages/Marketplace";
-import CourseDetail from "./pages/CourseDetail";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navigation from './components/Navigation';
+import Home from './pages/Home';
+import MyPlan from './pages/MyPlan';
+import Explore from './pages/Explore';
+import Marketplace from './pages/Marketplace';
+import CourseDetail from './pages/CourseDetail';
 import AdvisorDashboard from './pages/AdvisorDashboard';
 import DocumentReader from './pages/DocumentReader';
 import EscapeBlueprint from './pages/EscapeBlueprint';
 import Community from './pages/Community';
+import './App.css';
 
 function App() {
   return (
