@@ -433,6 +433,60 @@ const Explore = () => {
   }, [userStats]);
 
   // Duplicate functions removed - using the ones defined earlier
+
+  // Generate quiz questions for a term
+  const generateQuizQuestions = (term) => {
+    const questions = [];
+    
+    // Question 1: Definition matching
+    const wrongDefinitions = glossaryTerms
+      .filter(t => t.term !== term.term)
+      .map(t => t.definition)
+      .slice(0, 3);
+    
+    questions.push({
+      id: `${term.term}-definition`,
+      type: "definition",
+      question: `What is the definition of "${term.term}"?`,
+      options: [...wrongDefinitions, term.definition].sort(() => Math.random() - 0.5),
+      correct: term.definition,
+      term: term.term,
+      category: "definition",
+      xpValue: 10
+    });
+
+    // Question 2: Application scenario
+    questions.push({
+      id: `${term.term}-application`,
+      type: "application",
+      question: `In which scenario would you most likely use "${term.term}"?`,
+      options: [
+        term.case_study.scenario,
+        "When filing a simple tax return",
+        "For basic bookkeeping tasks",
+        "During routine financial planning"
+      ].sort(() => Math.random() - 0.5),
+      correct: term.case_study.scenario,
+      term: term.term,
+      category: "application",
+      xpValue: 15
+    });
+
+    // Question 3: Case study matching
+    const clientName = extractClientName(term.case_study.client_profile);
+    const wrongClients = glossaryTerms
+      .filter(t => t.term !== term.term)
+      .map(t => extractClientName(t.case_study.client_profile))
+      .filter(name => name && name !== clientName)
+      .slice(0, 3);
+    
+    if (clientName && wrongClients.length >= 3) {
+      questions.push({
+        id: `${term.term}-casestudy`,
+        type: "case_study_match",
+        question: `Which client is featured in the ${term.term} case study?`,
+        options: [...wrongClients, clientName].sort(() => Math.random() - 0.5),
+        correct: clientName,
     setUserAnswer("");
     setShowAnswer(false);
     setActiveSection("quiz-mode");
