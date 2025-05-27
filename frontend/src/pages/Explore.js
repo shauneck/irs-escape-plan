@@ -455,6 +455,29 @@ const Explore = () => {
   // Category statistics for display
   const categoryStats = getCategoryCompletion();
 
+  // Get terms that need review (incorrect answers)
+  const termsToReview = [...new Set(incorrectAnswers.map(a => a.term))];
+
+  // Calculate weekly streak (based on quiz activity in last 7 days)
+  const weeklyStreak = (() => {
+    if (!userStats.quizHistory.length) return 0;
+    
+    const now = new Date();
+    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const recentQuizzes = userStats.quizHistory.filter(quiz => 
+      new Date(quiz.startTime) >= weekAgo
+    );
+    
+    const uniqueDays = new Set(recentQuizzes.map(quiz => 
+      new Date(quiz.startTime).toDateString()
+    ));
+    
+    return uniqueDays.size;
+  })();
+
+  // Category statistics for display
+  const categoryStats = getCategoryCompletion();
+
   // Terms that need review (incorrect answers)
   const missedTerms = [...new Set(incorrectAnswers.map(a => a.term))];
 
