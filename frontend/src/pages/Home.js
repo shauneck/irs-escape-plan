@@ -173,9 +173,9 @@ const CourseCard = ({ course, index }) => {
           )}
 
           {/* CTA Button */}
-          <button
-            className={`w-full ${getCtaColor(course.locked, index)} text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg`}
-            disabled={course.locked}
+          <Link
+            to={course.courseId ? `/course/${course.courseId}` : '#'}
+            className={`block w-full ${getCtaColor(course.locked, index)} text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg text-center`}
           >
             {course.locked ? (
               <span className="flex items-center justify-center">
@@ -187,7 +187,7 @@ const CourseCard = ({ course, index }) => {
             ) : (
               course.cta
             )}
-          </button>
+          </Link>
         </div>
       </div>
     </div>
