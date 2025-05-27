@@ -30,123 +30,263 @@ const Explore = () => {
   const glossaryTerms = [
     {
       term: "Qualified Opportunity Fund (QOF)",
-      definition: "An investment vehicle that allows deferral and potential elimination of capital gains when invested in designated Opportunity Zones.",
-      example: "After selling stock with a $200K gain, you invest the gain in a QOF within 180 days to defer taxes.",
-      tags: ["Capital Gains", "Investment", "Business Owner"]
+      definition: "An investment vehicle under IRC §1400Z-2 that allows deferral and potential exclusion of capital gains by investing in designated Opportunity Zones.",
+      tags: ["capital gains", "real estate", "business owner", "investment"],
+      plain_english: "You can delay and potentially avoid paying capital gains taxes by investing in a Qualified Opportunity Fund.",
+      case_study: {
+        client_profile: "Amanda sold company stock with $600K in capital gains and wanted to defer the tax while reinvesting in real estate.",
+        structure: "She invested the gains in a QOF within 180 days of sale, targeting tax-advantaged Opportunity Zone property.",
+        implementation: "The fund pooled investor capital to purchase and improve a multifamily asset in a certified zone.",
+        results: "Deferred $600K in taxes and positioned the investment for permanent gain exclusion after 10 years."
+      },
+      key_benefit: "Turn taxable gains into long-term tax-free growth through compliant real estate investing."
     },
     {
       term: "REPS (Real Estate Professional Status)",
-      definition: "A tax status that allows certain real estate investors to treat passive losses as active, offsetting W-2 or business income.",
-      example: "Nina qualifies for REPS, allowing her $50K in rental losses to offset W-2 income.",
-      tags: ["Real Estate", "W2", "Deductions"]
+      definition: "A tax classification under IRC §469 that allows certain real estate investors to offset active income with rental losses.",
+      tags: ["real estate", "W2", "deductions", "active income"],
+      plain_english: "If you work full-time in real estate, you can use rental losses to reduce your W-2 or business income.",
+      case_study: {
+        client_profile: "Nina K. is a tech executive who owns a short-term rental portfolio generating passive losses.",
+        structure: "She became a full-time real estate professional by materially participating in her portfolio.",
+        implementation: "Met the 750-hour rule and established REPS via tax elections and time logs.",
+        results: "Used $82K in rental losses to offset W-2 income, reducing her tax bill by over $28K."
+      },
+      key_benefit: "Convert rental losses into powerful deductions against ordinary income."
     },
     {
       term: "QSBS (Qualified Small Business Stock)",
-      definition: "Stock in a qualifying C-Corp that can be sold after 5 years with up to 100% capital gains exclusion under Section 1202.",
-      example: "Claire invests in a startup C-Corp and exits with $8M in tax-free gains.",
-      tags: ["Equity", "Startup", "Exit Planning"]
+      definition: "Stock that may be eligible for up to 100% exclusion of capital gains under IRC §1202 if held for at least five years and issued by a qualifying C-Corp.",
+      tags: ["equity", "startup", "exit planning", "capital gains"],
+      plain_english: "If you hold shares in a qualified startup for 5 years, your gains can be 100% tax-free when you sell.",
+      case_study: {
+        client_profile: "Ethan invested in a software startup as an early employee and received QSBS-eligible shares.",
+        structure: "The company met Section 1202 requirements and Ethan held his stock for over five years.",
+        implementation: "Verified QSBS status through corporate records and planned exit accordingly.",
+        results: "Excluded $9.2M in gains from federal tax at sale."
+      },
+      key_benefit: "Create generational wealth through tax-free startup exits."
     },
     {
       term: "F-Reorg",
-      definition: "A type of corporate reorganization used to preserve QSBS eligibility when transferring ownership or restructuring.",
-      example: "A founder uses an F-reorg before selling shares to maintain QSBS treatment.",
-      tags: ["Corporate", "Advanced Planning", "QSBS"]
+      definition: "A tax-free corporate restructuring under IRC §368(a)(1)(F) used to preserve QSBS eligibility during ownership transitions or reorganizations.",
+      tags: ["corporate", "QSBS", "business owner", "exit planning"],
+      plain_english: "You can restructure your company without resetting the QSBS holding period.",
+      case_study: {
+        client_profile: "Sophie owned 90% of a startup C-Corp that was planning a Series A financing round.",
+        structure: "She executed an F-Reorg to preserve QSBS treatment while converting the entity to a holding company.",
+        implementation: "Filed required IRS forms and corporate documents to complete the reorganization without changing ownership.",
+        results: "Maintained QSBS status, enabling a future $7M tax-free exit."
+      },
+      key_benefit: "Preserve QSBS tax treatment while restructuring for future growth or sale."
     },
     {
       term: "Oil & Gas IDCs",
-      definition: "Intangible drilling costs that can be deducted in year one to offset ordinary income.",
-      example: "Miles invests $200K in an oil partnership and deducts $170K in year one through IDCs.",
-      tags: ["Alternative Investment", "Deductions", "Business Owner"]
+      definition: "Intangible Drilling Costs that are 100% deductible in year one and can offset active income under IRC §263(c).",
+      tags: ["deductions", "alternative investment", "business owner"],
+      plain_english: "You can deduct the cost of drilling an oil well—even if it hasn't produced yet—to reduce your tax bill.",
+      case_study: {
+        client_profile: "Miles J., a business owner with $400K in income, needed deductions to lower taxable income.",
+        structure: "He invested $250K in a direct oil & gas drilling program with 85% IDC allocation.",
+        implementation: "The sponsor filed K-1s showing $212K in year-one deductions.",
+        results: "Reduced his federal tax bill by over $70K and began earning monthly distributions."
+      },
+      key_benefit: "Front-load massive deductions while generating cash flow from alternative assets."
     },
     {
       term: "Roth Conversion",
-      definition: "Moving funds from a traditional IRA or 401(k) to a Roth IRA, paying tax now for future tax-free growth.",
-      example: "Samir converts $150K during a low-income year to reduce lifetime tax liability.",
-      tags: ["Retirement", "W2", "Tax Timing"]
+      definition: "The process of moving money from a traditional IRA to a Roth IRA, paying taxes now for tax-free growth later.",
+      tags: ["retirement", "tax timing", "W2", "investment"],
+      plain_english: "You pay taxes now so your retirement money grows and comes out tax-free later.",
+      case_study: {
+        client_profile: "Samir T., age 55, had $500K in a traditional IRA and anticipated higher taxes in retirement.",
+        structure: "Converted $150K to a Roth IRA during a strategic low-income window.",
+        implementation: "Used oil & gas deductions to eliminate 40% of the taxable income from the conversion.",
+        results: "Paid $18K in tax instead of $32K and locked in future tax-free withdrawals."
+      },
+      key_benefit: "Shift retirement assets into a tax-free bucket while your rates are still low."
     },
     {
       term: "STR (Short-Term Rental)",
-      definition: "A rental property typically leased for fewer than 7 days per stay, often eligible for more aggressive tax treatment if materially participated in.",
-      example: "Liam uses a Virginia STR to generate passive income and deductions against his W-2.",
-      tags: ["Real Estate", "W2", "Deductions"]
+      definition: "Rental properties leased for less than 7 days per guest stay that may qualify for active participation tax benefits.",
+      tags: ["real estate", "W2", "deductions", "passive income"],
+      plain_english: "If you rent out property short-term and stay actively involved, you can write off losses against W-2 income.",
+      case_study: {
+        client_profile: "Liam R. owns a STR in Virginia while working full-time as an engineer.",
+        structure: "Met material participation rules by self-managing and booking guests.",
+        implementation: "Documented 150+ hours in active management to override passive classification.",
+        results: "Used $31K in STR losses to offset his W-2 income, reducing taxes by $11K."
+      },
+      key_benefit: "Turn vacation rentals into powerful tax shields against earned income."
     },
     {
       term: "Material Participation",
-      definition: "A standard used to determine whether a taxpayer actively participates in an activity, affecting the treatment of losses.",
-      example: "A taxpayer spends 500+ hours on a rental and qualifies as materially participating.",
-      tags: ["IRS Rules", "Real Estate", "Active Income"]
+      definition: "A set of IRS tests under IRC §469 that determine if a taxpayer is actively involved in a business or rental activity, affecting how losses are treated.",
+      tags: ["real estate", "active income", "IRS rules", "deductions"],
+      plain_english: "If you're active enough in a business or rental, the IRS lets you use losses to reduce your other income.",
+      case_study: {
+        client_profile: "Rachel owns three rental properties and wants to offset income from her consulting business.",
+        structure: "She manages the properties herself, tracks hours, and handles tenant screening and repairs.",
+        implementation: "She passed the 500-hour test to qualify as materially participating.",
+        results: "Wrote off $45K in passive losses against active consulting income."
+      },
+      key_benefit: "Convert passive losses into active deductions by demonstrating real involvement."
     },
     {
       term: "MSO (Management Services Organization)",
-      definition: "A C-Corp structure that provides services to a main business entity, allowing income separation and advanced tax strategies.",
-      example: "Shaun creates an MSO to shift profits into a C-Corp and reduce pass-through taxation.",
-      tags: ["Entity Structure", "Business Owner", "Advanced Planning"]
+      definition: "A business structure—often a C-Corp—that provides services to a primary operating business, allowing income separation and advanced tax planning.",
+      tags: ["business owner", "entity structure", "C-Corp", "advanced planning"],
+      plain_english: "Create a second company to manage your business and open up new tax-saving strategies.",
+      case_study: {
+        client_profile: "Jordan runs a medical clinic and earns $1.4M in annual revenue.",
+        structure: "He forms an MSO to handle management and admin services.",
+        implementation: "The MSO receives $600K in service fees, shifting profit to a C-Corp.",
+        results: "Reduced pass-through income and used retained earnings for split-dollar insurance."
+      },
+      key_benefit: "Unlock corporate tax strategies and income control with compliant multi-entity planning."
     },
     {
       term: "Split-Dollar Life Insurance",
-      definition: "A strategy where a business funds a permanent life insurance policy, often with the goal of building tax-free retirement income.",
-      example: "A C-Corp funds a policy for the owner, allowing future tax-free loans for income.",
-      tags: ["Insurance", "Business Owner", "Wealth Transfer"]
+      definition: "A strategy where an employer or entity funds a permanent life insurance policy, creating future tax-free income or wealth transfer advantages.",
+      tags: ["insurance", "business owner", "wealth transfer", "retirement"],
+      plain_english: "A business can help fund a life insurance policy that you later borrow from tax-free.",
+      case_study: {
+        client_profile: "Melissa owns a C-Corp MSO generating $400K in retained earnings.",
+        structure: "The company funds a loan-based split-dollar life insurance policy on her life.",
+        implementation: "Policy grows in value tax-deferred; Melissa can borrow against it in retirement.",
+        results: "Extracted $2.5M from her company over 12 years without dividend tax."
+      },
+      key_benefit: "Exit retained earnings tax-efficiently while building future tax-free income."
     },
     {
       term: "Installment Sale",
-      definition: "A method of deferring capital gains by spreading out income over multiple years.",
-      example: "An investor sells a business and receives payments over 5 years, reducing year-one tax burden.",
-      tags: ["Exit Planning", "Capital Gains", "Timing"]
+      definition: "A method under IRC §453 that allows sellers to defer capital gains by spreading the sale proceeds and tax liability over multiple years.",
+      tags: ["exit planning", "capital gains", "timing", "business owner"],
+      plain_english: "Sell something and get paid over time so you don't owe all the tax up front.",
+      case_study: {
+        client_profile: "An ecommerce founder sells their brand for $2M, half up front and half over 3 years.",
+        structure: "Uses an installment agreement to spread out tax liability.",
+        implementation: "Capital gains are only taxed as payments are received.",
+        results: "Reduced year-one tax exposure and stayed in a lower tax bracket."
+      },
+      key_benefit: "Control the timing of your tax bill by structuring multi-year exits."
     },
     {
       term: "Irrevocable Trust",
-      definition: "A trust that, once created, cannot be changed or revoked and can offer estate and asset protection benefits.",
-      example: "A founder uses an irrevocable trust to protect assets and remove them from their estate.",
-      tags: ["Estate Planning", "Asset Protection", "Wealth Transfer"]
+      definition: "A legal structure that, once established, cannot be changed and removes assets from your estate for tax and protection purposes.",
+      tags: ["estate planning", "asset protection", "wealth transfer"],
+      plain_english: "You lock assets into a trust that can't be touched—by you or creditors—so they pass tax-efficiently.",
+      case_study: {
+        client_profile: "Anthony had $12M in net worth and wanted to shield future investment gains from estate tax.",
+        structure: "He funded an irrevocable trust with a private stock portfolio.",
+        implementation: "His estate attorney drafted the trust and assigned independent trustees.",
+        results: "Removed $5M from his taxable estate and avoided future capital gains on growth."
+      },
+      key_benefit: "Protect assets from estate taxes and creditors while preserving legacy control."
     },
     {
       term: "Cost Segregation",
-      definition: "A tax strategy that accelerates depreciation of real estate to generate large deductions early.",
-      example: "Jackson performs a cost seg on a rental and deducts $100K in year one.",
-      tags: ["Real Estate", "Depreciation", "Deductions"]
+      definition: "An IRS-approved method of breaking down a property into depreciable parts to accelerate deductions.",
+      tags: ["real estate", "depreciation", "deductions", "tax timing"],
+      plain_english: "Split a building into components so you can write off more value faster.",
+      case_study: {
+        client_profile: "Jackson owns a $1.2M short-term rental portfolio across five properties.",
+        structure: "Hired a firm to do a cost segregation study.",
+        implementation: "Accelerated depreciation on non-structural components (roof, carpet, appliances).",
+        results: "Deducted $230K in year one, sheltering STR income and offsetting W-2 wages."
+      },
+      key_benefit: "Unlock massive up-front write-offs from real estate that would normally take decades to depreciate."
     },
     {
       term: "Charitable Remainder Trust (CRT)",
-      definition: "A trust that provides income to the donor or others for a period of time, then donates the remainder to charity, offering upfront tax benefits.",
-      example: "A business owner funds a CRT to defer capital gains and create income for retirement.",
-      tags: ["Charitable", "Estate Planning", "Capital Gains"]
+      definition: "A split-interest trust that pays income to the donor during life, then gifts the remainder to charity—often reducing capital gains and estate taxes.",
+      tags: ["charitable", "estate planning", "capital gains", "wealth transfer"],
+      plain_english: "You donate an asset to a trust, get income from it for life, and send what's left to charity—while cutting taxes.",
+      case_study: {
+        client_profile: "A business owner sold a $3M real estate portfolio and wanted to avoid full capital gains exposure.",
+        structure: "He contributed $1.5M of the asset value to a CRT before the sale.",
+        implementation: "Received a partial deduction and income payments for 20 years.",
+        results: "Avoided ~$300K in immediate capital gains and removed value from estate."
+      },
+      key_benefit: "Generate income and lower taxes while funding a cause you care about."
     },
     {
       term: "AMT (Alternative Minimum Tax)",
-      definition: "A parallel tax system ensuring high-income individuals pay at least a minimum tax amount, often triggered by large deductions.",
-      example: "Helen hits AMT due to large oil & gas deductions and state tax write-offs.",
-      tags: ["W2", "Deductions", "IRS Rules"]
+      definition: "A parallel tax system that limits certain deductions and ensures high-income earners pay a baseline tax, regardless of how many write-offs they have.",
+      tags: ["W2", "deductions", "IRS rules", "tax limits"],
+      plain_english: "Even if you have a ton of deductions, the IRS might still tax you under AMT rules to make sure you pay something.",
+      case_study: {
+        client_profile: "Helen Park earned $950K and used oil & gas and STR deductions to offset her W-2 income.",
+        structure: "She claimed over $350K in deductions between depreciation and IDCs.",
+        implementation: "Her CPA ran both regular and AMT calculations to optimize outcome.",
+        results: "AMT eliminated a portion of her deductions, increasing her tax liability by $14K compared to the standard calculation."
+      },
+      key_benefit: "Plan ahead to avoid surprise taxes when stacking large deductions."
     },
     {
       term: "Tax-Free Step-Up in Basis",
-      definition: "The resetting of an asset's cost basis to its market value upon the owner's death, eliminating capital gains.",
-      example: "Heirs inherit a $2M property at market value, avoiding capital gains tax on prior appreciation.",
-      tags: ["Estate Planning", "Investment", "Capital Gains"]
+      definition: "A rule that resets the cost basis of an asset to its fair market value at death, eliminating capital gains for heirs.",
+      tags: ["estate planning", "capital gains", "inheritance", "investment"],
+      plain_english: "When someone dies, their heirs get the asset at today's value—so they don't owe capital gains on past appreciation.",
+      case_study: {
+        client_profile: "A client inherited a rental property that had appreciated from $400K to $1.3M.",
+        structure: "The property received a full step-up in basis upon the parent's death.",
+        implementation: "The heir re-listed the property and sold it for $1.35M shortly after.",
+        results: "Owed virtually no capital gains tax due to the reset basis."
+      },
+      key_benefit: "Eliminate decades of built-up capital gains tax with smart estate timing."
     },
     {
       term: "Self-Rental Rule",
-      definition: "An IRS rule that converts passive rental income into non-passive if the property is rented to a related business.",
-      example: "A doctor rents a building to her practice, allowing rental income to offset active income.",
-      tags: ["Real Estate", "Business Owner", "Deductions"]
+      definition: "An IRS rule that converts passive rental income into non-passive income when a property is rented to a related active business.",
+      tags: ["real estate", "business owner", "deductions", "passive income"],
+      plain_english: "If your business rents property from you, the income can offset your other business income instead of being stuck as passive.",
+      case_study: {
+        client_profile: "Dr. Patel owns both her dental practice and the building it's in.",
+        structure: "The building is held in an LLC and leased to the operating S-Corp.",
+        implementation: "Qualified for self-rental reclassification under §469.",
+        results: "Recharacterized $85K in rental income as non-passive, offsetting other active losses."
+      },
+      key_benefit: "Match rental income with your business losses for better tax alignment."
     },
     {
       term: "State Residency Planning",
-      definition: "Strategies for changing domicile to a lower-tax state to reduce long-term income and estate taxes.",
-      example: "A tech executive moves to Texas before a major liquidity event to avoid state income tax.",
-      tags: ["W2", "Exit Planning", "State Tax"]
+      definition: "A tax strategy focused on establishing legal residency in a low- or no-income tax state to reduce future tax burdens.",
+      tags: ["W2", "exit planning", "state tax", "income"],
+      plain_english: "Move to a tax-friendly state—legally and intentionally—to stop bleeding income to high state taxes.",
+      case_study: {
+        client_profile: "A tech executive in California planned to sell RSUs worth $3M.",
+        structure: "Moved to Texas six months before the vesting event.",
+        implementation: "Changed domicile, updated voter registration, and documented intent to remain.",
+        results: "Avoided ~13.3% California state tax on the gain—saving nearly $400K."
+      },
+      key_benefit: "Escape high-tax states and keep more of your exit money legally."
     },
     {
       term: "Family Limited Partnership (FLP)",
-      definition: "An entity structure used to consolidate family assets and pass wealth to heirs with valuation discounts.",
-      example: "Parents gift FLP shares to children with a 30% discount for estate tax purposes.",
-      tags: ["Entity Structure", "Wealth Transfer", "Estate Planning"]
+      definition: "An entity structure that allows families to consolidate assets, shift ownership to heirs at discounted values, and protect wealth from creditors.",
+      tags: ["entity structure", "estate planning", "wealth transfer", "valuation"],
+      plain_english: "Put family assets into a shared partnership so you can gift control to your kids at a discount.",
+      case_study: {
+        client_profile: "The Tran family held $7M in real estate across multiple LLCs.",
+        structure: "They formed an FLP with parents as general partners and gifted limited interests to kids.",
+        implementation: "Applied valuation discounts of 25–35% due to lack of control/liquidity.",
+        results: "Reduced estate value for tax purposes and protected assets from liability."
+      },
+      key_benefit: "Transfer wealth at discounted values while retaining control."
     },
     {
       term: "Backdoor Roth IRA",
-      definition: "A workaround that allows high-income earners to contribute to a Roth IRA via a nondeductible IRA conversion.",
-      example: "A W-2 earner contributes $6,500 to a traditional IRA and converts it to a Roth the next day.",
-      tags: ["Retirement", "W2", "Tax-Free Growth"]
+      definition: "A strategy that allows high-income earners to contribute to a Roth IRA by first contributing to a nondeductible traditional IRA and converting it.",
+      tags: ["retirement", "W2", "tax-free growth", "income limits"],
+      plain_english: "Too rich for a Roth IRA? There's a legal workaround using a traditional IRA that converts right in.",
+      case_study: {
+        client_profile: "Rachel earns $300K in W-2 income and doesn't qualify for direct Roth contributions.",
+        structure: "She contributes $6,500 to a nondeductible IRA.",
+        implementation: "Converts it to a Roth IRA the next day, paying minimal tax.",
+        results: "Grows tax-free over time and keeps the Roth open for future rollovers."
+      },
+      key_benefit: "Build tax-free retirement wealth even if you're over the income limit."
     }
   ];
 
