@@ -1761,6 +1761,363 @@ const Explore = () => {
           </div>
         )}
 
+        {activeSection === "quiz-dashboard" && (
+          <div className="space-y-6">
+            {/* Dashboard Header */}
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg shadow text-white p-6">
+              <h3 className="text-2xl font-bold mb-4">Quiz Scoring Dashboard</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center">
+                  <div className="text-3xl font-bold">{userStats.xp}</div>
+                  <div className="text-sm opacity-90">Total XP</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold">
+                    {userStats.correct + userStats.incorrect > 0 
+                      ? Math.round((userStats.correct / (userStats.correct + userStats.incorrect)) * 100)
+                      : 0}%
+                  </div>
+                  <div className="text-sm opacity-90">Accuracy</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold">{userStats.badges.length}</div>
+                  <div className="text-sm opacity-90">Badges Earned</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold">{weeklyStreak}</div>
+                  <div className="text-sm opacity-90">Weekly Streak</div>
+                </div>
+              </div>
+            </div>
+
+            {/* XP Progress to Next Badge */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <h4 className="text-lg font-bold text-gray-900 mb-4">Progress to Next Badge</h4>
+              <div className="space-y-4">
+                {[
+                  { name: "Tax Apprentice", xp: 500, icon: "🌱", color: "bg-green-500" },
+                  { name: "Tax Strategist", xp: 1000, icon: "⚡", color: "bg-blue-500" },
+                  { name: "Tax Expert", xp: 2500, icon: "🎯", color: "bg-purple-500" },
+                  { name: "Tax Master", xp: 5000, icon: "👑", color: "bg-yellow-500" }
+                ].map((badge, index) => {
+                  const isEarned = userStats.xp >= badge.xp;
+                  const progress = Math.min((userStats.xp / badge.xp) * 100, 100);
+                  
+                  return (
+                    <div key={index} className={`p-4 rounded-lg border-2 ${isEarned ? 'border-green-300 bg-green-50' : 'border-gray-200'}`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center space-x-3">
+                          <span className="text-2xl">{badge.icon}</span>
+                          <div>
+                            <h5 className={`font-semibold ${isEarned ? 'text-green-800' : 'text-gray-700'}`}>
+                              {badge.name}
+                            </h5>
+                            <p className="text-sm text-gray-600">{badge.xp} XP required</p>
+                          </div>
+                        </div>
+                        {isEarned && (
+                          <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                            ✓ Earned
+                          </span>
+                        )}
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-3">
+                        <div 
+                          className={`h-3 rounded-full transition-all duration-500 ${isEarned ? 'bg-green-500' : badge.color}`}
+                          style={{ width: `${progress}%` }}
+                        ></div>
+                      </div>
+                      {!isEarned && (
+                        <p className="text-sm text-gray-600 mt-2">
+                          {badge.xp - userStats.xp} XP remaining
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Badge Wall by Category */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <h4 className="text-lg font-bold text-gray-900 mb-4">Badge Wall</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {Object.entries(getCategoryCompletion()).map(([category, stats]) => {
+                  const tier = getBadgeTier(stats.xp, "category");
+                  const completionRate = Math.round((stats.completed / stats.total) * 100);
+                  
+                  return (
+                    <div key={category} className="border border-gray-200 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <h5 className="font-semibold text-gray-800">{category}</h5>
+                        {tier && (
+                          <span className={`px-2 py-1 rounded-full text-xs font-bold text-white ${
+                            tier === 'gold' ? 'bg-yellow-500' :
+                            tier === 'silver' ? 'bg-gray-400' : 'bg-amber-600'
+                          }`}>
+                            {tier.toUpperCase()}
+                          </span>
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span>Completion:</span>
+                          <span className="font-medium">{completionRate}%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div 
+                            className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                            style={{ width: `${completionRate}%` }}
+                          ></div>
+                        </div>
+                        <div className="flex justify-between text-sm text-gray-600">
+                          <span>{stats.completed}/{stats.total} terms</span>
+                          <span>{stats.xp} XP</span>
+                        </div>
+                        <button
+                          onClick={() => retakeCategory(category)}
+                          className="w-full bg-blue-500 text-white py-2 rounded-lg text-sm hover:bg-blue-600 transition-colors"
+                        >
+                          Retake Category
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Persona Progress */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <h4 className="text-lg font-bold text-gray-900 mb-4">Progress by Persona</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[
+                  { key: "W2", name: "W-2 Earners", icon: "💼", color: "bg-indigo-500" },
+                  { key: "business owner", name: "Business Owners", icon: "🏢", color: "bg-red-500" },
+                  { key: "real estate", name: "Real Estate Investors", icon: "🏠", color: "bg-orange-500" }
+                ].map((persona) => {
+                  const stats = userStats.personaStats[persona.key] || { correct: 0, incorrect: 0, xp: 0 };
+                  const total = stats.correct + stats.incorrect;
+                  const accuracy = total > 0 ? Math.round((stats.correct / total) * 100) : 0;
+                  const tier = getBadgeTier(stats.xp, "persona");
+                  
+                  return (
+                    <div key={persona.key} className="border border-gray-200 rounded-lg p-4">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <div className={`w-12 h-12 ${persona.color} rounded-full flex items-center justify-center text-white text-xl`}>
+                          {persona.icon}
+                        </div>
+                        <div>
+                          <h5 className="font-semibold text-gray-800">{persona.name}</h5>
+                          {tier && (
+                            <span className={`px-2 py-1 rounded-full text-xs font-bold text-white ${
+                              tier === 'gold' ? 'bg-yellow-500' :
+                              tier === 'silver' ? 'bg-gray-400' : 'bg-amber-600'
+                            }`}>
+                              {tier} Specialist
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-600">Accuracy:</span>
+                          <span className="font-bold text-gray-900">{accuracy}%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-600">Questions:</span>
+                          <span className="font-medium text-gray-700">{total}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-600">XP Earned:</span>
+                          <span className="font-bold text-purple-600">{stats.xp}</span>
+                        </div>
+                        
+                        <button
+                          onClick={() => {
+                            // Start persona-specific quiz
+                            const personaKey = persona.key.toLowerCase().replace(" ", "");
+                            const filteredTerms = getTermsByPersona(personaKey);
+                            if (filteredTerms.length > 0) {
+                              const randomTerm = filteredTerms[Math.floor(Math.random() * filteredTerms.length)];
+                              const questions = generateQuizQuestions(randomTerm);
+                              const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+                              setCurrentQuizTerm(randomQuestion);
+                              setUserAnswer("");
+                              setShowAnswer(false);
+                              setActiveSection("quiz-mode");
+                            }
+                          }}
+                          className={`w-full ${persona.color} text-white py-2 rounded-lg text-sm hover:opacity-80 transition-opacity`}
+                        >
+                          Practice {persona.name}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Glossary Mastery Panel */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <h4 className="text-lg font-bold text-gray-900 mb-4">Glossary Mastery & Review</h4>
+              
+              {/* Mastered Terms */}
+              <div className="mb-6">
+                <h5 className="font-semibold text-green-700 mb-3">Mastered Terms ({userStats.masteredTerms.length})</h5>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                  {userStats.masteredTerms.slice(0, 9).map((term, index) => (
+                    <div key={index} className="bg-green-50 border border-green-200 rounded-lg p-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-green-800">{term}</span>
+                        <span className="text-green-600">✓</span>
+                      </div>
+                    </div>
+                  ))}
+                  {userStats.masteredTerms.length > 9 && (
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 flex items-center justify-center">
+                      <span className="text-sm text-gray-600">+{userStats.masteredTerms.length - 9} more</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Terms Needing Review */}
+              {incorrectAnswers.length > 0 && (
+                <div className="mb-6">
+                  <h5 className="font-semibold text-red-700 mb-3">Terms Needing Review ({[...new Set(incorrectAnswers.map(a => a.term))].length})</h5>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {[...new Set(incorrectAnswers.map(a => a.term))].slice(0, 6).map((term, index) => (
+                      <div key={index} className="bg-red-50 border border-red-200 rounded-lg p-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium text-red-800">{term}</span>
+                          <span className="text-red-600">⚠️</span>
+                        </div>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => {
+                              setActiveSection("glossary");
+                              setSearchTerm(term);
+                            }}
+                            className="flex-1 bg-red-500 text-white py-1 px-3 rounded text-xs hover:bg-red-600 transition-colors"
+                          >
+                            Study
+                          </button>
+                          <button
+                            onClick={() => {
+                              const termObj = glossaryTerms.find(t => t.term === term);
+                              if (termObj) {
+                                const questions = generateQuizQuestions(termObj);
+                                const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+                                setCurrentQuizTerm(randomQuestion);
+                                setUserAnswer("");
+                                setShowAnswer(false);
+                                setActiveSection("quiz-mode");
+                              }
+                            }}
+                            className="flex-1 bg-orange-500 text-white py-1 px-3 rounded text-xs hover:bg-orange-600 transition-colors"
+                          >
+                            Retry
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Quick Action Buttons */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button
+                  onClick={shuffleFullQuiz}
+                  className="bg-purple-500 text-white py-3 px-4 rounded-lg hover:bg-purple-600 transition-colors"
+                >
+                  <div className="text-center">
+                    <div className="text-xl mb-1">🔀</div>
+                    <div className="font-medium">Shuffle Full Quiz</div>
+                  </div>
+                </button>
+                
+                <button
+                  onClick={retakeMissedTerms}
+                  disabled={incorrectAnswers.length === 0}
+                  className="bg-orange-500 text-white py-3 px-4 rounded-lg hover:bg-orange-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                >
+                  <div className="text-center">
+                    <div className="text-xl mb-1">🔄</div>
+                    <div className="font-medium">Retry Missed Terms</div>
+                  </div>
+                </button>
+                
+                <button
+                  onClick={() => setActiveSection("glossary")}
+                  className="bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+                >
+                  <div className="text-center">
+                    <div className="text-xl mb-1">📚</div>
+                    <div className="font-medium">Study Glossary</div>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* Visual Progress Tracker */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <h4 className="text-lg font-bold text-gray-900 mb-4">Overall Progress</h4>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Completion Chart */}
+                <div>
+                  <h5 className="font-semibold text-gray-700 mb-3">Quiz Completion by Category</h5>
+                  <div className="space-y-3">
+                    {Object.entries(getCategoryCompletion()).map(([category, stats]) => {
+                      const percentage = Math.round((stats.completed / stats.total) * 100);
+                      return (
+                        <div key={category}>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span className="text-gray-700">{category}</span>
+                            <span className="font-medium">{percentage}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div 
+                              className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-500"
+                              style={{ width: `${percentage}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Statistics Summary */}
+                <div>
+                  <h5 className="font-semibold text-gray-700 mb-3">Performance Statistics</h5>
+                  <div className="space-y-4">
+                    <div className="bg-gradient-to-r from-green-100 to-green-200 rounded-lg p-4">
+                      <div className="text-2xl font-bold text-green-800">{userStats.correct}</div>
+                      <div className="text-sm text-green-700">Questions Correct</div>
+                    </div>
+                    
+                    <div className="bg-gradient-to-r from-red-100 to-red-200 rounded-lg p-4">
+                      <div className="text-2xl font-bold text-red-800">{userStats.incorrect}</div>
+                      <div className="text-sm text-red-700">Questions Incorrect</div>
+                    </div>
+                    
+                    <div className="bg-gradient-to-r from-purple-100 to-purple-200 rounded-lg p-4">
+                      <div className="text-2xl font-bold text-purple-800">
+                        {Math.round((userStats.masteredTerms.length / glossaryTerms.length) * 100)}%
+                      </div>
+                      <div className="text-sm text-purple-700">Terms Mastered</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {activeSection === "document-reader" && (
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Document Reader</h3>
