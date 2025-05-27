@@ -516,50 +516,194 @@ const Explore = () => {
     setShowAnswer(false);
   };
 
-  // Submit quiz answer
-  const submitAnswer = () => {
-    const isCorrect = currentQuizTerm.type === "multiple-choice" 
-      ? userAnswer === currentQuizTerm.correct
-      : userAnswer.toLowerCase().trim() === currentQuizTerm.correct.toLowerCase();
+  // Enhanced submit answer with comprehensive scoring
+  const submitQuizAnswer = () => {
+    if (!currentQuizQuestion || !quizSession) return;
 
+    const question = currentQuizQuestion;
+    let isCorrect = false;
+
+    // Check answer based on question type
+    switch (question.type) {
+      case "multiple_choice":
+      case "case_study_match":
+      case "scenario":
+        isCorrect = userAnswer === question.correct;
+        break;
+      case "true_false":
+        isCorrect = userAnswer === question.correct.toString();
+        break;
+      default:
+        isCorrect = userAnswer.toLowerCase().trim() === question.correct.toLowerCase();
+    }
+
+    // Update quiz session
+    const answer = {
+      questionId: question.id,
+      question: question.question,
+      userAnswer,
+      correctAnswer: question.correct,
+      isCorrect,
+      term: question.term,
+      category: question.category,
+      xpEarned: isCorrect ? question.xpValue : 0
+    };
+
+    const updatedSession = {
+      ...quizSession,
+      answers: [...quizSession.answers, answer],
+      score: quizSession.score + (isCorrect ? question.xpValue : 0)
+    };
+
+    setQuizSession(updatedSession);
+
+    // Update user stats
     const newStats = { ...userStats };
     
     if (isCorrect) {
       newStats.correct += 1;
-      newStats.xp += 10;
+      newStats.xp += question.xpValue;
       
-      // Track progress for this term
-      const termProgress = userProgress[currentQuizTerm.term] || { correct: 0, incorrect: 0 };
-      termProgress.correct += 1;
-      
-      // Master term if answered correctly 3 times
-      if (termProgress.correct >= 3 && !newStats.masteredTerms.includes(currentQuizTerm.term)) {
-        newStats.masteredTerms.push(currentQuizTerm.term);
-        newStats.xp += 25; // Bonus XP for mastering
-        
-        // Award badges
-        const masteredCount = newStats.masteredTerms.length;
-        if (masteredCount === 5 && !newStats.badges.includes("5-terms")) {
-          newStats.badges.push("5-terms");
-        } else if (masteredCount === 10 && !newStats.badges.includes("10-terms")) {
-          newStats.badges.push("10-terms");
-        } else if (masteredCount === 25 && !newStats.badges.includes("25-terms")) {
-          newStats.badges.push("25-terms");
-        } else if (masteredCount === 50 && !newStats.badges.includes("50-terms")) {
-          newStats.badges.push("50-terms");
-        }
+      // Update persona stats
+      const personaKey = getPersonaKey(question.term);
+      if (personaKey && newStats.personaStats[personaKey]) {
+        newStats.personaStats[personaKey].correct += 1;
+        newStats.personaStats[personaKey].xp += question.xpValue;
       }
-      
-      setUserProgress(prev => ({ ...prev, [currentQuizTerm.term]: termProgress }));
+
+      // Update category stats
+      if (!newStats.categoryStats[question.category]) {
+        newStats.categoryStats[question.category] = { correct: 0, incorrect: 0, xp: 0 };
+      }
+      newStats.categoryStats[question.category].correct += 1;
+      newStats.categoryStats[question.category].xp += question.xpValue;
+
     } else {
       newStats.incorrect += 1;
-      const termProgress = userProgress[currentQuizTerm.term] || { correct: 0, incorrect: 0 };
-      termProgress.incorrect += 1;
-      setUserProgress(prev => ({ ...prev, [currentQuizTerm.term]: termProgress }));
+      
+      // Track incorrect answer for review
+      setIncorrectAnswers(prev => [...prev, {
+        term: question.term,
+        question: question.question,
+        userAnswer,
+        correctAnswer: question.correct
+      }]);
+
+      // Update persona stats
+      const personaKey = getPersonaKey(question.term);
+      if (personaKey && newStats.personaStats[personaKey]) {
+        newStats.personaStats[personaKey].incorrect += 1;
+      }
+
+      // Update category stats
+      if (!newStats.categoryStats[question.category]) {
+        newStats.categoryStats[question.category] = { correct: 0, incorrect: 0, xp: 0 };
+      }
+      newStats.categoryStats[question.category].incorrect += 1;
     }
+
+    // Check for new badges
+    checkAndAwardBadges(newStats);
     
     setUserStats(newStats);
     setShowAnswer(true);
+  };
+
+  // Get persona key for term
+  const getPersonaKey = (termName) => {
+    const term = glossaryTerms.find(t => t.term === termName);
+    if (!term) return null;
+    
+    const tags = term.tags.map(t => t.toLowerCase());
+    if (tags.some(tag => tag.includes("w2") || tag.includes("retirement"))) return "W2";
+    if (tags.some(tag => tag.includes("business") || tag.includes("entity"))) return "business owner";
+    if (tags.some(tag => tag.includes("real estate") || tag.includes("depreciation"))) return "real estate";
+    if (tags.some(tag => tag.includes("investment") || tag.includes("capital gains"))) return "investment";
+    return null;
+  };
+
+  // Enhanced badge system
+  const checkAndAwardBadges = (stats) => {
+    const badges = [...stats.badges];
+    
+    // XP-based badges
+    if (stats.xp >= 500 && !badges.includes("tax-apprentice")) {
+      badges.push("tax-apprentice");
+    }
+    if (stats.xp >= 1000 && !badges.includes("tax-strategist")) {
+      badges.push("tax-strategist");
+    }
+    if (stats.xp >= 2500 && !badges.includes("tax-expert")) {
+      badges.push("tax-expert");
+    }
+    if (stats.xp >= 5000 && !badges.includes("tax-master")) {
+      badges.push("tax-master");
+    }
+
+    // Persona-based badges
+    Object.entries(stats.personaStats).forEach(([persona, data]) => {
+      if (data.xp >= 300 && !badges.includes(`${persona.replace(" ", "-")}-specialist`)) {
+        badges.push(`${persona.replace(" ", "-")}-specialist`);
+      }
+    });
+
+    // Category mastery badges
+    Object.entries(stats.categoryStats).forEach(([category, data]) => {
+      if (data.correct >= 10 && !badges.includes(`${category}-master`)) {
+        badges.push(`${category}-master`);
+      }
+    });
+
+    // Accuracy badges
+    const totalAnswers = stats.correct + stats.incorrect;
+    const accuracy = totalAnswers > 0 ? (stats.correct / totalAnswers) * 100 : 0;
+    
+    if (totalAnswers >= 50 && accuracy >= 90 && !badges.includes("precision-expert")) {
+      badges.push("precision-expert");
+    }
+    if (totalAnswers >= 100 && accuracy >= 85 && !badges.includes("consistency-champion")) {
+      badges.push("consistency-champion");
+    }
+
+    stats.badges = badges;
+  };
+
+  // Move to next question
+  const nextQuizQuestion = () => {
+    const nextIndex = quizProgress.current + 1;
+    
+    if (nextIndex < quizProgress.total) {
+      setQuizProgress(prev => ({ ...prev, current: nextIndex }));
+      setCurrentQuizQuestion(quizProgress.questions[nextIndex]);
+      setUserAnswer("");
+      setShowAnswer(false);
+    } else {
+      // Quiz completed
+      completeQuiz();
+    }
+  };
+
+  // Complete quiz and save to history
+  const completeQuiz = () => {
+    if (!quizSession) return;
+
+    const completedSession = {
+      ...quizSession,
+      endTime: new Date(),
+      completed: true,
+      incorrectTerms: incorrectAnswers.map(a => a.term)
+    };
+
+    const newStats = { ...userStats };
+    newStats.quizHistory.push(completedSession);
+    setUserStats(newStats);
+
+    // Reset quiz state
+    setCurrentQuizQuestion(null);
+    setQuizSession(null);
+    setQuizProgress({ current: 0, total: 0, questions: [] });
+    setShowAnswer(false);
+    setUserAnswer("");
   };
 
   // Badge component
