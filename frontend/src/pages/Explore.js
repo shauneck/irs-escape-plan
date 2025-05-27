@@ -660,15 +660,42 @@ const Explore = () => {
                       </div>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       <div>
                         <h5 className="font-medium text-gray-700 mb-1">Definition:</h5>
                         <p className="text-gray-600">{term.definition}</p>
                       </div>
                       
                       <div>
-                        <h5 className="font-medium text-gray-700 mb-1">Real-World Example:</h5>
-                        <p className="text-gray-600 italic">{term.example}</p>
+                        <h5 className="font-medium text-gray-700 mb-1">Plain English:</h5>
+                        <p className="text-blue-600 italic">{term.plain_english}</p>
+                      </div>
+
+                      <div>
+                        <h5 className="font-medium text-gray-700 mb-2">Real-World Case Study:</h5>
+                        <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                          <div>
+                            <h6 className="font-medium text-gray-700 text-sm">Client Profile:</h6>
+                            <p className="text-gray-600 text-sm">{term.case_study.client_profile}</p>
+                          </div>
+                          <div>
+                            <h6 className="font-medium text-gray-700 text-sm">Structure:</h6>
+                            <p className="text-gray-600 text-sm">{term.case_study.structure}</p>
+                          </div>
+                          <div>
+                            <h6 className="font-medium text-gray-700 text-sm">Implementation:</h6>
+                            <p className="text-gray-600 text-sm">{term.case_study.implementation}</p>
+                          </div>
+                          <div>
+                            <h6 className="font-medium text-gray-700 text-sm">Results:</h6>
+                            <p className="text-green-600 text-sm font-medium">{term.case_study.results}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                        <h5 className="font-medium text-yellow-800 mb-1">Key Benefit:</h5>
+                        <p className="text-yellow-700 text-sm">{term.key_benefit}</p>
                       </div>
 
                       {termProgress && (
