@@ -24,6 +24,7 @@ function App() {
           <Route path="/course/:courseId" element={<CourseDetail />} />
           <Route path="/advisor" element={<AdvisorDashboard />} />
           <Route path="/documents" element={<DocumentReader />} />
+          <Route path="/escape-blueprint" element={<EscapeBlueprint />} />
         </Routes>
       </BrowserRouter>
     </div>
