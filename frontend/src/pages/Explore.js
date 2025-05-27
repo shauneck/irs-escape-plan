@@ -13,6 +13,112 @@ const Explore = () => {
   const [selectedPersona, setSelectedPersona] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [quizProgress, setQuizProgress] = useState({ current: 0, total: 0, questions: [] });
+
+  // Enhanced quiz statistics and category tracking
+  const [weeklyStreak, setWeeklyStreak] = useState(0);
+  const [categoryStats, setCategoryStats] = useState({});
+  const [missedTerms, setMissedTerms] = useState([]);
+
+  // Category mapping for terms
+  const getCategoryForTerm = (term) => {
+    const termObj = glossaryTerms.find(t => t.term === term);
+    if (!termObj) return "General";
+    
+    const tags = termObj.tags.map(t => t.toLowerCase());
+    
+    if (tags.some(tag => tag.includes("capital gains") || tag.includes("investment"))) return "Capital Gains";
+    if (tags.some(tag => tag.includes("real estate") || tag.includes("depreciation"))) return "Real Estate";
+    if (tags.some(tag => tag.includes("retirement") || tag.includes("tax timing"))) return "Retirement";
+    if (tags.some(tag => tag.includes("business") || tag.includes("entity"))) return "Business Structure";
+    if (tags.some(tag => tag.includes("estate") || tag.includes("wealth transfer"))) return "Estate Planning";
+    if (tags.some(tag => tag.includes("deductions") || tag.includes("w2"))) return "Deductions";
+    
+    return "Advanced Strategies";
+  };
+
+  // Badge tier system
+  const getBadgeTier = (xp, category) => {
+    if (category === "overall") {
+      if (xp >= 5000) return "gold";
+      if (xp >= 2500) return "silver";
+      if (xp >= 1000) return "bronze";
+      return null;
+    } else {
+      if (xp >= 1000) return "gold";
+      if (xp >= 500) return "silver";
+      if (xp >= 200) return "bronze";
+      return null;
+    }
+  };
+
+  // Calculate category completion
+  const getCategoryCompletion = () => {
+    const categories = {};
+    
+    glossaryTerms.forEach(term => {
+      const category = getCategoryForTerm(term.term);
+      if (!categories[category]) {
+        categories[category] = { total: 0, completed: 0, xp: 0 };
+      }
+      categories[category].total++;
+      
+      if (userStats.masteredTerms.includes(term.term)) {
+        categories[category].completed++;
+      }
+      
+      // Calculate XP for this category
+      const termProgress = userProgress[term.term];
+      if (termProgress) {
+        categories[category].xp += termProgress.correct * 10;
+      }
+    });
+    
+    return categories;
+  };
+
+  // Retake quiz functions
+  const retakeCategory = (category) => {
+    const categoryTerms = glossaryTerms.filter(term => 
+      getCategoryForTerm(term.term) === category
+    );
+    
+    if (categoryTerms.length > 0) {
+      const randomTerm = categoryTerms[Math.floor(Math.random() * categoryTerms.length)];
+      const questions = generateQuizQuestions(randomTerm);
+      const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+      setCurrentQuizTerm(randomQuestion);
+      setUserAnswer("");
+      setShowAnswer(false);
+      setActiveSection("quiz-mode");
+    }
+  };
+
+  const retakeMissedTerms = () => {
+    if (missedTerms.length > 0) {
+      const randomMissedTerm = glossaryTerms.find(term => 
+        missedTerms.includes(term.term)
+      );
+      
+      if (randomMissedTerm) {
+        const questions = generateQuizQuestions(randomMissedTerm);
+        const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+        setCurrentQuizTerm(randomQuestion);
+        setUserAnswer("");
+        setShowAnswer(false);
+        setActiveSection("quiz-mode");
+      }
+    }
+  };
+
+  const shuffleFullQuiz = () => {
+    const randomTerm = glossaryTerms[Math.floor(Math.random() * glossaryTerms.length)];
+    const questions = generateQuizQuestions(randomTerm);
+    const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+    setCurrentQuizTerm(randomQuestion);
+    setUserAnswer("");
+    setShowAnswer(false);
+    setActiveSection("quiz-mode");
+  };
   const [quizSession, setQuizSession] = useState(null);
   const [incorrectAnswers, setIncorrectAnswers] = useState([]);
   const [userStats, setUserStats] = useState({
