@@ -175,7 +175,7 @@ const CourseCard = ({ course, index }) => {
           {/* CTA Button */}
           <Link
             to={course.courseId === "escape-blueprint" ? "/escape-blueprint" : course.courseId ? `/course/${course.courseId}` : '#'}
-            className={`block w-full ${getCtaColor(course.locked, index)} text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg text-center`}
+            className={`cta-button block w-full ${getCtaColor(course.locked, index)} text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg text-center`}
           >
             {course.locked ? (
               <span className="flex items-center justify-center">
