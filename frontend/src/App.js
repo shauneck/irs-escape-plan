@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Home from './pages/Home';
 import MyPlan from './pages/MyPlan';
+import Dashboard from './pages/Dashboard';
 import Explore from './pages/Explore';
 import Tools from './pages/Tools';
 import Marketplace from './pages/Marketplace';
