@@ -6,7 +6,7 @@ const Explore = () => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [userProgress, setUserProgress] = useState({});
-  const [currentQuizQuestion, setCurrentQuizQuestion] = useState(null);
+  const [currentQuizTerm, setCurrentQuizTerm] = useState(null);
   const [userAnswer, setUserAnswer] = useState("");
   const [showAnswer, setShowAnswer] = useState(false);
   const [quizMode, setQuizMode] = useState("practice"); // practice, persona, category
