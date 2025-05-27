@@ -10,6 +10,7 @@ import CourseDetail from "./pages/CourseDetail";
 import AdvisorDashboard from './pages/AdvisorDashboard';
 import DocumentReader from './pages/DocumentReader';
 import EscapeBlueprint from './pages/EscapeBlueprint';
+import Community from './pages/Community';
 
 function App() {
   return (
