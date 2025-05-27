@@ -1,23 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Navigation = ({ theme, toggleTheme }) => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isExploreOpen, setIsExploreOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef(null);
   const location = useLocation();
 
-  const navItems = [
-    { name: "Home", path: "/" },
+  // Essential top navigation items
+  const topNavItems = [
+    { name: "Courses", path: "/" },
     { name: "Glossary", path: "/explore" },
     { name: "Dashboard", path: "/my-plan" },
-    { name: "Community", path: "/community" },
   ];
 
-  const exploreSubItems = [
-    "Glossary",
-    "Quiz Mode", 
-    "Document Reader",
-    "Free Course - Escape Blueprint"
+  // Menu dropdown items
+  const menuItems = [
+    { name: "My Plan", path: "/my-plan", icon: "📋" },
+    { name: "Tools", path: "/tools", icon: "🔧" },
+    { name: "Documents", path: "/documents", icon: "📄", conditional: true }, // Only if user has uploads
+    { name: "Advisor Mode", path: "/advisor", icon: "👨‍💼", adminOnly: true },
+    { name: "Account Settings", path: "/settings", icon: "⚙️" },
+    { name: "Log Out", path: "/logout", icon: "🚪", isAction: true },
   ];
 
   const isActive = (path) => location.pathname === path;
