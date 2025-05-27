@@ -218,16 +218,23 @@ const AdvisorDashboard = () => {
   // Authentication component
   const LoginForm = () => {
     const [credentials, setCredentials] = useState({ username: "", password: "" });
+    const [isLogging, setIsLogging] = useState(false);
     
     const handleLogin = (e) => {
       e.preventDefault();
+      setIsLogging(true);
+      
       // Mock authentication - in real app would validate against backend
-      if (credentials.username === "advisor" && credentials.password === "quantus2024") {
-        localStorage.setItem('advisorAuthenticated', 'true');
-        setIsAuthenticated(true);
-      } else {
-        alert("Invalid credentials. Use: advisor / quantus2024");
-      }
+      setTimeout(() => {
+        if (credentials.username === "advisor" && credentials.password === "quantus2024") {
+          localStorage.setItem('advisorAuthenticated', 'true');
+          setIsAuthenticated(true);
+          setIsLogging(false);
+        } else {
+          alert("Invalid credentials. Use: advisor / quantus2024");
+          setIsLogging(false);
+        }
+      }, 500); // Small delay to simulate server authentication
     };
 
     return (
