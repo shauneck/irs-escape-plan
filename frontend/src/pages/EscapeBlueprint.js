@@ -55,14 +55,25 @@ const EscapeBlueprint = () => {
 
   // Save progress
   const saveProgress = (completed, current) => {
+    console.log('Saving progress - completed:', completed, 'current:', current);
     const progress = {
-      completed,
-      currentModule: current,
+      completed: completed,
+      current: current,
       timestamp: new Date().toISOString()
     };
-    localStorage.setItem('escapeBlueprintProgress', JSON.stringify(progress));
-    setCompletedModules(completed);
-    setCurrentModule(current);
+    
+    try {
+      localStorage.setItem('escapeBlueprintProgress', JSON.stringify(progress));
+      console.log('Progress saved successfully:', progress);
+      
+      // Update state
+      setCompletedModules(completed);
+      setCurrentModule(current);
+      
+      console.log('State updated - completedModules:', completed, 'currentModule:', current);
+    } catch (error) {
+      console.error('Error saving progress:', error);
+    }
   };
 
   // Handle video completion
