@@ -50,6 +50,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/my-plan" element={<MyPlan />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/tools" element={<Tools />} />
           <Route path="/marketplace" element={<Marketplace />} />
