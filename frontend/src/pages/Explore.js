@@ -1272,56 +1272,157 @@ const Explore = () => {
         )}
 
         {activeSection === "quiz-mode" && (
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-medium text-gray-900">Tax Strategy Quiz</h3>
-              <div className="flex items-center space-x-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">{userStats.correct}</div>
-                  <div className="text-xs text-gray-600">Correct</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-red-600">{userStats.incorrect}</div>
-                  <div className="text-xs text-gray-600">Incorrect</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-yellow-600">{userStats.xp}</div>
-                  <div className="text-xs text-gray-600">XP</div>
+          <div className="space-y-6">
+            {/* Quiz Mode Header */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-medium text-gray-900">Interactive Quiz Mode</h3>
+                <div className="flex items-center space-x-4">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-600">{userStats.correct}</div>
+                    <div className="text-xs text-gray-600">Correct</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-red-600">{userStats.incorrect}</div>
+                    <div className="text-xs text-gray-600">Incorrect</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-yellow-600">{userStats.xp}</div>
+                    <div className="text-xs text-gray-600">XP</div>
+                  </div>
                 </div>
               </div>
+
+              {/* Quiz Mode Selection */}
+              {!currentQuizTerm && (
+                <div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <button
+                      onClick={() => startQuiz()}
+                      className="p-4 border-2 border-gray-200 rounded-lg hover:border-yellow-400 transition-colors text-left"
+                    >
+                      <div className="flex items-center mb-2">
+                        <span className="text-2xl mr-3">🎯</span>
+                        <h4 className="font-semibold">Practice Mode</h4>
+                      </div>
+                      <p className="text-sm text-gray-600">Random questions from all terms</p>
+                    </button>
+                    
+                    <button
+                      onClick={() => {
+                        // Filter by W-2 terms and start quiz
+                        const w2Terms = glossaryTerms.filter(term => 
+                          term.tags.some(tag => tag.toLowerCase().includes("w2") || tag.toLowerCase().includes("retirement"))
+                        );
+                        if (w2Terms.length > 0) {
+                          const randomTerm = w2Terms[Math.floor(Math.random() * w2Terms.length)];
+                          const questions = generateQuizQuestions(randomTerm);
+                          const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+                          setCurrentQuizTerm(randomQuestion);
+                          setUserAnswer("");
+                          setShowAnswer(false);
+                        }
+                      }}
+                      className="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-400 transition-colors text-left"
+                    >
+                      <div className="flex items-center mb-2">
+                        <span className="text-2xl mr-3">💼</span>
+                        <h4 className="font-semibold">W-2 Earner Focus</h4>
+                      </div>
+                      <p className="text-sm text-gray-600">Questions for high-income employees</p>
+                    </button>
+                    
+                    <button
+                      onClick={() => {
+                        // Filter by Business Owner terms and start quiz
+                        const businessTerms = glossaryTerms.filter(term => 
+                          term.tags.some(tag => tag.toLowerCase().includes("business") || tag.toLowerCase().includes("entity"))
+                        );
+                        if (businessTerms.length > 0) {
+                          const randomTerm = businessTerms[Math.floor(Math.random() * businessTerms.length)];
+                          const questions = generateQuizQuestions(randomTerm);
+                          const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+                          setCurrentQuizTerm(randomQuestion);
+                          setUserAnswer("");
+                          setShowAnswer(false);
+                        }
+                      }}
+                      className="p-4 border-2 border-gray-200 rounded-lg hover:border-purple-400 transition-colors text-left"
+                    >
+                      <div className="flex items-center mb-2">
+                        <span className="text-2xl mr-3">🏢</span>
+                        <h4 className="font-semibold">Business Owner Focus</h4>
+                      </div>
+                      <p className="text-sm text-gray-600">Advanced strategies for entrepreneurs</p>
+                    </button>
+                  </div>
+
+                  {/* Progress Overview */}
+                  <div className="bg-gray-50 rounded-lg p-6">
+                    <h4 className="font-medium text-gray-900 mb-4">Your Progress</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="text-center">
+                        <ProgressRing />
+                      </div>
+                      <div className="space-y-2">
+                        <h5 className="font-medium text-gray-700">Badges Earned</h5>
+                        <div className="flex flex-wrap gap-1">
+                          {userStats.badges.length > 0 ? (
+                            userStats.badges.slice(0, 3).map((badge, index) => (
+                              <Badge key={index} badge={badge} />
+                            ))
+                          ) : (
+                            <span className="text-sm text-gray-500">No badges yet</span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <h5 className="font-medium text-gray-700">Accuracy Rate</h5>
+                        <div className="text-2xl font-bold text-blue-600">
+                          {userStats.correct + userStats.incorrect > 0 
+                            ? Math.round((userStats.correct / (userStats.correct + userStats.incorrect)) * 100)
+                            : 0}%
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <h5 className="font-medium text-gray-700">Next Badge</h5>
+                        <div className="text-sm text-gray-600">
+                          {userStats.xp < 500 
+                            ? `${500 - userStats.xp} XP to Tax Apprentice`
+                            : userStats.xp < 1000
+                            ? `${1000 - userStats.xp} XP to Tax Strategist`
+                            : userStats.xp < 2500
+                            ? `${2500 - userStats.xp} XP to Tax Expert`
+                            : "All major badges earned!"
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {!currentQuizTerm && (
-              <div className="text-center py-8">
-                <div className="mb-6">
-                  <ProgressRing />
-                </div>
-                <h4 className="text-xl font-medium text-gray-800 mb-2">
-                  Ready to test your knowledge?
-                </h4>
-                <p className="text-gray-600 mb-6">
-                  {userStats.masteredTerms.length} of {glossaryTerms.length} terms mastered
-                </p>
-                <button
-                  onClick={startQuiz}
-                  className="bg-yellow-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-yellow-600 transition-colors"
-                >
-                  Start Quiz
-                </button>
-              </div>
-            )}
-
+            {/* Active Quiz Interface */}
             {currentQuizTerm && !showAnswer && (
-              <div className="space-y-6">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                  <h4 className="font-semibold text-blue-900 mb-3">
-                    {currentQuizTerm.question}
-                  </h4>
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="mb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-gray-600">Question Type: {currentQuizTerm.category || currentQuizTerm.type}</span>
+                    <span className="text-sm font-medium text-yellow-600">+{currentQuizTerm.xpValue || 10} XP</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-yellow-500 h-2 rounded-full" style={{ width: '20%' }}></div>
+                  </div>
+                </div>
 
-                  {currentQuizTerm.type === "multiple-choice" && (
-                    <div className="space-y-2">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                  <h4 className="font-semibold text-blue-900 mb-4">{currentQuizTerm.question}</h4>
+
+                  {(currentQuizTerm.type === "multiple_choice" || currentQuizTerm.type === "case_study_match" || currentQuizTerm.type === "scenario") && (
+                    <div className="space-y-3">
                       {currentQuizTerm.options.map((option, index) => (
-                        <label key={index} className="flex items-center">
+                        <label key={index} className="flex items-center p-3 border border-blue-200 rounded-lg hover:bg-blue-100 cursor-pointer">
                           <input
                             type="radio"
                             name="quiz"
@@ -1335,77 +1436,112 @@ const Explore = () => {
                     </div>
                   )}
 
-                  {(currentQuizTerm.type === "fill-blank" || currentQuizTerm.type === "definition") && (
+                  {currentQuizTerm.type === "true_false" && (
+                    <div className="space-y-3">
+                      <label className="flex items-center p-3 border border-blue-200 rounded-lg hover:bg-blue-100 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="quiz"
+                          value="true"
+                          onChange={(e) => setUserAnswer(e.target.value)}
+                          className="text-blue-600 mr-3"
+                        />
+                        <span className="text-blue-800">True</span>
+                      </label>
+                      <label className="flex items-center p-3 border border-blue-200 rounded-lg hover:bg-blue-100 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="quiz"
+                          value="false"
+                          onChange={(e) => setUserAnswer(e.target.value)}
+                          className="text-blue-600 mr-3"
+                        />
+                        <span className="text-blue-800">False</span>
+                      </label>
+                    </div>
+                  )}
+
+                  {currentQuizTerm.type === "fill_blank" && (
                     <input
                       type="text"
                       value={userAnswer}
                       onChange={(e) => setUserAnswer(e.target.value)}
                       placeholder="Type your answer..."
-                      className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-blue-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   )}
                 </div>
 
-                <div className="flex space-x-4">
+                <div className="flex space-x-4 mt-6">
                   <button
                     onClick={submitAnswer}
                     disabled={!userAnswer}
-                    className="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                    className="bg-yellow-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-yellow-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
                   >
                     Submit Answer
                   </button>
                   <button
                     onClick={() => setCurrentQuizTerm(null)}
-                    className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors"
+                    className="bg-gray-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-600 transition-colors"
                   >
-                    Skip Question
+                    End Quiz
                   </button>
                 </div>
               </div>
             )}
 
+            {/* Answer Feedback */}
             {currentQuizTerm && showAnswer && (
-              <div className="space-y-6">
+              <div className="bg-white rounded-lg shadow p-6">
                 <div className={`border rounded-lg p-6 ${
-                  userAnswer === currentQuizTerm.correct || 
-                  (currentQuizTerm.type !== "multiple-choice" && userAnswer.toLowerCase().trim() === currentQuizTerm.correct.toLowerCase())
+                  (currentQuizTerm.type === "true_false" 
+                    ? userAnswer === currentQuizTerm.correct.toString()
+                    : userAnswer === currentQuizTerm.correct)
                     ? 'bg-green-50 border-green-200' 
                     : 'bg-red-50 border-red-200'
                 }`}>
                   <h4 className="font-semibold mb-3">
-                    {userAnswer === currentQuizTerm.correct || 
-                     (currentQuizTerm.type !== "multiple-choice" && userAnswer.toLowerCase().trim() === currentQuizTerm.correct.toLowerCase())
+                    {(currentQuizTerm.type === "true_false" 
+                      ? userAnswer === currentQuizTerm.correct.toString()
+                      : userAnswer === currentQuizTerm.correct)
                       ? '✅ Correct!' 
                       : '❌ Incorrect'}
                   </h4>
-                  <p className="mb-2"><strong>Correct Answer:</strong> {currentQuizTerm.correct}</p>
-                  <p><strong>Your Answer:</strong> {userAnswer}</p>
+                  <p className="mb-2">
+                    <strong>Correct Answer:</strong> {currentQuizTerm.correct.toString()}
+                  </p>
+                  <p className="mb-4">
+                    <strong>Your Answer:</strong> {userAnswer}
+                  </p>
                   
-                  {userProgress[currentQuizTerm.term] && (
-                    <div className="mt-4 pt-4 border-t border-gray-200">
-                      <p className="text-sm text-gray-600">
-                        Progress on "{currentQuizTerm.term}": {userProgress[currentQuizTerm.term].correct} correct answers
-                        {userStats.masteredTerms.includes(currentQuizTerm.term) && (
-                          <span className="text-green-600 font-medium"> - MASTERED! 🎉</span>
-                        )}
-                      </p>
-                    </div>
-                  )}
+                  {/* Term Info */}
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <h5 className="font-medium text-gray-700 mb-2">About {currentQuizTerm.term}:</h5>
+                    <button
+                      onClick={() => {
+                        setActiveSection("glossary");
+                        setSearchTerm(currentQuizTerm.term);
+                      }}
+                      className="text-yellow-600 hover:text-yellow-700 text-sm underline"
+                    >
+                      Review in Glossary →
+                    </button>
+                  </div>
                 </div>
 
-                <div className="flex space-x-4">
+                <div className="flex space-x-4 mt-6">
                   <button
                     onClick={() => {
                       setCurrentQuizTerm(null);
                       startQuiz();
                     }}
-                    className="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors"
+                    className="bg-yellow-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-yellow-600 transition-colors"
                   >
                     Next Question
                   </button>
                   <button
                     onClick={() => setCurrentQuizTerm(null)}
-                    className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors"
+                    className="bg-gray-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-600 transition-colors"
                   >
                     End Quiz
                   </button>
