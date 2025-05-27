@@ -509,8 +509,9 @@ const Explore = () => {
     }
     
     const randomTerm = availableTerms[Math.floor(Math.random() * availableTerms.length)];
-    const question = generateQuizQuestion(randomTerm);
-    setCurrentQuizTerm(question);
+    const questions = generateQuizQuestions(randomTerm);
+    const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+    setCurrentQuizTerm(randomQuestion);
     setUserAnswer("");
     setShowAnswer(false);
   };
