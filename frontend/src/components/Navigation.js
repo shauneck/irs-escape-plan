@@ -47,15 +47,15 @@ const Navigation = ({ theme, toggleTheme }) => {
   );
 
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-lg border-b border-gray-200">
+    <nav className="nav-container sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link to="/" className="flex items-center">
+            <Link to="/" className="flex items-center nav-brand">
               <span className="text-2xl font-bold">
-                <span className="text-gray-800">IRS</span>
-                <span className="text-yellow-500"> Escape Plan</span>
+                <span className="text-primary">The IRS Escape Plan</span>
+                <span className="text-accent ml-2 text-sm">by Quantus Group</span>
               </span>
             </Link>
           </div>
