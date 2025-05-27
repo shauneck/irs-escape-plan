@@ -13,6 +13,9 @@ const Explore = () => {
   const [selectedPersona, setSelectedPersona] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [quizProgress, setQuizProgress] = useState({ current: 0, total: 0, questions: [] });
+  const [missedTerms, setMissedTerms] = useState([]);
+  const [currentQuizQuestion, setCurrentQuizQuestion] = useState(null);
+  const [quizSession, setQuizSession] = useState(null);
 
   // Category mapping for terms
   const getCategoryForTerm = (term) => {
