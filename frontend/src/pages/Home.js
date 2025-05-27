@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 // Core courses data (3 main courses for conversion focus)
-const coreCoursess = [
+const coreCourses = [
   {
     id: 1,
     title: "The Escape Blueprint",
