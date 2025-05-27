@@ -174,7 +174,7 @@ const Navigation = () => {
                         {exploreSubItems.map((subItem) => (
                           <Link
                             key={subItem}
-                            to={`/explore#${subItem.toLowerCase().replace(" ", "-")}`}
+                            to={subItem === "Free Course - Escape Blueprint" ? "/escape-blueprint" : `/explore#${subItem.toLowerCase().replace(" ", "-")}`}
                             className="block px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md"
                             onClick={() => {
                               setIsMobileMenuOpen(false);
