@@ -15,6 +15,13 @@ const Navigation = ({ theme, toggleTheme }) => {
     { name: "Marketplace", path: "/marketplace" },
   ];
 
+  const exploreSubItems = [
+    "Glossary",
+    "Quiz Mode", 
+    "Document Reader",
+    "Free Course - Escape Blueprint"
+  ];
+
   const isActive = (path) => location.pathname === path;
 
   return (
