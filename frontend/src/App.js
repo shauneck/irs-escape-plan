@@ -7,6 +7,7 @@ import MyPlan from "./pages/MyPlan";
 import Explore from "./pages/Explore";
 import Marketplace from "./pages/Marketplace";
 import CourseDetail from "./pages/CourseDetail";
+import AdvisorDashboard from './pages/AdvisorDashboard';
 
 function App() {
   return (
