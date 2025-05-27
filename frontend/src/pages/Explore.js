@@ -6,16 +6,29 @@ const Explore = () => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [userProgress, setUserProgress] = useState({});
-  const [currentQuizTerm, setCurrentQuizTerm] = useState(null);
-  const [quizType, setQuizType] = useState("multiple-choice");
+  const [currentQuizQuestion, setCurrentQuizQuestion] = useState(null);
   const [userAnswer, setUserAnswer] = useState("");
   const [showAnswer, setShowAnswer] = useState(false);
+  const [quizMode, setQuizMode] = useState("practice"); // practice, persona, category
+  const [selectedPersona, setSelectedPersona] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [quizProgress, setQuizProgress] = useState({ current: 0, total: 0, questions: [] });
+  const [quizSession, setQuizSession] = useState(null);
+  const [incorrectAnswers, setIncorrectAnswers] = useState([]);
   const [userStats, setUserStats] = useState({
     xp: 0,
     correct: 0,
     incorrect: 0,
     masteredTerms: [],
-    badges: []
+    badges: [],
+    quizHistory: [],
+    personaStats: {
+      "W2": { correct: 0, incorrect: 0, xp: 0 },
+      "business owner": { correct: 0, incorrect: 0, xp: 0 },
+      "real estate": { correct: 0, incorrect: 0, xp: 0 },
+      "investment": { correct: 0, incorrect: 0, xp: 0 }
+    },
+    categoryStats: {}
   });
 
   const sections = [
