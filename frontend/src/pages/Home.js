@@ -16,7 +16,8 @@ const coreCourses = [
     badge: "Beginner Friendly",
     audience: "W2 Earners & Business Owners",
     duration: "2-3 hours",
-    modules: 4
+    modules: 4,
+    courseId: "escape-blueprint"
   },
   {
     id: 2,
@@ -31,7 +32,8 @@ const coreCourses = [
     badge: "High-Income Employees",
     audience: "W2 Earners $100K+",
     duration: "6-8 hours",
-    modules: 8
+    modules: 9,
+    courseId: "w2-escape-plan"
   },
   {
     id: 3,
@@ -46,7 +48,8 @@ const coreCourses = [
     badge: "$1M+ Businesses",
     audience: "Business Owners",
     duration: "10-12 hours",
-    modules: 12
+    modules: 12,
+    courseId: "business-owner-escape-plan"
   }
 ];
 
