@@ -1,114 +1,51 @@
 import { useState } from "react";
 
-// Course modules data (9 modules as requested)
-const courseModules = [
+// Core courses data (3 main courses for conversion focus)
+const coreCoursess = [
   {
     id: 1,
-    title: "Tax Fundamentals & Strategy",
-    hook: "Master the basics and build your foundation for tax optimization",
-    image: "https://images.pexels.com/photos/159888/pexels-photo-159888.jpeg",
-    progress: 85,
-    duration: "2.5 hours"
+    title: "The Escape Blueprint",
+    tagline: "Start your IRS Escape — no cost, just clarity.",
+    description: "Perfect for W2 earners and business owners new to tax strategy. Learn the fundamentals that form the foundation of advanced tax planning.",
+    image: "https://images.pexels.com/photos/8962468/pexels-photo-8962468.jpeg",
+    cta: "Start Free",
+    price: "Free",
+    locked: false,
+    progress: 35,
+    badge: "Beginner Friendly",
+    audience: "W2 Earners & Business Owners",
+    duration: "2-3 hours",
+    modules: 4
   },
   {
     id: 2,
-    title: "Business Tax Strategies",
-    hook: "Unlock powerful deductions and structures for entrepreneurs",
-    image: "https://images.pexels.com/photos/32270056/pexels-photo-32270056.jpeg",
-    progress: 62,
-    duration: "3 hours"
-  },
-  {
-    id: 3,
-    title: "Personal Deduction Mastery",
-    hook: "Maximize your personal tax savings with advanced deduction strategies",
-    image: "https://images.pexels.com/photos/259027/pexels-photo-259027.jpeg",
-    progress: 90,
-    duration: "2 hours"
-  },
-  {
-    id: 4,
-    title: "Real Estate Tax Benefits",
-    hook: "Leverage property investments for maximum tax advantages",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab",
-    progress: 45,
-    duration: "2.5 hours"
-  },
-  {
-    id: 5,
-    title: "Retirement Planning & Tax Optimization",
-    hook: "Secure your future while minimizing tax burdens today",
-    image: "https://images.pexels.com/photos/32219704/pexels-photo-32219704.jpeg",
-    progress: 30,
-    duration: "3.5 hours"
-  },
-  {
-    id: 6,
-    title: "Investment Tax Strategies",
-    hook: "Smart investing techniques to reduce capital gains tax",
-    image: "https://images.pexels.com/photos/730547/pexels-photo-730547.jpeg",
-    progress: 75,
-    duration: "2.5 hours"
-  },
-  {
-    id: 7,
-    title: "Advanced Tax Consultation",
-    hook: "Professional strategies used by top tax advisors",
-    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40",
-    progress: 15,
-    duration: "4 hours"
-  },
-  {
-    id: 8,
-    title: "Tax Data Analysis & Reporting",
-    hook: "Use data-driven insights to optimize your tax position",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f",
+    title: "W-2 Escape Plan",
+    tagline: "Slash your W-2 taxes and build tax-free wealth.",
+    description: "Advanced strategies specifically designed for high-income employees. Transform your W-2 tax burden into wealth-building opportunities.",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwxfHxmaW5hbmNpYWwlMjBwbGFubmluZ3xlbnwwfHx8fDE3NDgzMDk2ODV8MA&ixlib=rb-4.1.0&q=85",
+    cta: "View Curriculum",
+    price: "$497",
+    locked: true,
     progress: 0,
-    duration: "2 hours"
-  },
-  {
-    id: 9,
-    title: "Legal Tax Avoidance Methods",
-    hook: "Stay compliant while minimizing your tax obligations",
-    image: "https://images.pexels.com/photos/6963021/pexels-photo-6963021.jpeg",
-    progress: 55,
-    duration: "3 hours"
-  }
-];
-
-// Strategy playbooks data
-const strategyPlaybooks = [
-  {
-    id: 1,
-    title: "The High-Income Professional",
-    hook: "Strategies for doctors, lawyers, and executives earning $200K+",
-    image: "https://images.pexels.com/photos/732444/pexels-photo-732444.jpeg",
-    personas: "High Earners",
-    tactics: "12 tactics"
-  },
-  {
-    id: 2,
-    title: "The Small Business Owner",
-    hook: "Maximize deductions and structure for growing businesses",
-    image: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg",
-    personas: "Entrepreneurs",
-    tactics: "15 tactics"
+    badge: "High-Income Employees",
+    audience: "W2 Earners $100K+",
+    duration: "6-8 hours",
+    modules: 8
   },
   {
     id: 3,
-    title: "The Real Estate Investor",
-    hook: "Advanced strategies for property investment portfolios",
-    image: "https://images.pexels.com/photos/9052475/pexels-photo-9052475.jpeg",
-    personas: "Investors",
-    tactics: "10 tactics"
-  },
-  {
-    id: 4,
-    title: "The Retirement Planner",
-    hook: "Optimize taxes in your pre-retirement and retirement years",
-    image: "https://images.pexels.com/photos/6863253/pexels-photo-6863253.jpeg",
-    personas: "Retirees",
-    tactics: "8 tactics"
+    title: "Business Owner Escape Plan",
+    tagline: "Turn your business into a tax-optimized wealth engine.",
+    description: "Elite strategies for entrepreneurs with $1M+ profit. Master advanced tax structures, asset protection, and wealth preservation techniques.",
+    image: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg",
+    cta: "View Curriculum",
+    price: "$1,997",
+    locked: true,
+    progress: 0,
+    badge: "$1M+ Businesses",
+    audience: "Business Owners",
+    duration: "10-12 hours",
+    modules: 12
   }
 ];
 
