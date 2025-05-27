@@ -1,7 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Explore = () => {
   const [activeSection, setActiveSection] = useState("glossary");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+  const [userProgress, setUserProgress] = useState({});
+  const [currentQuizTerm, setCurrentQuizTerm] = useState(null);
+  const [quizType, setQuizType] = useState("multiple-choice");
+  const [userAnswer, setUserAnswer] = useState("");
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [userStats, setUserStats] = useState({
+    xp: 0,
+    correct: 0,
+    incorrect: 0,
+    masteredTerms: [],
+    badges: []
+  });
 
   const sections = [
     { id: "glossary", name: "Glossary", icon: "📚" },
@@ -13,10 +28,126 @@ const Explore = () => {
   ];
 
   const glossaryTerms = [
-    { term: "Qualified Opportunity Fund (QOF)", definition: "An investment vehicle that allows for the deferral of capital gains taxes." },
-    { term: "Section 1031 Exchange", definition: "A tax-deferred exchange allowing real estate investors to swap properties." },
-    { term: "Cost Segregation", definition: "A tax strategy that accelerates depreciation deductions for commercial property." },
-    { term: "Augusta Rule", definition: "IRS provision allowing tax-free rental income from personal residence up to 14 days." },
+    {
+      term: "Qualified Opportunity Fund (QOF)",
+      definition: "An investment vehicle that allows deferral and potential elimination of capital gains when invested in designated Opportunity Zones.",
+      example: "After selling stock with a $200K gain, you invest the gain in a QOF within 180 days to defer taxes.",
+      tags: ["Capital Gains", "Investment", "Business Owner"]
+    },
+    {
+      term: "REPS (Real Estate Professional Status)",
+      definition: "A tax status that allows certain real estate investors to treat passive losses as active, offsetting W-2 or business income.",
+      example: "Nina qualifies for REPS, allowing her $50K in rental losses to offset W-2 income.",
+      tags: ["Real Estate", "W2", "Deductions"]
+    },
+    {
+      term: "QSBS (Qualified Small Business Stock)",
+      definition: "Stock in a qualifying C-Corp that can be sold after 5 years with up to 100% capital gains exclusion under Section 1202.",
+      example: "Claire invests in a startup C-Corp and exits with $8M in tax-free gains.",
+      tags: ["Equity", "Startup", "Exit Planning"]
+    },
+    {
+      term: "F-Reorg",
+      definition: "A type of corporate reorganization used to preserve QSBS eligibility when transferring ownership or restructuring.",
+      example: "A founder uses an F-reorg before selling shares to maintain QSBS treatment.",
+      tags: ["Corporate", "Advanced Planning", "QSBS"]
+    },
+    {
+      term: "Oil & Gas IDCs",
+      definition: "Intangible drilling costs that can be deducted in year one to offset ordinary income.",
+      example: "Miles invests $200K in an oil partnership and deducts $170K in year one through IDCs.",
+      tags: ["Alternative Investment", "Deductions", "Business Owner"]
+    },
+    {
+      term: "Roth Conversion",
+      definition: "Moving funds from a traditional IRA or 401(k) to a Roth IRA, paying tax now for future tax-free growth.",
+      example: "Samir converts $150K during a low-income year to reduce lifetime tax liability.",
+      tags: ["Retirement", "W2", "Tax Timing"]
+    },
+    {
+      term: "STR (Short-Term Rental)",
+      definition: "A rental property typically leased for fewer than 7 days per stay, often eligible for more aggressive tax treatment if materially participated in.",
+      example: "Liam uses a Virginia STR to generate passive income and deductions against his W-2.",
+      tags: ["Real Estate", "W2", "Deductions"]
+    },
+    {
+      term: "Material Participation",
+      definition: "A standard used to determine whether a taxpayer actively participates in an activity, affecting the treatment of losses.",
+      example: "A taxpayer spends 500+ hours on a rental and qualifies as materially participating.",
+      tags: ["IRS Rules", "Real Estate", "Active Income"]
+    },
+    {
+      term: "MSO (Management Services Organization)",
+      definition: "A C-Corp structure that provides services to a main business entity, allowing income separation and advanced tax strategies.",
+      example: "Shaun creates an MSO to shift profits into a C-Corp and reduce pass-through taxation.",
+      tags: ["Entity Structure", "Business Owner", "Advanced Planning"]
+    },
+    {
+      term: "Split-Dollar Life Insurance",
+      definition: "A strategy where a business funds a permanent life insurance policy, often with the goal of building tax-free retirement income.",
+      example: "A C-Corp funds a policy for the owner, allowing future tax-free loans for income.",
+      tags: ["Insurance", "Business Owner", "Wealth Transfer"]
+    },
+    {
+      term: "Installment Sale",
+      definition: "A method of deferring capital gains by spreading out income over multiple years.",
+      example: "An investor sells a business and receives payments over 5 years, reducing year-one tax burden.",
+      tags: ["Exit Planning", "Capital Gains", "Timing"]
+    },
+    {
+      term: "Irrevocable Trust",
+      definition: "A trust that, once created, cannot be changed or revoked and can offer estate and asset protection benefits.",
+      example: "A founder uses an irrevocable trust to protect assets and remove them from their estate.",
+      tags: ["Estate Planning", "Asset Protection", "Wealth Transfer"]
+    },
+    {
+      term: "Cost Segregation",
+      definition: "A tax strategy that accelerates depreciation of real estate to generate large deductions early.",
+      example: "Jackson performs a cost seg on a rental and deducts $100K in year one.",
+      tags: ["Real Estate", "Depreciation", "Deductions"]
+    },
+    {
+      term: "Charitable Remainder Trust (CRT)",
+      definition: "A trust that provides income to the donor or others for a period of time, then donates the remainder to charity, offering upfront tax benefits.",
+      example: "A business owner funds a CRT to defer capital gains and create income for retirement.",
+      tags: ["Charitable", "Estate Planning", "Capital Gains"]
+    },
+    {
+      term: "AMT (Alternative Minimum Tax)",
+      definition: "A parallel tax system ensuring high-income individuals pay at least a minimum tax amount, often triggered by large deductions.",
+      example: "Helen hits AMT due to large oil & gas deductions and state tax write-offs.",
+      tags: ["W2", "Deductions", "IRS Rules"]
+    },
+    {
+      term: "Tax-Free Step-Up in Basis",
+      definition: "The resetting of an asset's cost basis to its market value upon the owner's death, eliminating capital gains.",
+      example: "Heirs inherit a $2M property at market value, avoiding capital gains tax on prior appreciation.",
+      tags: ["Estate Planning", "Investment", "Capital Gains"]
+    },
+    {
+      term: "Self-Rental Rule",
+      definition: "An IRS rule that converts passive rental income into non-passive if the property is rented to a related business.",
+      example: "A doctor rents a building to her practice, allowing rental income to offset active income.",
+      tags: ["Real Estate", "Business Owner", "Deductions"]
+    },
+    {
+      term: "State Residency Planning",
+      definition: "Strategies for changing domicile to a lower-tax state to reduce long-term income and estate taxes.",
+      example: "A tech executive moves to Texas before a major liquidity event to avoid state income tax.",
+      tags: ["W2", "Exit Planning", "State Tax"]
+    },
+    {
+      term: "Family Limited Partnership (FLP)",
+      definition: "An entity structure used to consolidate family assets and pass wealth to heirs with valuation discounts.",
+      example: "Parents gift FLP shares to children with a 30% discount for estate tax purposes.",
+      tags: ["Entity Structure", "Wealth Transfer", "Estate Planning"]
+    },
+    {
+      term: "Backdoor Roth IRA",
+      definition: "A workaround that allows high-income earners to contribute to a Roth IRA via a nondeductible IRA conversion.",
+      example: "A W-2 earner contributes $6,500 to a traditional IRA and converts it to a Roth the next day.",
+      tags: ["Retirement", "W2", "Tax-Free Growth"]
+    }
   ];
 
   const leaderboardData = [
