@@ -516,6 +516,406 @@ body.dark .badge {
 }
 
 /* =================================================================================
+   GLOBAL TEXT COLOR FIX FOR COLORED BACKGROUNDS
+   ================================================================================= */
+
+/* UNIVERSAL RULE: White text on ANY colored or gradient background */
+[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent),
+.bg-gradient,
+.bg-colored,
+.colored-background,
+.gradient-background,
+[style*="background:"],
+[style*="background-color:"]:not([style*="background-color: white"]):not([style*="background-color: #ffffff"]),
+[style*="background-image:"],
+.btn-primary,
+.btn-secondary,
+.btn-accent,
+.btn-success,
+.btn-warning,
+.btn-error,
+.btn-info,
+.cta-button,
+.upgrade-button,
+.action-button,
+.bg-blue-500,
+.bg-blue-600,
+.bg-green-500,
+.bg-green-600,
+.bg-yellow-500,
+.bg-yellow-600,
+.bg-purple-500,
+.bg-purple-600,
+.bg-red-500,
+.bg-red-600,
+.bg-orange-500,
+.bg-orange-600,
+.bg-indigo-500,
+.bg-indigo-600,
+.bg-teal-500,
+.bg-teal-600,
+.bg-pink-500,
+.bg-pink-600 {
+  color: #ffffff !important;
+}
+
+/* Apply to ALL child text elements */
+[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent) *,
+.bg-gradient *,
+.bg-colored *,
+.colored-background *,
+.gradient-background *,
+[style*="background:"] *,
+[style*="background-color:"]:not([style*="background-color: white"]):not([style*="background-color: #ffffff"]) *,
+[style*="background-image:"] *,
+.btn-primary *,
+.btn-secondary *,
+.btn-accent *,
+.btn-success *,
+.btn-warning *,
+.btn-error *,
+.btn-info *,
+.cta-button *,
+.upgrade-button *,
+.action-button *,
+.bg-blue-500 *,
+.bg-blue-600 *,
+.bg-green-500 *,
+.bg-green-600 *,
+.bg-yellow-500 *,
+.bg-yellow-600 *,
+.bg-purple-500 *,
+.bg-purple-600 *,
+.bg-red-500 *,
+.bg-red-600 *,
+.bg-orange-500 *,
+.bg-orange-600 *,
+.bg-indigo-500 *,
+.bg-indigo-600 *,
+.bg-teal-500 *,
+.bg-teal-600 *,
+.bg-pink-500 *,
+.bg-pink-600 * {
+  color: #ffffff !important;
+}
+
+/* Enhanced text styling for colored backgrounds */
+[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent) h1,
+[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent) h2,
+[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent) h3,
+[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent) h4,
+[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent) h5,
+[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent) h6,
+.bg-gradient h1,
+.bg-gradient h2,
+.bg-gradient h3,
+.bg-gradient h4,
+.bg-gradient h5,
+.bg-gradient h6,
+.colored-background h1,
+.colored-background h2,
+.colored-background h3,
+.colored-background h4,
+.colored-background h5,
+.colored-background h6 {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Button text enhancement */
+.btn-primary,
+.btn-secondary,
+.btn-accent,
+.btn-success,
+.btn-warning,
+.btn-error,
+.btn-info,
+.cta-button,
+.upgrade-button,
+.action-button,
+button[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100),
+a[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100) {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Hover states maintain white text */
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-accent:hover,
+.btn-success:hover,
+.btn-warning:hover,
+.btn-error:hover,
+.btn-info:hover,
+.cta-button:hover,
+.upgrade-button:hover,
+.action-button:hover,
+button[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):hover,
+a[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):hover,
+[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):hover * {
+  color: #f0f0f0 !important;
+  text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* =================================================================================
+   COMPONENT-SPECIFIC FIXES
+   ================================================================================= */
+
+/* Course Cards and Netflix-style Homepage */
+.course-card,
+.netflix-card,
+.course-cta,
+.course-button {
+  background-attachment: fixed;
+}
+
+.course-card *,
+.netflix-card *,
+.course-cta *,
+.course-button * {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Strategy Stack Cards */
+.strategy-card,
+.strategy-stack-item,
+.strategy-badge,
+.implementation-card {
+  background-clip: padding-box;
+}
+
+.strategy-card *,
+.strategy-stack-item *,
+.strategy-badge *,
+.implementation-card * {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Smart Recommendations */
+.recommendation-card,
+.recommendation-tile,
+.suggestion-card,
+.next-strategy-card {
+  background-blend-mode: normal;
+}
+
+.recommendation-card *,
+.recommendation-tile *,
+.suggestion-card *,
+.next-strategy-card * {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Document Vault */
+.document-card,
+.document-banner,
+.document-tag,
+.vault-section {
+  background-origin: border-box;
+}
+
+.document-card *,
+.document-banner *,
+.document-tag *,
+.vault-section * {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Quiz Dashboard and Progress Sections */
+.quiz-dashboard,
+.quiz-score-card,
+.quiz-stats-grid,
+.progress-section,
+.progress-banner,
+.streak-banner,
+.achievement-banner {
+  background-repeat: no-repeat;
+}
+
+.quiz-dashboard *,
+.quiz-score-card *,
+.quiz-stats-grid *,
+.progress-section *,
+.progress-banner *,
+.streak-banner *,
+.achievement-banner * {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Badge System */
+.badge,
+.badge-bronze,
+.badge-silver,
+.badge-gold,
+.badge-master,
+.achievement-badge,
+.milestone-badge {
+  background-clip: text;
+  -webkit-background-clip: border-box;
+}
+
+.badge,
+.badge-bronze,
+.badge-silver,
+.badge-gold,
+.badge-master,
+.achievement-badge,
+.milestone-badge {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* =================================================================================
+   DARK MODE CONSISTENCY
+   ================================================================================= */
+
+body.dark [class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent),
+body.dark .bg-gradient,
+body.dark .bg-colored,
+body.dark .colored-background,
+body.dark .gradient-background {
+  color: #f0f0f0 !important;
+}
+
+body.dark [class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100):not(.bg-transparent) *,
+body.dark .bg-gradient *,
+body.dark .bg-colored *,
+body.dark .colored-background *,
+body.dark .gradient-background * {
+  color: #f0f0f0 !important;
+  text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Dark mode buttons */
+body.dark .btn-primary,
+body.dark .btn-secondary,
+body.dark .btn-accent,
+body.dark .cta-button,
+body.dark .upgrade-button,
+body.dark button[class*="bg-"]:not(.bg-white),
+body.dark a[class*="bg-"]:not(.bg-white) {
+  color: #ffffff !important;
+  text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* =================================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ================================================================================= */
+
+/* High contrast for critical elements */
+.high-contrast,
+.critical-text,
+.important-stat,
+.primary-metric {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5) !important;
+  padding: 0.125rem 0.25rem !important;
+  border-radius: 4px !important;
+}
+
+/* Focus states for colored backgrounds */
+[class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100) *:focus,
+.bg-gradient *:focus,
+.colored-background *:focus {
+  outline: 3px solid #ffffff !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Ensure minimum contrast ratios */
+.wcag-aa-text {
+  color: #ffffff !important;
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  padding: 0.25rem !important;
+  border-radius: 4px !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75) !important;
+}
+
+/* Large text optimization (18px+ or 14px+ bold) */
+.large-text,
+.hero-text,
+.display-text {
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* =================================================================================
+   RESPONSIVE ENHANCEMENTS
+   ================================================================================= */
+
+@media (max-width: 768px) {
+  /* Mobile: Enhanced text shadows and contrast */
+  [class*="bg-"]:not(.bg-white):not(.bg-gray-50):not(.bg-gray-100) *,
+  .bg-gradient *,
+  .colored-background * {
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5) !important;
+    font-weight: 600 !important;
+  }
+
+  /* Mobile button enhancement */
+  .btn-primary,
+  .btn-secondary,
+  .cta-button,
+  button[class*="bg-"]:not(.bg-white) {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  /* Mobile card text */
+  .course-card *,
+  .strategy-card *,
+  .recommendation-card * {
+    text-align: center !important;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.6) !important;
+  }
+}
+
+/* =================================================================================
+   UTILITY CLASSES FOR MANUAL APPLICATION
+   ================================================================================= */
+
+.force-white-text,
+.white-text-on-color {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+}
+
+.force-white-text *,
+.white-text-on-color * {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
+}
+
+.enhanced-contrast {
+  color: #ffffff !important;
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  font-weight: 700 !important;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.6) !important;
+  padding: 0.25rem 0.5rem !important;
+  border-radius: 6px !important;
+}
+
+/* =================================================================================
    TEXT VISIBILITY & ACCESSIBILITY ON COLORED BACKGROUNDS
    ================================================================================= */
 
