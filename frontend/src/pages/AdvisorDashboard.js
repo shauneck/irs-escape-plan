@@ -270,9 +270,10 @@ const AdvisorDashboard = () => {
             
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              disabled={isLogging}
+              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Login to Advisor Dashboard
+              {isLogging ? "Authenticating..." : "Login to Advisor Dashboard"}
             </button>
           </form>
           
