@@ -434,21 +434,6 @@ const Explore = () => {
 
   // Duplicate function removed - using the one defined earlier
 
-  // Badge tier system
-  const getBadgeTier = (xp, category) => {
-    if (category === "overall") {
-      if (xp >= 5000) return "gold";
-      if (xp >= 2500) return "silver";
-      if (xp >= 1000) return "bronze";
-      return null;
-    } else {
-      if (xp >= 1000) return "gold";
-      if (xp >= 500) return "silver";
-      if (xp >= 200) return "bronze";
-      return null;
-    }
-  };
-
   // Calculate category completion
   const getCategoryCompletion = () => {
     const categories = {};
