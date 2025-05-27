@@ -90,13 +90,15 @@ const EscapeBlueprint = () => {
 
     useEffect(() => {
       let interval;
-      if (isPlaying && progress < 100) {
+      if (isPlaying && progress < 100 && !hasCompleted) {
         interval = setInterval(() => {
           setProgress(prev => {
-            const newProgress = prev + (100 / (duration * 2)); // Faster for demo - complete in 2 seconds per minute
-            if (newProgress >= 100 && !hasCompleted) {
+            const newProgress = prev + (100 / (duration * 2)); // Complete in 2 seconds per minute
+            if (newProgress >= 95 && !hasCompleted) { // Trigger slightly before 100% for better UX
               setHasCompleted(true);
-              onComplete(moduleId);
+              setTimeout(() => {
+                onComplete(moduleId);
+              }, 500);
             }
             return Math.min(newProgress, 100);
           });
@@ -105,13 +107,18 @@ const EscapeBlueprint = () => {
       return () => clearInterval(interval);
     }, [isPlaying, progress, duration, hasCompleted, onComplete, moduleId]);
 
+    const handlePlayClick = () => {
+      console.log('Play button clicked for:', moduleId);
+      setIsPlaying(true);
+    };
+
     return (
       <div className="bg-black rounded-lg overflow-hidden relative">
         <div className="aspect-video flex items-center justify-center relative">
           {!isPlaying ? (
             <button
-              onClick={() => setIsPlaying(true)}
-              className="bg-red-600 hover:bg-red-700 text-white rounded-full p-6 transition-all transform hover:scale-110"
+              onClick={handlePlayClick}
+              className="bg-red-600 hover:bg-red-700 text-white rounded-full p-6 transition-all transform hover:scale-110 z-10"
             >
               <svg className="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z"/>
@@ -122,6 +129,9 @@ const EscapeBlueprint = () => {
               <div className="text-center text-white">
                 <div className="text-xl font-semibold mb-2">{title}</div>
                 <div className="text-sm opacity-75">Playing...</div>
+                {hasCompleted && (
+                  <div className="text-green-400 mt-2">✓ Complete!</div>
+                )}
               </div>
             </div>
           )}
@@ -140,6 +150,7 @@ const EscapeBlueprint = () => {
         {progress > 0 && (
           <div className="p-3 bg-gray-800 text-white text-sm">
             Progress: {Math.round(progress)}% • {Math.round((duration * progress) / 100)} / {duration} minutes
+            {hasCompleted && <span className="text-green-400 ml-2">✓ Completed</span>}
           </div>
         )}
       </div>
