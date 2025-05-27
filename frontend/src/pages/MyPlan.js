@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import AITaxAssistant from "../components/AITaxAssistant";
 
 const MyPlan = () => {
   const [activeSection, setActiveSection] = useState("strategy-map");
@@ -9,6 +10,7 @@ const MyPlan = () => {
   const [newNote, setNewNote] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [readyToImplement, setReadyToImplement] = useState([]);
+  const [showAIAssistant, setShowAIAssistant] = useState(false);
 
   // Load data from localStorage
   useEffect(() => {
@@ -25,6 +27,7 @@ const MyPlan = () => {
 
   // Get user stats from Explore page data
   const userStats = JSON.parse(localStorage.getItem('userStats') || '{"xp": 0, "correct": 0, "incorrect": 0, "masteredTerms": [], "badges": [], "quizHistory": [], "personaStats": {"W2": {"correct": 0, "incorrect": 0, "xp": 0}, "business owner": {"correct": 0, "incorrect": 0, "xp": 0}, "real estate": {"correct": 0, "incorrect": 0, "xp": 0}, "investment": {"correct": 0, "incorrect": 0, "xp": 0}}, "categoryStats": {}}');
+  const userProgress = JSON.parse(localStorage.getItem('glossaryProgress') || '{}');
   
   // Mock course data - in real app this would come from backend
   const courseModules = [
@@ -37,6 +40,75 @@ const MyPlan = () => {
     { id: 7, title: "Real Estate Optimization", completion: 90, status: "Completed" },
     { id: 8, title: "Advanced Strategies", completion: 0, status: "Locked" },
     { id: 9, title: "Implementation Mastery", completion: 0, status: "Locked" }
+  ];
+
+  // Glossary data for AI Assistant
+  const glossaryTerms = [
+    {
+      term: "Qualified Opportunity Fund (QOF)",
+      definition: "An investment vehicle under IRC §1400Z-2 that allows deferral and potential exclusion of capital gains by investing in designated Opportunity Zones.",
+      tags: ["capital gains", "real estate", "business owner", "investment"],
+      plain_english: "You can delay and potentially avoid paying capital gains taxes by investing in a Qualified Opportunity Fund.",
+      case_study: {
+        client_profile: "Amanda sold company stock with $600K in capital gains and wanted to defer the tax while reinvesting in real estate.",
+        structure: "She invested the gains in a QOF within 180 days of sale, targeting tax-advantaged Opportunity Zone property.",
+        implementation: "The fund pooled investor capital to purchase and improve a multifamily asset in a certified zone.",
+        results: "Deferred $600K in taxes and positioned the investment for permanent gain exclusion after 10 years."
+      },
+      key_benefit: "Turn taxable gains into long-term tax-free growth through compliant real estate investing."
+    },
+    {
+      term: "REPS (Real Estate Professional Status)",
+      definition: "A tax classification under IRC §469 that allows certain real estate investors to offset active income with rental losses.",
+      tags: ["real estate", "W2", "deductions", "active income"],
+      plain_english: "If you work full-time in real estate, you can use rental losses to reduce your W-2 or business income.",
+      case_study: {
+        client_profile: "Nina K. is a tech executive who owns a short-term rental portfolio generating passive losses.",
+        structure: "She became a full-time real estate professional by materially participating in her portfolio.",
+        implementation: "Met the 750-hour rule and established REPS via tax elections and time logs.",
+        results: "Used $82K in rental losses to offset W-2 income, reducing her tax bill by over $28K."
+      },
+      key_benefit: "Convert rental losses into powerful deductions against ordinary income."
+    },
+    {
+      term: "QSBS (Qualified Small Business Stock)",
+      definition: "Stock that may be eligible for up to 100% exclusion of capital gains under IRC §1202 if held for at least five years and issued by a qualifying C-Corp.",
+      tags: ["equity", "startup", "exit planning", "capital gains"],
+      plain_english: "If you hold shares in a qualified startup for 5 years, your gains can be 100% tax-free when you sell.",
+      case_study: {
+        client_profile: "Ethan invested in a software startup as an early employee and received QSBS-eligible shares.",
+        structure: "The company met Section 1202 requirements and Ethan held his stock for over five years.",
+        implementation: "Verified QSBS status through corporate records and planned exit accordingly.",
+        results: "Excluded $9.2M in gains from federal tax at sale."
+      },
+      key_benefit: "Create generational wealth through tax-free startup exits."
+    },
+    {
+      term: "Roth Conversion",
+      definition: "The process of moving money from a traditional IRA to a Roth IRA, paying taxes now for tax-free growth later.",
+      tags: ["retirement", "tax timing", "W2", "investment"],
+      plain_english: "You pay taxes now so your retirement money grows and comes out tax-free later.",
+      case_study: {
+        client_profile: "Samir T., age 55, had $500K in a traditional IRA and anticipated higher taxes in retirement.",
+        structure: "Converted $150K to a Roth IRA during a strategic low-income window.",
+        implementation: "Used oil & gas deductions to eliminate 40% of the taxable income from the conversion.",
+        results: "Paid $18K in tax instead of $32K and locked in future tax-free withdrawals."
+      },
+      key_benefit: "Shift retirement assets into a tax-free bucket while your rates are still low."
+    },
+    {
+      term: "STR (Short-Term Rental)",
+      definition: "Rental properties leased for less than 7 days per guest stay that may qualify for active participation tax benefits.",
+      tags: ["real estate", "W2", "deductions", "passive income"],
+      plain_english: "If you rent out property short-term and stay actively involved, you can write off losses against W-2 income.",
+      case_study: {
+        client_profile: "Liam R. owns a STR in Virginia while working full-time as an engineer.",
+        structure: "Met material participation rules by self-managing and booking guests.",
+        implementation: "Documented 150+ hours in active management to override passive classification.",
+        results: "Used $31K in STR losses to offset his W-2 income, reducing taxes by $11K."
+      },
+      key_benefit: "Turn vacation rentals into powerful tax shields against earned income."
+    }
   ];
 
   // Tax strategy categories with unlock requirements
