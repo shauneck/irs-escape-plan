@@ -356,49 +356,145 @@ const Explore = () => {
     );
   };
 
-  // Generate quiz question
-  const generateQuizQuestion = (term) => {
-    const questionTypes = ["multiple-choice", "fill-blank", "definition"];
-    const type = questionTypes[Math.floor(Math.random() * questionTypes.length)];
+  // Enhanced quiz question generator with multiple question types
+  const generateQuizQuestions = (term) => {
+    const questions = [];
     
-    if (type === "multiple-choice") {
-      const wrongAnswers = glossaryTerms
-        .filter(t => t.term !== term.term)
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 3)
-        .map(t => t.definition);
-      
-      const options = [...wrongAnswers, term.definition].sort(() => Math.random() - 0.5);
-      
-      return {
-        type: "multiple-choice",
-        question: `What is the definition of "${term.term}"?`,
-        options,
-        correct: term.definition,
-        term: term.term
-      };
-    } else if (type === "fill-blank") {
-      const words = term.definition.split(' ');
-      const blankIndex = Math.floor(Math.random() * words.length);
-      const blankWord = words[blankIndex];
-      const questionText = words.map((word, index) => 
-        index === blankIndex ? '______' : word
-      ).join(' ');
-      
-      return {
-        type: "fill-blank",
-        question: `Fill in the blank: ${questionText}`,
-        correct: blankWord.toLowerCase(),
-        term: term.term
-      };
-    } else {
-      return {
-        type: "definition",
-        question: `Given this scenario: "${term.case_study.client_profile} ${term.case_study.results}" - What tax concept is being described?`,
-        correct: term.term,
-        term: term.term
-      };
+    // Question 1: Multiple choice definition
+    const wrongDefinitions = glossaryTerms
+      .filter(t => t.term !== term.term)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 3)
+      .map(t => t.definition);
+    
+    questions.push({
+      id: `${term.term}-definition`,
+      type: "multiple_choice",
+      question: `What is the definition of "${term.term}"?`,
+      options: [...wrongDefinitions, term.definition].sort(() => Math.random() - 0.5),
+      correct: term.definition,
+      term: term.term,
+      category: "definition",
+      xpValue: 10
+    });
+
+    // Question 2: True/False based on key benefit
+    const isTrue = Math.random() > 0.5;
+    const trueFalseStatement = isTrue 
+      ? term.key_benefit 
+      : `${term.term} is primarily used for generating immediate tax credits.`;
+    
+    questions.push({
+      id: `${term.term}-truefalse`,
+      type: "true_false",
+      question: `True or False: ${trueFalseStatement}`,
+      correct: isTrue,
+      term: term.term,
+      category: "application",
+      xpValue: 15
+    });
+
+    // Question 3: Case study matching
+    const clientName = extractClientName(term.case_study.client_profile);
+    const wrongClients = glossaryTerms
+      .filter(t => t.term !== term.term)
+      .map(t => extractClientName(t.case_study.client_profile))
+      .filter(name => name && name !== clientName)
+      .slice(0, 3);
+    
+    if (clientName && wrongClients.length >= 3) {
+      questions.push({
+        id: `${term.term}-casestudy`,
+        type: "case_study_match",
+        question: `Which client is featured in the ${term.term} case study?`,
+        options: [...wrongClients, clientName].sort(() => Math.random() - 0.5),
+        correct: clientName,
+        term: term.term,
+        category: "case_study",
+        xpValue: 20
+      });
     }
+
+    // Question 4: Scenario application
+    questions.push({
+      id: `${term.term}-scenario`,
+      type: "scenario",
+      question: `Based on the case study, what was the primary result achieved using ${term.term}?`,
+      options: [
+        term.case_study.results,
+        "Eliminated all tax liability permanently",
+        "Reduced tax rates to zero percent", 
+        "Generated unlimited deductions"
+      ].sort(() => Math.random() - 0.5),
+      correct: term.case_study.results,
+      term: term.term,
+      category: "results",
+      xpValue: 25
+    });
+
+    return questions;
+  };
+
+  // Extract client name from case study profile
+  const extractClientName = (profile) => {
+    const names = ["Amanda", "Nina", "Ethan", "Sophie", "Miles", "Samir", "Liam", "Rachel", 
+                   "Jordan", "Melissa", "Jackson", "Anthony", "Helen Park", "Dr. Patel"];
+    return names.find(name => profile.includes(name)) || null;
+  };
+
+  // Filter terms by persona
+  const getTermsByPersona = (persona) => {
+    if (persona === "all") return glossaryTerms;
+    
+    const personaMap = {
+      "w2": ["W2", "retirement", "tax timing"],
+      "business": ["business owner", "entity structure", "C-Corp", "advanced planning"],
+      "realestate": ["real estate", "depreciation", "passive income"],
+      "investment": ["investment", "capital gains", "alternative investment"]
+    };
+    
+    return glossaryTerms.filter(term => 
+      term.tags.some(tag => 
+        personaMap[persona]?.some(p => tag.toLowerCase().includes(p.toLowerCase()))
+      )
+    );
+  };
+
+  // Start comprehensive quiz
+  const startComprehensiveQuiz = (mode = "practice", persona = "all", category = "all") => {
+    const filteredTerms = getTermsByPersona(persona);
+    const allQuestions = [];
+    
+    filteredTerms.forEach(term => {
+      const termQuestions = generateQuizQuestions(term);
+      allQuestions.push(...termQuestions);
+    });
+    
+    // Shuffle questions
+    const shuffledQuestions = allQuestions.sort(() => Math.random() - 0.5);
+    const sessionQuestions = mode === "practice" 
+      ? shuffledQuestions.slice(0, 10) 
+      : shuffledQuestions;
+    
+    setQuizProgress({
+      current: 0,
+      total: sessionQuestions.length,
+      questions: sessionQuestions
+    });
+    
+    setQuizSession({
+      mode,
+      persona,
+      category,
+      startTime: new Date(),
+      answers: [],
+      score: 0
+    });
+    
+    setCurrentQuizQuestion(sessionQuestions[0]);
+    setUserAnswer("");
+    setShowAnswer(false);
+    setIncorrectAnswers([]);
   };
 
   // Start quiz
