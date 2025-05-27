@@ -1,9 +1,7 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
-const Navigation = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isExploreOpen, setIsExploreOpen] = useState(false);
+const Navigation = ({ theme, toggleTheme }) => {
   const location = useLocation();
 
   const navItems = [
@@ -13,13 +11,6 @@ const Navigation = () => {
     { name: "Documents", path: "/documents" },
     { name: "Community", path: "/community" },
     { name: "Marketplace", path: "/marketplace" },
-  ];
-
-  const exploreSubItems = [
-    "Glossary",
-    "Quiz Mode", 
-    "Document Reader",
-    "Free Course - Escape Blueprint"
   ];
 
   const isActive = (path) => location.pathname === path;
