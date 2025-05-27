@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import MyPlan from "./pages/MyPlan";
 import Explore from "./pages/Explore";
 import Marketplace from "./pages/Marketplace";
+import CourseDetail from "./pages/CourseDetail";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/my-plan" element={<MyPlan />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/marketplace" element={<Marketplace />} />
+          <Route path="/course/:courseId" element={<CourseDetail />} />
         </Routes>
       </BrowserRouter>
     </div>
