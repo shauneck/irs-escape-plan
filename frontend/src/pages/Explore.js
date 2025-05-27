@@ -434,11 +434,6 @@ const Explore = () => {
     localStorage.setItem('userStats', JSON.stringify(userStats));
   }, [userStats]);
 
-  // Enhanced quiz statistics and category tracking
-  const [weeklyStreak, setWeeklyStreak] = useState(0);
-  const [categoryStats, setCategoryStats] = useState({});
-  const [missedTerms, setMissedTerms] = useState([]);
-
   // Category mapping for terms
   const getCategoryForTerm = (term) => {
     const termObj = glossaryTerms.find(t => t.term === term);
