@@ -42,9 +42,10 @@ const EscapeBlueprint = () => {
     if (moduleId === 'vsl') {
       setWatchedVSL(true);
       localStorage.setItem('watchedVSL', 'true');
-      if (currentModule === 0) {
+      // Auto-advance to Module 1 after VSL
+      setTimeout(() => {
         setCurrentModule(1);
-      }
+      }, 1000);
       return;
     }
 
@@ -53,17 +54,20 @@ const EscapeBlueprint = () => {
       newCompleted.push(moduleId);
     }
 
+    // Auto-advance to next module
     const nextModule = moduleId < 3 ? moduleId + 1 : 3;
     saveProgress(newCompleted, nextModule);
 
     // Show upgrade prompt after completing all modules
     if (newCompleted.length === 3) {
-      setShowUpgrade(true);
-      // Award badge
-      const userStats = JSON.parse(localStorage.getItem('userStats') || '{}');
-      const newBadges = [...(userStats.badges || []), 'Escape Artist'];
-      userStats.badges = [...new Set(newBadges)]; // Remove duplicates
-      localStorage.setItem('userStats', JSON.stringify(userStats));
+      setTimeout(() => {
+        setShowUpgrade(true);
+        // Award badge
+        const userStats = JSON.parse(localStorage.getItem('userStats') || '{}');
+        const newBadges = [...(userStats.badges || []), 'Escape Artist'];
+        userStats.badges = [...new Set(newBadges)]; // Remove duplicates
+        localStorage.setItem('userStats', JSON.stringify(userStats));
+      }, 1500);
     }
   };
 
