@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 // Core courses data (3 main courses for conversion focus)
 const coreCourses = [
