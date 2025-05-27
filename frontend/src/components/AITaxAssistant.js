@@ -412,7 +412,7 @@ const AITaxAssistant = ({ isOpen, onClose, userStats, glossaryTerms, courseModul
     },
 
     // Helper methods for context and personalization
-    getPersonalizedInsight: (term, context) => {
+    getPersonalizedInsight: function(term, context) {
       if (context.xp < 500) {
         return `💡 **For Your Level (${context.level}):** This is an advanced strategy. Consider mastering fundamentals first through our quiz system.`;
       }
@@ -422,7 +422,7 @@ const AITaxAssistant = ({ isOpen, onClose, userStats, glossaryTerms, courseModul
       return `💡 **For Your Level (${context.level}):** You have the knowledge to implement this strategy. Focus on execution and optimization.`;
     },
 
-    getPersonalizedApplicationAdvice: (term, context) => {
+    getPersonalizedApplicationAdvice: function(term, context) {
       const persona = context.recommendedPersona;
       const personaAdvice = {
         'W2': 'As a W-2 employee, focus on strategies that optimize your salary and benefits.',
@@ -434,15 +434,23 @@ const AITaxAssistant = ({ isOpen, onClose, userStats, glossaryTerms, courseModul
       return `**For ${persona} professionals:** ${personaAdvice[persona] || 'Consider how this applies to your specific tax situation.'}`;
     },
 
-    getPersonalizedRecommendation: (context) => {
+    getPersonalizedRecommendation: function(context) {
       if (context.xp < 1000) {
         return `💪 **Recommendation:** Focus on building your foundation with our quiz system to unlock more advanced strategies.`;
       }
       return `🎯 **Recommendation:** You're ready for implementation. Consider scheduling an advisor consultation.`;
     },
 
-    getNextBestStrategy: (context) => {
-      const unlockedStrategies = glossaryTerms.filter(term => {
+    getPersonalizedImplementationAdvice: function(term, context) {
+      return `Given your experience level (${context.level}), you should focus on understanding the fundamentals before implementing ${term.term}.`;
+    },
+
+    getPersonalizedComparison: function(term1, term2, context) {
+      return `For someone at your level (${context.level}), I recommend starting with the simpler strategy and building expertise.`;
+    },
+
+    getNextBestStrategy: function(context) {
+      const unlockedStrategies = (glossaryTerms || []).filter(term => {
         const complexity = this.getStrategyComplexity(term);
         return complexity <= context.xp;
       });
@@ -458,7 +466,7 @@ const AITaxAssistant = ({ isOpen, onClose, userStats, glossaryTerms, courseModul
       return "Continue building your foundation with quizzes";
     },
 
-    getStrategyComplexity: (term) => {
+    getStrategyComplexity: function(term) {
       const complexityMap = {
         'Roth Conversion': 300,
         'STR (Short-Term Rental)': 400,
@@ -470,42 +478,42 @@ const AITaxAssistant = ({ isOpen, onClose, userStats, glossaryTerms, courseModul
       return complexityMap[term.term] || 500;
     },
 
-    getStrategiesForPersona: (persona) => {
+    getStrategiesForPersona: function(persona) {
       const personaStrategies = {
-        'W2': glossaryTerms.filter(t => t.tags.some(tag => 
+        'W2': (glossaryTerms || []).filter(t => t.tags && t.tags.some(tag => 
           tag.toLowerCase().includes('w2') || 
           tag.toLowerCase().includes('retirement') ||
           tag.toLowerCase().includes('deductions')
         )),
-        'business owner': glossaryTerms.filter(t => t.tags.some(tag => 
+        'business owner': (glossaryTerms || []).filter(t => t.tags && t.tags.some(tag => 
           tag.toLowerCase().includes('business') || 
           tag.toLowerCase().includes('entity') ||
           tag.toLowerCase().includes('c-corp')
         )),
-        'real estate': glossaryTerms.filter(t => t.tags.some(tag => 
+        'real estate': (glossaryTerms || []).filter(t => t.tags && t.tags.some(tag => 
           tag.toLowerCase().includes('real estate') || 
           tag.toLowerCase().includes('rental') ||
           tag.toLowerCase().includes('depreciation')
         )),
-        'investment': glossaryTerms.filter(t => t.tags.some(tag => 
+        'investment': (glossaryTerms || []).filter(t => t.tags && t.tags.some(tag => 
           tag.toLowerCase().includes('investment') || 
           tag.toLowerCase().includes('capital gains') ||
           tag.toLowerCase().includes('portfolio')
         ))
       };
       
-      return personaStrategies[persona] || glossaryTerms.slice(0, 5);
+      return personaStrategies[persona] || (glossaryTerms || []).slice(0, 5);
     },
 
-    findRelatedTerms: (term) => {
-      return glossaryTerms.filter(t => 
+    findRelatedTerms: function(term) {
+      return (glossaryTerms || []).filter(t => 
         t.term !== term.term && 
-        t.tags.some(tag => term.tags.includes(tag))
+        t.tags && term.tags && t.tags.some(tag => term.tags.includes(tag))
       );
     },
 
     // CTA generation
-    generateCTAs: (term, context) => {
+    generateCTAs: function(term, context) {
       const ctas = [];
       
       if (!context.masteredTerms.includes(term.term)) {
@@ -521,7 +529,7 @@ const AITaxAssistant = ({ isOpen, onClose, userStats, glossaryTerms, courseModul
       return ctas;
     },
 
-    generateStrategyCTAs: (context) => {
+    generateStrategyCTAs: function(context) {
       return [
         { text: "Take Strategy Quiz", action: "quiz" },
         { text: "Review Module", action: "module" },
@@ -529,7 +537,7 @@ const AITaxAssistant = ({ isOpen, onClose, userStats, glossaryTerms, courseModul
       ];
     },
 
-    generateImplementationCTAs: (context) => {
+    generateImplementationCTAs: function(context) {
       return [
         { text: "Download Checklist", action: "checklist" },
         { text: "Schedule Consultation", action: "schedule" },
@@ -537,7 +545,7 @@ const AITaxAssistant = ({ isOpen, onClose, userStats, glossaryTerms, courseModul
       ];
     },
 
-    generateGeneralCTAs: (context) => {
+    generateGeneralCTAs: function(context) {
       const ctas = [
         { text: "Take Practice Quiz", action: "quiz" }
       ];
