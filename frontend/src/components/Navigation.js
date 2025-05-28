@@ -10,6 +10,7 @@ const Navigation = ({ theme, toggleTheme }) => {
   const topNavItems = [
     { name: "Courses", path: "/" },
     { name: "Glossary", path: "/explore" },
+    { name: "Community", path: "/community" },
     { name: "Dashboard", path: "/dashboard" },
   ];
 
@@ -18,6 +19,8 @@ const Navigation = ({ theme, toggleTheme }) => {
     { name: "My Plan", path: "/my-plan", icon: "📋" },
     { name: "Dashboard", path: "/dashboard", icon: "🎯" },
     { name: "Tools", path: "/tools", icon: "🔧" },
+    { name: "Strategy Playbooks", path: "/tools/strategy-playbooks", icon: "📚" },
+    { name: "Community", path: "/community", icon: "💬" },
     { name: "Documents", path: "/documents", icon: "📄", conditional: true }, // Only if user has uploads
     { name: "Advisor Mode", path: "/advisor", icon: "👨‍💼", adminOnly: true },
     { name: "Account Settings", path: "/settings", icon: "⚙️" },

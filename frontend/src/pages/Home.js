@@ -1,192 +1,230 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-// Core courses data (3 main courses for conversion focus)
-const coreCourses = [
+// 9 Course Modules for The IRS Escape Plan
+const courseModules = [
   {
     id: 1,
-    title: "The Escape Blueprint",
-    tagline: "Start your IRS Escape — no cost, just clarity.",
-    description: "Perfect for W2 earners and business owners new to tax strategy. Learn the fundamentals that form the foundation of advanced tax planning.",
-    image: "https://images.pexels.com/photos/8962468/pexels-photo-8962468.jpeg",
-    cta: "Start Free",
-    price: "Free",
+    title: "Module 1: Business Structuring & Retained Earnings",
+    hook: "Turn your business into a tax-efficient wealth machine",
+    description: "Master entity selection, C-Corp benefits, and retained earnings strategies for business owners.",
+    image: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg",
+    progress: 0,
     locked: false,
-    progress: 35,
-    badge: "Beginner Friendly",
-    audience: "W2 Earners & Business Owners",
-    duration: "2-3 hours",
-    modules: 4,
-    courseId: "escape-blueprint"
+    duration: "45 min",
+    strategies: ["MSO + C-Corp", "Entity Optimization"]
   },
   {
     id: 2,
-    title: "W-2 Escape Plan",
-    tagline: "Slash your W-2 taxes and build tax-free wealth.",
-    description: "Advanced strategies specifically designed for high-income employees. Transform your W-2 tax burden into wealth-building opportunities.",
+    title: "Module 2: W-2 Income Repositioning",
+    hook: "Escape the W-2 tax trap with smart repositioning",
+    description: "Learn how to reposition W-2 income and minimize employment taxes through strategic entity choices.",
     image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwxfHxmaW5hbmNpYWwlMjBwbGFubmluZ3xlbnwwfHx8fDE3NDgzMDk2ODV8MA&ixlib=rb-4.1.0&q=85",
-    cta: "View Curriculum",
-    price: "$497",
-    locked: true,
     progress: 0,
-    badge: "High-Income Employees",
-    audience: "W2 Earners $100K+",
-    duration: "6-8 hours",
-    modules: 9,
-    courseId: "w2-escape-plan"
+    locked: false,
+    duration: "50 min",
+    strategies: ["S-Corp Election", "Salary Optimization"]
   },
   {
     id: 3,
-    title: "Business Owner Escape Plan",
-    tagline: "Turn your business into a tax-optimized wealth engine.",
-    description: "Elite strategies for entrepreneurs with $1M+ profit. Master advanced tax structures, asset protection, and wealth preservation techniques.",
-    image: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg",
-    cta: "View Curriculum",
-    price: "$1,997",
-    locked: true,
+    title: "Module 3: Roth Conversion & Valuation Strategies",
+    hook: "Convert retirement accounts at massive discounts",
+    description: "Use alternative investments and valuation discounts to minimize Roth conversion taxes.",
+    image: "https://images.pexels.com/photos/8962468/pexels-photo-8962468.jpeg",
     progress: 0,
-    badge: "$1M+ Businesses",
-    audience: "Business Owners",
-    duration: "10-12 hours",
-    modules: 12,
-    courseId: "business-owner-escape-plan"
+    locked: false,
+    duration: "55 min",
+    strategies: ["FMV Discounts", "Strategic Conversions"]
+  },
+  {
+    id: 4,
+    title: "Module 4: Solo 401k & Retirement Optimization",
+    hook: "Max out retirement savings beyond traditional limits",
+    description: "Leverage Solo 401k, defined benefit plans, and advanced retirement strategies.",
+    image: "https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg",
+    progress: 0,
+    locked: false,
+    duration: "40 min",
+    strategies: ["Solo 401k", "Defined Benefit Plans"]
+  },
+  {
+    id: 5,
+    title: "Module 5: Real Estate Professional Strategies",
+    hook: "Turn real estate losses into W-2 tax shields",
+    description: "Master REPS qualification, cost segregation, and short-term rental optimization.",
+    image: "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
+    progress: 0,
+    locked: false,
+    duration: "60 min",
+    strategies: ["REPS Qualification", "Cost Segregation"]
+  },
+  {
+    id: 6,
+    title: "Module 6: Oil & Gas Tax Planning",
+    hook: "Generate massive deductions with IDC strategies",
+    description: "Navigate oil & gas investments for immediate tax deductions and long-term benefits.",
+    image: "https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg",
+    progress: 0,
+    locked: false,
+    duration: "35 min",
+    strategies: ["IDC Deductions", "Working Interest"]
+  },
+  {
+    id: 7,
+    title: "Module 7: Opportunity Zone Planning",
+    hook: "Defer and eliminate capital gains taxes forever",
+    description: "Master Opportunity Zone investments for capital gains deferral and elimination.",
+    image: "https://images.pexels.com/photos/247851/pexels-photo-247851.jpeg",
+    progress: 0,
+    locked: false,
+    duration: "45 min",
+    strategies: ["OZ Investment", "Gain Elimination"]
+  },
+  {
+    id: 8,
+    title: "Module 8: Charitable Structures",
+    hook: "Create massive deductions while keeping control",
+    description: "Use charitable trusts and advanced giving strategies for tax benefits and wealth transfer.",
+    image: "https://images.pexels.com/photos/6994982/pexels-photo-6994982.jpeg",
+    progress: 0,
+    locked: false,
+    duration: "50 min",
+    strategies: ["CRT/CLAT", "Charitable Planning"]
+  },
+  {
+    id: 9,
+    title: "Module 9: Installment Sales & Exit Planning",
+    hook: "Spread out gains and minimize tax brackets",
+    description: "Structure business and asset sales to optimize tax timing and minimize bracket compression.",
+    image: "https://images.pexels.com/photos/3831645/pexels-photo-3831645.jpeg",
+    progress: 0,
+    locked: false,
+    duration: "40 min",
+    strategies: ["Installment Sales", "Exit Planning"]
   }
 ];
 
-const CourseCard = ({ course, index }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  
-  const getBadgeColor = (index) => {
-    switch(index) {
-      case 0: return "bg-green-500";
-      case 1: return "bg-blue-500";
-      case 2: return "bg-purple-500";
-      default: return "bg-gray-500";
-    }
-  };
+// 4 Strategy Persona Playbooks (featured selection from the 9)
+const strategyPlaybooks = [
+  {
+    id: 'w2-professionals',
+    title: 'W-2 Professionals Playbook',
+    hook: 'Escape the employee tax trap',
+    description: 'Complete playbook for high-income W-2 earners to minimize taxes and build wealth.',
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwxfHxmaW5hbmNpYWwlMjBwbGFubmluZ3xlbnwwfHx8fDE3NDgzMDk2ODV8MA&ixlib=rb-4.1.0&q=85",
+    strategies: ["S-Corp Salary Optimization", "Roth Conversion with FMV Discount", "Oil & Gas Deduction Pairing"],
+    personas: ["W-2 Earner", "High-Income Employee"],
+    link: "/tools/strategy-playbooks"
+  },
+  {
+    id: 'business-owners',
+    title: 'Business Owners Playbook',
+    hook: 'Turn profits into tax-efficient wealth',
+    description: 'Advanced strategies for entrepreneurs to optimize business structures and minimize tax burden.',
+    image: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg",
+    strategies: ["MSO + C-Corp Structuring", "Oil & Gas Deduction Pairing", "Installment Sale Exit Planning"],
+    personas: ["Business Owner", "Entrepreneur"],
+    link: "/tools/strategy-playbooks"
+  },
+  {
+    id: 'real-estate-investors',
+    title: 'Real Estate Investors Playbook',
+    hook: 'Master the ultimate tax shelter',
+    description: 'Complete guide to real estate tax strategies, from REPS to cost segregation and beyond.',
+    image: "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg",
+    strategies: ["STR + REPS Qualification", "Cost Segregation & Timing", "Opportunity Zone Deferral"],
+    personas: ["Real Estate Investor", "Property Owner"],
+    link: "/tools/strategy-playbooks"
+  },
+  {
+    id: 'legacy-planners',
+    title: 'Legacy Planners Playbook',
+    hook: 'Preserve and transfer wealth tax-efficiently',
+    description: 'Sophisticated strategies for high net worth individuals focused on wealth preservation and transfer.',
+    image: "https://images.pexels.com/photos/6994982/pexels-photo-6994982.jpeg",
+    strategies: ["Charitable Trust Planning", "Installment Sale Exit Planning", "Opportunity Zone Deferral"],
+    personas: ["HNW Individual", "Legacy Planner"],
+    link: "/tools/strategy-playbooks"
+  }
+];
 
-  const getCtaColor = (locked, index) => {
-    if (!locked) return "bg-green-500 hover:bg-green-600";
-    switch(index) {
-      case 1: return "bg-blue-500 hover:bg-blue-600";
-      case 2: return "bg-purple-500 hover:bg-purple-600";
-      default: return "bg-gray-500 hover:bg-gray-600";
-    }
-  };
+const ModuleCard = ({ module, index }) => {
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div 
-      className={`relative group cursor-pointer transition-all duration-500 ${
-        index === 1 ? 'transform scale-105 z-10' : ''
-      } hover:scale-110`}
+    <div
+      className={`relative group cursor-pointer transition-all duration-300 hover:scale-105 ${
+        index === 0 ? 'lg:col-span-2' : ''
+      }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Popular badge for middle course */}
-      {index === 1 && (
-        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
-          <span className="bg-yellow-400 text-black px-4 py-1 rounded-full text-sm font-bold">
-            MOST POPULAR
-          </span>
-        </div>
-      )}
-      
-      <div className="bg-white rounded-xl shadow-2xl overflow-hidden border-2 border-gray-100 group-hover:border-yellow-400 transition-all duration-300">
-        {/* Course Image */}
-        <div className="relative h-48 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 group-hover:border-accent transition-all duration-300">
+        {/* Module Image */}
+        <div className="relative h-32 lg:h-40 overflow-hidden">
           <img
-            src={course.image}
-            alt={course.title}
+            src={module.image}
+            alt={module.title}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
           
-          {/* Badge */}
-          <div className={`absolute top-4 left-4 ${getBadgeColor(index)} text-white px-3 py-1 rounded-full text-sm font-semibold`}>
-            {course.badge}
+          {/* Module Number */}
+          <div className="absolute top-3 left-3 bg-accent text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
+            {module.id}
           </div>
 
-          {/* Lock icon for premium courses */}
-          {course.locked && (
-            <div className="absolute top-4 right-4 bg-gray-800 text-white p-2 rounded-full">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-              </svg>
-            </div>
-          )}
+          {/* Duration */}
+          <div className="absolute top-3 right-3 bg-black/50 text-white px-2 py-1 rounded-full text-xs">
+            {module.duration}
+          </div>
         </div>
 
-        {/* Course Content */}
-        <div className="p-6">
-          {/* Price */}
-          <div className="flex justify-between items-start mb-3">
-            <span className={`text-2xl font-bold ${course.locked ? 'text-gray-800' : 'text-green-600'}`}>
-              {course.price}
-            </span>
-            {!course.locked && (
-              <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-sm font-semibold">
-                FREE
-              </span>
-            )}
-          </div>
-
-          {/* Title */}
-          <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-yellow-600 transition-colors">
-            {course.title}
+        {/* Module Content */}
+        <div className="p-4">
+          <h3 className="font-bold text-gray-900 mb-2 text-sm lg:text-base line-clamp-2 group-hover:text-accent transition-colors">
+            {module.title}
           </h3>
-
-          {/* Tagline */}
-          <p className="text-gray-600 font-medium mb-3 text-sm">
-            {course.tagline}
+          
+          <p className="text-accent font-medium text-xs lg:text-sm mb-2">
+            {module.hook}
+          </p>
+          
+          <p className="text-gray-600 text-xs mb-3 line-clamp-2">
+            {module.description}
           </p>
 
-          {/* Description */}
-          <p className="text-gray-500 text-sm mb-4 leading-relaxed">
-            {course.description}
-          </p>
-
-          {/* Course Details */}
-          <div className="mb-4">
-            <div className="flex justify-between items-center text-sm text-gray-600 mb-2">
-              <span><strong>Audience:</strong> {course.audience}</span>
-            </div>
-            <div className="flex justify-between items-center text-sm text-gray-600">
-              <span><strong>Duration:</strong> {course.duration}</span>
-              <span><strong>Modules:</strong> {course.modules}</span>
-            </div>
+          {/* Strategies */}
+          <div className="flex flex-wrap gap-1 mb-3">
+            {module.strategies.map((strategy, idx) => (
+              <span key={idx} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
+                {strategy}
+              </span>
+            ))}
           </div>
 
-          {/* Progress Bar (if applicable) */}
-          {course.progress > 0 && (
-            <div className="mb-4">
-              <div className="flex justify-between text-sm text-gray-600 mb-1">
+          {/* Progress Bar */}
+          {module.progress > 0 && (
+            <div className="mb-3">
+              <div className="flex justify-between text-xs text-gray-600 mb-1">
                 <span>Progress</span>
-                <span>{course.progress}%</span>
+                <span>{module.progress}%</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-gray-200 rounded-full h-1.5">
                 <div
-                  className="bg-green-500 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${course.progress}%` }}
+                  className="bg-accent h-1.5 rounded-full transition-all duration-300"
+                  style={{ width: `${module.progress}%` }}
                 ></div>
               </div>
             </div>
           )}
 
-          {/* CTA Button */}
+          {/* CTA */}
           <Link
-            to={course.courseId === "escape-blueprint" ? "/escape-blueprint" : course.courseId ? `/course/${course.courseId}` : '#'}
-            className={`cta-button block w-full ${getCtaColor(course.locked, index)} text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg text-center`}
+            to={`/course/module-${module.id}`}
+            className="block w-full bg-accent text-white font-medium py-2 px-4 rounded-lg hover:bg-accent-hover transition-colors text-center text-sm"
           >
-            {course.locked ? (
-              <span className="flex items-center justify-center">
-                <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                </svg>
-                {course.cta}
-              </span>
-            ) : (
-              course.cta
-            )}
+            {module.progress > 0 ? 'Continue' : 'Start Module'}
           </Link>
         </div>
       </div>
@@ -194,136 +232,255 @@ const CourseCard = ({ course, index }) => {
   );
 };
 
+const PlaybookCard = ({ playbook, index }) => {
+  const [isHovered, setIsHovered] = useState(false);
 
+  return (
+    <div
+      className="relative group cursor-pointer transition-all duration-300 hover:scale-105"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 group-hover:border-accent transition-all duration-300">
+        {/* Playbook Image */}
+        <div className="relative h-40 overflow-hidden">
+          <img
+            src={playbook.image}
+            alt={playbook.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+          
+          {/* Persona Badge */}
+          <div className="absolute top-3 left-3 bg-primary text-white px-3 py-1 rounded-full text-xs font-medium">
+            {playbook.personas[0]}
+          </div>
+        </div>
+
+        {/* Playbook Content */}
+        <div className="p-5">
+          <h3 className="font-bold text-gray-900 mb-2 group-hover:text-accent transition-colors">
+            {playbook.title}
+          </h3>
+          
+          <p className="text-accent font-medium text-sm mb-2">
+            {playbook.hook}
+          </p>
+          
+          <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+            {playbook.description}
+          </p>
+
+          {/* Strategy Count */}
+          <div className="flex items-center justify-between text-xs text-gray-600 mb-4">
+            <span>{playbook.strategies.length} Strategies</span>
+            <span>{playbook.personas.join(', ')}</span>
+          </div>
+
+          {/* Top Strategies */}
+          <div className="space-y-1 mb-4">
+            {playbook.strategies.slice(0, 2).map((strategy, idx) => (
+              <div key={idx} className="flex items-center text-xs text-gray-700">
+                <span className="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>
+                {strategy}
+              </div>
+            ))}
+            {playbook.strategies.length > 2 && (
+              <div className="text-xs text-gray-500">
+                +{playbook.strategies.length - 2} more strategies
+              </div>
+            )}
+          </div>
+
+          {/* CTA */}
+          <Link
+            to={playbook.link}
+            className="block w-full bg-primary text-white font-medium py-2.5 px-4 rounded-lg hover:bg-primary-hover transition-colors text-center text-sm"
+          >
+            Explore Playbook
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 pt-16">
+    <div className="min-h-screen bg-primary pt-16">
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div 
-          className="h-[60vh] bg-cover bg-center bg-no-repeat"
+          className="h-[50vh] lg:h-[60vh] bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6)), url('https://images.pexels.com/photos/247851/pexels-photo-247851.jpeg')`
+            backgroundImage: `linear-gradient(135deg, rgba(37, 60, 55, 0.9), rgba(37, 60, 55, 0.7)), url('https://images.pexels.com/photos/247851/pexels-photo-247851.jpeg')`
           }}
         >
-          <div className="flex items-center justify-center h-full px-8">
+          <div className="flex items-center justify-center h-full px-4 lg:px-8">
             <div className="text-center max-w-4xl">
-              <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight text-white">
+              <h1 className="text-4xl lg:text-6xl font-bold mb-4 leading-tight text-white">
                 The IRS 
-                <span className="text-yellow-400"> Escape Plan</span>
+                <span className="text-accent"> Escape Plan</span>
               </h1>
-              <p className="text-xl md:text-2xl text-gray-300 mb-4">
-                by <span className="text-green-400 font-semibold">Quantus Group</span>
+              <p className="text-lg lg:text-xl text-gray-300 mb-3">
+                by <span className="text-accent font-semibold">Quantus Group</span>
               </p>
-              <p className="text-lg md:text-xl text-gray-200 mb-8 leading-relaxed max-w-3xl mx-auto">
-                Stop overpaying taxes. Start building wealth. Choose your path to financial freedom 
-                with proven strategies used by the top 1%.
+              <p className="text-base lg:text-lg text-gray-200 mb-6 leading-relaxed max-w-2xl mx-auto">
+                Master the Netflix-style education platform for advanced tax strategies. 
+                Choose your learning path and start building tax-free wealth today.
               </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  to="/course/module-1"
+                  className="bg-accent text-white font-bold py-3 px-8 rounded-lg hover:bg-accent-hover transition-all transform hover:scale-105"
+                >
+                  Start Free Course
+                </Link>
+                <Link
+                  to="/tools/strategy-playbooks"
+                  className="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-lg hover:bg-white hover:text-primary transition-all"
+                >
+                  Explore Strategies
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Course Selection Section */}
-      <div className="py-16 px-8">
+      {/* Course Modules Section */}
+      <div className="py-12 lg:py-16 px-4 lg:px-8 bg-secondary">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-              Choose Your <span className="text-yellow-500">Learning Path</span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Start with our free course or jump into advanced strategies. 
-              Each path is designed to maximize your tax savings and accelerate wealth building.
-            </p>
+          {/* Section Header */}
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl lg:text-3xl font-bold text-primary mb-2">
+                The IRS Escape Plan Course
+              </h2>
+              <p className="text-gray-600">
+                9 comprehensive modules covering every aspect of advanced tax planning
+              </p>
+            </div>
+            <Link
+              to="/dashboard"
+              className="hidden lg:block text-accent hover:text-accent-hover font-medium"
+            >
+              View All Modules →
+            </Link>
           </div>
 
-          {/* Course Cards Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6">
-            {coreCourses.map((course, index) => (
-              <CourseCard key={course.id} course={course} index={index} />
+          {/* Netflix-style Module Grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-6">
+            {courseModules.map((module, index) => (
+              <ModuleCard key={module.id} module={module} index={index} />
             ))}
           </div>
 
-          {/* Trust Indicators */}
-          <div className="mt-16 text-center">
-            <p className="text-gray-500 mb-6">Trusted by thousands of successful entrepreneurs and professionals</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 max-w-4xl mx-auto">
-              <div className="flex items-center justify-center space-x-2">
-                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                </svg>
-                <span>CPA Approved</span>
-              </div>
-              <div className="flex items-center justify-center space-x-2">
-                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                </svg>
-                <span>IRS Compliant</span>
-              </div>
-              <div className="flex items-center justify-center space-x-2">
-                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                </svg>
-                <span>Proven Results</span>
-              </div>
-              <div className="flex items-center justify-center space-x-2">
-                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                </svg>
-                <span>Money-Back Guarantee</span>
-              </div>
+          {/* Mobile View All Link */}
+          <div className="lg:hidden mt-6 text-center">
+            <Link
+              to="/dashboard"
+              className="text-accent hover:text-accent-hover font-medium"
+            >
+              View All Modules →
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Strategy Persona Playbooks Section */}
+      <div className="py-12 lg:py-16 px-4 lg:px-8 bg-primary">
+        <div className="max-w-7xl mx-auto">
+          {/* Section Header */}
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl lg:text-3xl font-bold text-primary mb-2">
+                Strategy Persona Playbooks
+              </h2>
+              <p className="text-gray-600">
+                Curated strategy collections for your specific situation and goals
+              </p>
             </div>
+            <Link
+              to="/tools/strategy-playbooks"
+              className="hidden lg:block text-accent hover:text-accent-hover font-medium"
+            >
+              View All Playbooks →
+            </Link>
           </div>
 
-          {/* Value Proposition */}
-          <div className="mt-16 bg-white rounded-2xl shadow-xl p-8 md:p-12">
-            <div className="text-center">
-              <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">
-                Why Choose The IRS Escape Plan?
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
-                    </svg>
-                  </div>
-                  <h4 className="text-lg font-semibold text-gray-800 mb-2">Proven Strategies</h4>
-                  <p className="text-gray-600">Learn methods used by the wealthy to minimize taxes and maximize wealth accumulation.</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                  </div>
-                  <h4 className="text-lg font-semibold text-gray-800 mb-2">Expert Guidance</h4>
-                  <p className="text-gray-600">Created by certified tax professionals with decades of experience in wealth optimization.</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 4a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1V8zm8 0a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V8z" clipRule="evenodd"/>
-                    </svg>
-                  </div>
-                  <h4 className="text-lg font-semibold text-gray-800 mb-2">Practical Implementation</h4>
-                  <p className="text-gray-600">Step-by-step guides you can implement immediately to start reducing your tax burden.</p>
-                </div>
-              </div>
+          {/* Netflix-style Playbook Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6">
+            {strategyPlaybooks.map((playbook, index) => (
+              <PlaybookCard key={playbook.id} playbook={playbook} index={index} />
+            ))}
+          </div>
+
+          {/* Mobile View All Link */}
+          <div className="lg:hidden mt-6 text-center">
+            <Link
+              to="/tools/strategy-playbooks"
+              className="text-accent hover:text-accent-hover font-medium"
+            >
+              View All Playbooks →
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Stats Section */}
+      <div className="py-12 lg:py-16 px-4 lg:px-8 bg-secondary">
+        <div className="max-w-4xl mx-auto text-center">
+          <h3 className="text-xl lg:text-2xl font-bold text-primary mb-8">
+            Join Thousands Building Tax-Free Wealth
+          </h3>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            <div>
+              <div className="text-2xl lg:text-3xl font-bold text-accent mb-2">$2.5M</div>
+              <div className="text-sm text-gray-600">Average Tax Savings</div>
+            </div>
+            <div>
+              <div className="text-2xl lg:text-3xl font-bold text-accent mb-2">12K+</div>
+              <div className="text-sm text-gray-600">Active Students</div>
+            </div>
+            <div>
+              <div className="text-2xl lg:text-3xl font-bold text-accent mb-2">89%</div>
+              <div className="text-sm text-gray-600">Success Rate</div>
+            </div>
+            <div>
+              <div className="text-2xl lg:text-3xl font-bold text-accent mb-2">24/7</div>
+              <div className="text-sm text-gray-600">Expert Support</div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-8 text-center">
-          <h3 className="text-2xl font-bold mb-2">Quantus Group</h3>
-          <p className="text-gray-400 mb-4">Elite Tax Strategy Education • Wealth Optimization Specialists</p>
-          <p className="text-sm text-gray-500">© 2025 Quantus Group. All rights reserved.</p>
+      {/* CTA Section */}
+      <div className="py-12 lg:py-16 px-4 lg:px-8 bg-primary">
+        <div className="max-w-4xl mx-auto text-center">
+          <h3 className="text-2xl lg:text-3xl font-bold text-primary mb-4">
+            Ready to Escape the IRS?
+          </h3>
+          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+            Start with our free Escape Blueprint module and discover how much you could be saving. 
+            No cost, just clarity on your path to tax freedom.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              to="/escape-blueprint"
+              className="bg-accent text-white font-bold py-3 px-8 rounded-lg hover:bg-accent-hover transition-all transform hover:scale-105"
+            >
+              Start Free Blueprint
+            </Link>
+            <Link
+              to="/community"
+              className="bg-transparent border-2 border-primary text-primary font-bold py-3 px-8 rounded-lg hover:bg-primary hover:text-white transition-all"
+            >
+              Join Community
+            </Link>
+          </div>
         </div>
-      </footer>
+      </div>
     </div>
   );
 };
