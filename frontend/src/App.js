@@ -1,0 +1,28 @@
+import { useState } from "react";
+import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navigation from "./components/Navigation";
+import Home from "./pages/Home";
+import MyPlan from "./pages/MyPlan";
+import Explore from "./pages/Explore";
+import Marketplace from "./pages/Marketplace";
+import CourseDetail from "./pages/CourseDetail";
+
+function App() {
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <Navigation />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/my-plan" element={<MyPlan />} />
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/marketplace" element={<Marketplace />} />
+          <Route path="/course/:courseId" element={<CourseDetail />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
+}
+
+export default App;
